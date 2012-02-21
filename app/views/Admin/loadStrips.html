@@ -1,0 +1,23 @@
+#{extends 'main.html' /}
+
+#{form @Admin.loadStrips()}
+
+#{field 'srcUrl'}
+<dl><label for='${field.name}'>Source URL:</label></dl>
+<dt><input type='text' name='${field.name}'  class='${field.errorClass}'/></dt>
+#{/field}
+
+#{field 'linkPattern'}
+<dl><label for='${field.name}'>Link Pattern:</label></dl>
+<dt><input type='text' name='${field.name}'  class='${field.errorClass}'/></dt>
+#{/field}
+<dt><input type='submit' name='loadstrips' value='Submit'/></dt>
+#{/form}
+
+%{
+	for (item in items) {
+}%
+	<li><a href="${item.url}" >${item.title}</a></li>
+%{
+	}
+}%

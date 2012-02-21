@@ -1,0 +1,21 @@
+#{extends 'main-text.html' /}
+#{set title:'Login' /}
+<h1>Login</h1>
+<p>
+Please remember that the site is under under heavy development.<br/>
+If you are unable to log in, it is possible that your account no longer exists or has changed.<br/>
+I am very sorry if this happens, but if it does, you can register again <a href="@{Application.register}" >here</a>.<br/>
+<br/>
+If for some other reason you are unable to log in, please <a href="@{Application.contact}">contact me</a>.
+</p>
+#{form @Users.login()}
+#{field 'email'}
+<dl><label for='${field.name}'>Email:</label></dl>
+<dt><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${email}'/></dt>
+#{/field}
+#{field 'password'}
+<dl><label for='${field.name}'>Password:</label></dl>
+<dt><input type='password' name='${field.name}' class='${field.errorClass}' value=''/></dt>
+#{/field}
+<dl></dl><dt><input type='submit' value='Login' /></dt>
+#{/form}

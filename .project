@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>comichill</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.playframework.playclipse.playNature</nature>
+	</natures>
+	<linkedResources><link><name>siena-2.0.6</name><type>2</type><location>/web/comichill/modules/siena-2.0.6/app</location></link>
+<link><name>conf/siena-2.0.6</name><type>2</type><location>/web/comichill/modules/siena-2.0.6/conf</location></link>
+<link><name>playapps-1.4</name><type>2</type><location>/web/comichill/modules/playapps-1.4/app</location></link>
+<link><name>conf/playapps-1.4</name><type>2</type><location>/web/comichill/modules/playapps-1.4/conf</location></link>
+</linkedResources>
+</projectDescription>

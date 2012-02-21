@@ -1,0 +1,19 @@
+#{extends 'main.html' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{set title:'Admin Panel' /}
+
+<h1>Admin Panel</h1>
+<div class="comic-hill">
+%{for (comic in comics) { }%
+<div class="comic">
+	<a href="@{Admin.editComic(comic.label)}">
+		<img class="banner" src="/img/banner/${comic.label}.png"">
+	</a>
+	<span class="title">${comic.title}</span>
+	<span class="author">${comic.author}</span>
+	<div class="unread-count">Total ${comic.numStrips}</div>
+</div>
+%{ } }%
+</div>

@@ -1,0 +1,36 @@
+#{extends 'main.html' /}
+#{stylesheet 'admin.css' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{set title:'Updates' /}
+
+<ul data-bind="foreach: feeds">
+	<li><span data-bind="text: data.src()"></span></li>
+</ul>
+
+<script>
+function AppViewModel() {
+	var self = this;
+	self.feeds = ko.observableArray();
+	self.status = ko.observable(0);
+	self.statusText = ko.observable("Hello, world!");
+	self.removeRss = function(feed) {
+		self.feeds.remove(feed);
+	}
+}
+
+var viewModel = new AppViewModel();
+var feedsLoad = {"feeds": %{ print feeds.serializeWith("rssSerializer").raw() }% };
+var feeds = feedsLoad['feeds'];
+
+for (var f in feeds) {
+	var rss = new Rss();
+	ko.mapping.fromJS(feeds[f], rss.data);
+	rss.done = ko.observable(false);
+	viewModel.feeds.push(rss);
+}
+
+ko.applyBindings(viewModel);
+
+</script>

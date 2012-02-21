@@ -1,0 +1,43 @@
+#{extends 'main.html' /}
+#{stylesheet 'admin.css' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{set title:'Import Strips from Archive' /}
+
+<h1>Import Strips for ${comic.title} - (${comic.label})</h1>
+<br/>
+Or... <a href="@{Admin.editComic(comic.label)}">edit ${comic.label}</a><br/>
+<br/>
+Current number of strips: ${comic.numStrips}<br/>
+<a href="${archive.src}">${archive.src}</a><br/>
+<div class="status" data-bind="text: viewModel.statusText(), css: {statusError: viewModel.status() < 0, statusOK: viewModel.status() == 1}"></div>
+<button onclick="commit()">Commit</button>
+<br/>
+<br/>
+Results: ${nodes.size()} strips found</br>
+
+<ul>
+%{ for (node in nodes) { }%
+	<li><span>${node.title}</span> - <a class="small" href="${node.url}">${node.url}</a></li>
+%{ } }%
+</ul>
+
+<script type="text/javascript">
+
+function AppViewModel() {
+	var self = this;
+	self.status = ko.observable(2);
+	self.statusText = ko.observable("Click 'Commit' to submit the data");
+}
+
+function commit() {
+	server_get('commit_strips', {'commitKey':"${commitKey}"},
+			function (data) { viewModel.status(1); viewModel.statusText(data); },
+			function (jqXHR) { viewModel.status(-1); viewModel.statusText(jqXHR.responseText); });
+}
+
+var viewModel = new AppViewModel();
+ko.applyBindings(viewModel);
+
+</script>

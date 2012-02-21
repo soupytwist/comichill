@@ -1,0 +1,21 @@
+
+<div id="topnav">
+<div id="logo"><a href="/" >Comic Hill</a></div>
+%{ if (user && !user.isGuest() && !user.isAdmin()) { }%
+<div class="item"><a href="@{Application.contact}">questions/comments?</a></div>
+<div class="item"><a href="@{Application.about}">about</a></div>
+<div class="item"><a href="@{Users.logout}">logout</a></div>
+<div class="item">${user.email}</div>
+%{ } else if (user.isAdmin()) { }%
+<div class="item"><a href="@{Application.contact}">questions/comments?</a></div>
+<div class="item"><a href="@{Application.about}">about</a></div>
+<div class="item"><a href="@{Users.logout}">logout</a></div>
+<div class="item">${user.email}</div>
+<div class="item"><a href="@{Admin.adminPanel}">Admin</a></div>
+%{ } else { }%
+<div class="item"><a href="@{Application.contact}">questions/comments?</a></div>
+<div class="item"><a href="@{Application.about}">about</a></div>
+<div class="item"><a href="@{Application.register}">register</a></div>
+<div class="item"><a href="@{Application.login}">login</a></div>
+%{ } }%
+</div>

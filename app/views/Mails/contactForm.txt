@@ -1,0 +1,8 @@
+Timestamp:
+   %{ print new Date().toLocaleString()+"\n" }%
+
+Message From:
+   ${email}
+
+Message Body:
+   ${messageBody}

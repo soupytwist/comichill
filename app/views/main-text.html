@@ -1,0 +1,9 @@
+#{extends 'barebone.html' /}
+
+    	<div class="content-with-text" id="content-wrapper"><div id="content">
+        #{doLayout /}
+        </div></div>
+        <script>
+        $(".autofocus").focus();
+        $(".hasError").bind("change", function() { $(this).removeClass('hasError'); });
+        </script>

@@ -1,0 +1,179 @@
+#{extends 'main.html' /}
+#{stylesheet 'admin.css' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{include 'public/templates/templates.html' /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{set title:'Edit Comic' /}
+
+<div data-bind="template: {name: 'comic-template-noauth', data: comic}"></div>
+<div class="spacer"></div>
+
+<div class="formBlock" data-bind="css: {ok: comic.persisted()}">
+<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
+<h1 data-bind="text: viewModel.pageTitle()"></h1>
+<p>Edit the comic properties below</p>
+<label>Label:<span class="subLabel">Short name for comic</span></label><input id="labelField" type='text' data-bind="value: comic.data.label, disable: comic.persisted()"/><br/>
+<label>Title:<span class="subLabel">Full name for comic</span></label><input type='text' data-bind="value: comic.data.title"/><br/>
+<label>Author:<span class="subLabel">Whoever does it</span></label><input type='text' data-bind="value: comic.data.author"/><br/>
+<label>Homepage:<span class="subLabel">Just the URL</span></label><input type='text' data-bind="value: comic.data.homepage"/><br/>
+<label>Tags:<span class="subLabel">Put some tags</span></label><input type='text' data-bind="value: comic.data.tags"/><br/>
+<button type='submit' data-bind="text: comic.persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
+</form>
+<div class="spacer"></div>
+</div>
+
+<div class="formBlock" data-bind="css: {ok: bannerExists()}">
+#{form @Admin.doUploadBanner(label), method:'POST', enctype:'multipart/form-data'}
+<h1>Upload a Banner</h1>
+<p>Pick a banner to upload for this comic</p>
+#{field 'img' }
+<label>Banner:<span class="subLabel">PNG file</span></label><input type='file' name='${field.name}'  class='${field.errorClass}'/><br/>
+#{/field}
+<button type='submit' >Submit</button>
+#{/form}
+</div>
+
+<!-- ko foreach: rssFeeds -->
+	<div class="formBlock" data-bind="css: {ok: persisted()}">
+	<form class="formClass" data-bind="submit: function() { submitAction($data, 'rss'); }">
+	<h1><input type="checkbox" data-bind="checked: data.enabled"/> RSS Feed<span data-bind="text: ' ('+ (data.enabled()?'enabled':'disabled') +')'"></span></h1>
+	<button class="rightFloat" data-bind="click: $root.removeRss">Delete</button>
+	<label>Source:<span class="subLabel">URI of RSS feed XML</span></label><input type="text" data-bind="value: data.src"/><br/>
+	<label>Link Tag:<span class="subLabel">Tag that contains the URL</span></label><input type="text" data-bind="value: data.linkTag"/><br/>
+	<label>Link Pattern:<span class="subLabel">Regex to match the URL</span></label><input type="text" data-bind="value: data.urlPattern"/><br/>
+	<label>Title Tag:<span class="subLabel">Tag that contains the title</span></label><input type="text" data-bind="value: data.titleTag"/><br/>
+	<label>Title Pattern:<span class="subLabel">Regex to match the title</span></label><input type="text" data-bind="value: data.titlePattern"/><br/>
+	<div class="spacer"></div>
+	<button type='button' data-bind="click: $data.fetch, disable: viewModel.status() == 2">Preview</button>
+	<div class="spacer"></div>
+	<button type='submit' data-bind="text: persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
+	</form>
+	<div class="resultsPreview" data-bind="visible: results().length > 0">
+		<ul data-bind="foreach: results">
+			<li><span data-bind="text: title"></span><a class="small" data-bind="attr: {href: url}, text: url"></a></li>
+		</ul>
+	</div>
+	</div>
+<!-- /ko -->
+
+<div data-bind="foreach: archives">
+	<div class="formBlock" data-bind="css: {ok: persisted()}">
+	<form class="formClass" data-bind="submit: function() { submitAction($data, 'archive'); }">
+	<h1>Archive</h1>
+	<button class="rightFloat" data-bind="click: $root.removeArchive">Delete</button>
+	<label>Source:<span class="subLabel">URI of RSS feed XML</span></label><input type="text" data-bind="value: data.src"/><br/>
+	<label>Link Pattern:<span class="subLabel">Regex to match the URL</span></label><input type="text" data-bind="value: data.urlPattern"/><br/>
+	<label>Title Pattern:<span class="subLabel">Regex to match the title</span></label><input type="text" data-bind="value: data.titlePattern"/><br/>
+	<label>Reverse order:<span class="subLabel">If newest listed first</span></label><input type="checkbox" data-bind="checked: data.newestFirst"/><br/>
+	<div class="spacer"></div>
+	<button type='button' data-bind="click: function() { window.open('/admin/loadArchive/'+$data.data.id()); }, disable: viewModel.status() == 2 || data.id() == -1">Load</button>
+	<div class="spacer"></div>
+	<button type='submit' data-bind="text: persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
+	</form>
+	<div class="resultsPreview" data-bind="visible: results().length > 0">
+		<ul data-bind="foreach: results">
+			<li><span data-bind="text: title"></span><a class="small" data-bind="attr: {href: url}, text: url"></a></li>
+		</ul>
+	</div>
+	</div>
+</div>
+<input type="button" onclick="addRssAction(new Rss())" value="Add Rss" />
+<input type="button" onclick="addArchiveAction(new Archive())" value="Add Archive" />
+
+<div class="status" data-bind="text: viewModel.statusText(), css: {statusError: viewModel.status() < 0, statusOK: viewModel.status() == 1}"></div>
+
+<script type="text/javascript">
+function AppViewModel() {
+	var self = this;
+	self.comic = new Comic();
+	ko.mapping.fromJS(%{ print comic.serializeWith("comicSerializer").raw() }%, self.comic.data);
+	self.rssFeeds = ko.observableArray();
+	self.archives = ko.observableArray();
+	self.status = ko.observable(0);
+	self.statusText = ko.observable("Hello, world!");
+	self.bannerExists = ko.observable(false);
+	self.pageTitle = ko.computed(function() {
+		var data = self.comic.data;
+		return ((data.title() == null || data.title() == '') ? "New Comic" : data.title()) + " - (" +
+				((data.label() == null || data.label() == '') ? "new" : data.label()) + ")";
+	});
+	self.removeRss = function(feed) {
+		if (feed.data.id() != -1) {
+			if (confirm("This feed will be deleted from the server?\nAre you sure you want to continue?")) {
+				server_delete('rss', feed.data.id(), ajaxSuccess, ajaxError);
+			}
+		}
+		self.rssFeeds.remove(feed);
+	}
+	self.removeArchive = function(archive) {
+		if (archive.persisted()) {
+			if (confirm("This feed will be deleted from the server?\nAre you sure you want to continue?")) {
+				server_delete('archive', archive.data.id(), ajaxSuccess, ajaxError);
+			}
+		}
+		self.archives.remove(archive);
+	}
+}
+
+function submitAction(obj, type) {
+	viewModel.status(2);
+	server_post(type,obj.data,
+		function(data, textStatus, jqXHR) {
+			viewModel.statusText("Success!");
+			viewModel.status(1);
+			ko.mapping.fromJS(data, obj.data);
+			myAlert("Success!");
+		}
+		,ajaxError);
+}
+
+function addRssAction(rss) {
+	rss.data.cid(viewModel.comic.data.id());
+	viewModel.rssFeeds.push(rss);
+}
+
+function addArchiveAction(archive) {
+	archive.data.cid(viewModel.comic.data.id());
+	viewModel.archives.push(archive);
+}
+
+function ajaxSuccess(data, textStatus, jqXHR) {
+	viewModel.statusText("Success!");
+	viewModel.status(1);
+}
+
+function ajaxError(jqXHR, textStatus, errorThrown) {
+	viewModel.statusText("Error!\n"+textStatus+"\n"+errorThrown);
+	viewModel.status(-1);
+}
+
+var viewModel = new AppViewModel();
+$.each(%{ print feeds.serializeWith("rssSerializer").raw() }%,
+	function (index, value) {
+		var rss = new Rss();
+		ko.mapping.fromJS(value, rss.data);
+		addRssAction(rss);
+	});
+$.each(%{ print archives.serializeWith("archiveSerializer").raw() }%,
+	function (index, value) {
+		var archive = new Archive();
+		ko.mapping.fromJS(value, archive.data);
+		addArchiveAction(archive);
+	});
+	
+ko.applyBindings(viewModel);
+
+$("img.banner").bind({
+    error: function() {
+       viewModel.bannerExists(false);
+       $("img.banner").attr('src', "/img/banner/_new_comic.png");
+   }
+});
+viewModel.bannerExists(true);
+$("input#labelField").change(
+	function() { window.location.replace('/admin/edit/'+viewModel.comic.data.label()); }
+);
+
+</script>

@@ -1,0 +1,12 @@
+precompiled
+siena-2.0.6
+playapps-1.4
+.settings
+conf/application.conf
+data
+eclipse
+lib
+modules
+precompiled
+test-result
+tmp

@@ -1,0 +1,86 @@
+#{extends 'main.html' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{include 'public/templates/templates.html' /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{set title:'Comic Hill' /}
+
+<img src='/img/title.png' />
+<h1 class='title'>All Comics</h1>
+<div class="comic-hill" data-bind="template: {name: templateName, foreach: comics}"></div>
+
+%{ if (user != null && !user.isGuest()) { }%
+<a  href="@{Application.index}">
+<div id="home-mine"></div></a>
+<a href="@{Subscriptions.generateUpdateQueue}">
+<div id="home-updates"></div></a>
+%{ } }%
+
+<script type="text/javascript">
+
+ko.bindingHandlers.slideVisible = {
+	init: function() {},
+    update: function(element, valueAccessor, allBindingsAccessor) {
+        // First get the latest data that we're bound to
+        var value = valueAccessor(), allBindings = allBindingsAccessor();
+         
+        // Next, whether or not the supplied model property is observable, get its current value
+        var valueUnwrapped = ko.utils.unwrapObservable(value); 
+        
+        var dir = allBindings['dir'];
+        
+        // Now manipulate the DOM element
+        if (valueUnwrapped && element.style.display == 'none') {
+        	$(element).show('slide', {direction: dir}, 160);
+        } else if (!valueUnwrapped) {
+        	$(element).hide('slide', {direction: dir}, 160);
+        }
+    }
+};
+
+
+function AppViewModel() {
+	var self = this;
+	self.comics = ko.observableArray();
+	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
+	self.templateName = function(comic) { return (self.loggedIn() ? ((comic.sub.id() == -1) ? 'comic-template' : 'comic-template-subscribed') : 'comic-template-noauth'); };
+}
+
+var viewModel = new AppViewModel();
+
+server_get('comics', {}, function(comicData) { addComics(comicData);
+	if (viewModel.loggedIn()){
+		server_get('subscriptions', {}, function(subData) {
+			addSubscriptions(subData);
+		});
+	}
+});
+
+function addComics(comicData) {
+	viewModel.comics.removeAll();
+	$.each(comicData,
+		function(index, value) {
+			var newComic = new Comic();
+			ko.mapping.fromJS(value, newComic.data);
+			viewModel.comics.push(newComic);
+		});
+}
+
+function addSubscriptions(subData) {
+	$.each(subData,
+		function(index, value) {
+			var comic = null;
+			for (var tmp in viewModel.comics()) {
+				if (viewModel.comics()[tmp].data.id() == index) {
+					comic = viewModel.comics()[tmp];
+					break;
+				}
+			}
+			ko.mapping.fromJS(value, comic.sub);
+	});
+}
+
+ko.applyBindings(viewModel);
+
+</script>

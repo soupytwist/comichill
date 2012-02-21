@@ -1,0 +1,25 @@
+#{extends 'main-text.html' /}
+#{set title:'Register' /}
+<h1>Register</h1>
+<p>
+Warning!! This application is currently under heavy development.<br/>
+Go ahead and register, but I can not guarantee your account will exist next time you come back.<br/>
+<br/>
+If you encounter any problems on this site, please <a href="@{Application.contact}">contact me</a>.<br/>
+</p>
+#{ifErrors}
+   <h3>Please correct the errors below!</h3>
+#{/ifErrors}
+#{form @Users.createUser()}
+#{field 'email'}
+<dl><label for='${field.name}'>Email:</label></dl>
+<dt><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='${flash.email}'/></dt>
+#{errors 'email'}<li>${error}</li>#{/errors}
+#{/field}
+#{field 'password'}
+<dl><label for='${field.name}'>Password:</label></dl>
+<dt><input type='password' name='${field.name}' value=''/></dt>
+#{errors 'password'}<li>${error}</li>#{/errors}
+#{/field}
+<dl></dl><dt><input type='submit' value='Register' /></dt>
+#{/form}

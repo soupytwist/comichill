@@ -1,0 +1,62 @@
+#{extends 'main.html' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{include 'public/templates/templates.html' /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{set title:'Home' /}
+
+<!-- <a href=""><div class="unread_count" title="There are unread strips!" style="display: block" data-bind="text: unread(), visible: unread() > 0"></div></a> -->
+<img src='/img/title.png' />
+<div class="comic-hill" data-bind="template: {name: 'subscription-template', foreach: subscriptions}"></div>
+<div class="comic-hill" data-bind="template: {name: 'comic-template', foreach: comics}"></div>
+
+<div id="viewer-ctl-wrapper">
+<div id="viewer-ctl">
+<a id="nav-prev" href="@{Application.comics}">
+<div id="viewer-prev"></div></a>
+<a id="nav-next" href="@{Application.comics}">
+<div id="viewer-next"></div></a>
+</div></div>
+
+<script type="text/javascript">
+
+ko.bindingHandlers.slideVisible = {
+		init: function() {},
+	    update: function(element, valueAccessor, allBindingsAccessor) {
+	        // First get the latest data that we're bound to
+	        var value = valueAccessor(), allBindings = allBindingsAccessor();
+	         
+	        // Next, whether or not the supplied model property is observable, get its current value
+	        var valueUnwrapped = ko.utils.unwrapObservable(value); 
+	        
+	        var dir = allBindings['dir'];
+	        
+	        // Now manipulate the DOM element
+	        if (valueUnwrapped && element.style.display == 'none') {
+	        	$(element).show('slide', {direction: dir}, 200);
+	        } else if (!valueUnwrapped) {
+	        	$(element).hide('slide', {direction: dir}, 200);
+	        }
+	    }
+};
+
+function AppViewModel() {
+	var self = this;
+	self.subscriptions = ko.observableArray();
+	self.comics = ko.observableArray();
+}
+
+var viewModel = new AppViewModel();
+server_get('subscriptions', {}, function(data) {
+	$.each(data,
+			function(index, value) {
+				var newSub = new Subscription();
+				ko.mapping.fromJS(value, newSub.data);
+				viewModel.subscriptions.push(newSub);
+			});
+});
+
+ko.applyBindings(viewModel);
+
+</script>

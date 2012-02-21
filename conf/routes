@@ -1,0 +1,89 @@
+# Routes
+
+# Controller Outline
+# ~~~~ Application
+# Site navigation
+#
+# ~~~~ Users
+# Handles user authentication
+#
+# ~~~~ Comics
+# Handles comic listing and categorization
+#
+# ~~~~ Viewer
+# Allows users (non-authenticated) to view comics by the strip
+
+# User pages
+GET     /                                       Application.index
+GET     /about                                  Application.about
+GET     /contact                                Application.contact
+GET     /home                                   Application.home
+GET     /login                                  Application.login
+POST    /doLogin                                Users.login
+GET     /logout                                 Users.logout
+GET     /register                               Application.register
+GET     /comics/?                               Application.all
+GET     /comics/{label}/{<[0-9]+>sid}/?         Viewer.viewBySid
+GET     /queue/{label}/{<[0-9]+>sid}/?          Viewer.viewQueue
+GET     /comics/{label}/?                       Viewer.viewByLabel
+GET     /strips/{<[0-9]+>id}/?                  Viewer.viewById
+GET     /visit/{<[0-9]+>id}                     Subscriptions.visit
+GET     /updates/?                              Subscriptions.generateUpdateQueue
+
+GET     /tag/{tag}                              Comics.getByTag
+
+GET     /user/queue/{<[0-9]+>id}                Users.getQueue
+GET     /strips/queue/{<[0-9]+>id}              Strips.getQueue
+POST    /contact                                Application.doContact
+
+# Administration Panel
+GET     /admin                                  Admin.adminPanel
+GET     /admin/doUpdates                        Admin.doUpdates
+GET     /admin/loadArchive/{<[0-9]+>id}/?       Admin.loadArchive
+GET     /admin/edit/{label}/{<[0-9]+>id}/?      Admin.editComic
+GET     /admin/edit/{label}/?                   Admin.editComic
+POST    /admin/banner/{label}                   Admin.doUploadBanner
+
+# REST / JSON
+GET    /rest/comics/all                         Comics.getAll
+GET    /rest/comics/{<[0-9]+>id}                Comics.get
+GET    /rest/comics/{label}                     Comics.getByLabel
+POST   /rest/comics                             Comics.create
+PUT    /rest/comics/{<[0-9]+>id}                Comics.update
+DELETE /rest/comics/{<[0-9]+>id}                Comics.delete
+
+GET    /rest/strips/{<[0-9]+>id}                Strips.get
+GET    /rest/strips/{label}/{<[0-9]+>sid}       Strips.getBySid
+GET    /rest/strips/updates                     Subscriptions.getUpdates
+GET    /rest/strips/{label}                     Strips.getByComic
+
+POST   /admin/rss/fetch                         RssController.fetch
+GET    /rest/rss/{<[0-9]+>id}                   RssController.get
+POST   /rest/rss                                RssController.create
+PUT    /rest/rss/{<[0-9]+>id}                   RssController.update
+POST   /admin/archive/fetch                     ArchiveController.fetch
+GET    /rest/archive/{<[0-9]+>id}               ArchiveController.get
+POST   /rest/archive                            ArchiveController.create
+PUT    /rest/archive/{<[0-9]+>id}               ArchiveController.update
+DELETE /rest/stripsource/{<[0-9]+>id}           StripSourceController.delete
+
+GET    /rest/subscription/{<[0-9]+>id}          Subscriptions.get
+POST   /rest/subscription                       Subscriptions.create
+PUT    /rest/subscription/{<[0-9]+>id}          Subscriptions.update
+DELETE /rest/subscription/{<[0-9]+>id}          Subscriptions.delete
+GET    /rest/subscriptions/all                  Subscriptions.getAll
+
+GET    /admin/commit/strips                     CommitController.commitStrips
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Images
+GET     /img/banner/                            staticDir:data/banners
+GET     /img/                                   staticDir:public/images
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

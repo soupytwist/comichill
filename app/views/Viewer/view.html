@@ -1,0 +1,26 @@
+#{extends 'barebone.html' /}
+#{script 'knockout-2.0.0.debug.js' /}
+#{script 'knockout.mapping-latest.debug.js' /}
+#{script 'knockout-models.js' /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{script 'view/viewer.js' /}
+#{stylesheet 'viewer.css' /}
+#{set title:comic.title +" - "+ strip.sid /}
+
+<iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.strip.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>
+<iframe class="cframe" id="cframe2" data-bind="fadeVisible: f2.visible(), cframeSrc: f2.data.strip.url()"></iframe>
+
+<div id="viewer-ctl-wrapper">
+<div id="viewer-ctl">
+<a id="nav-prev" %{if (nav.prev != null) {}%href="@{Viewer.viewBySid(nav.prev.comic.label, nav.prev.sid)}"%{}else{}%href="/" class="nav-disabled"%{}}%>
+<div id="viewer-prev"></div></a>
+<div id="viewer-hill"></div>
+<a id="nav-next" %{if (nav.next != null) {}%href="@{Viewer.viewBySid(nav.next.comic.label, nav.next.sid)}"%{}else{}%href="/" class="nav-disabled"%{}}%>
+<div id="viewer-next"></div></a>
+</div></div>
+
+<script>
+var mode = "${mode}";
+viewModel.init(%{ print strip.serializeWith("stripSerializer").raw() }%, %{ print comic.serializeWith("comicSerializer").raw() }%);
+ko.applyBindings(viewModel);
+</script>

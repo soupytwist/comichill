@@ -1,0 +1,19 @@
+#{extends 'main-text.html' /}
+#{set title:'Contact' /}
+<h1>Contact Me</h1>
+<p>
+Encountered a problem with the site?<br/>
+Have some feedback or suggestions?<br/>
+Please use the form below to let me know!
+</p>
+#{form @Application.doContact()}
+#{field 'email'}
+<dl><label for='${field.name}'>Your Email:</label></dl>
+<dt><input type='text' name='${field.name}' class='${field.errorClass}' value='${user?.email}'/></dt>
+#{/field}
+#{field 'messageBody'}
+<dl><label for='${field.name}'>Message:</label></dl>
+<dt><textarea name='${field.name}' class='autofocus ${field.errorClass}'>${flash.messageBody}</textarea></dt>
+#{/field}
+<dl></dl><dt><input type='submit' value='Send' /></dt>
+#{/form}

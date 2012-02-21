@@ -1,0 +1,22 @@
+#{extends 'main.html' /}
+#{set title:'Comics' /}
+#{script 'knockout-2.0.0.debug.js' /}
+
+<ul class="subscription_list">
+<li class="subscription_listing subscribed" data-bind="foreach: viewModel">
+	<a href='@{Viewer.viewComic("label")}'>
+		<img class="comic_banner" data-bind="attr: {src: '/img/'+label+'_banner_lg.png'}">
+	</a>
+	<div class="ol_unsubscribe" >x</div>
+	<a href='@{Viewer.viewComicUnread("label")}'><div class="unread_count" title="There are unread strips!" style="display: block">3</div></a>
+	<span class="comic_title" data-bind="text: title"></span>
+	<span class="comic_author" data-bind="text: author"></span>
+	<img class="rating" onmousemove="hoverRating(event, this)"><span class="comm_rating" title="Community rating: 4.3">4.3</span>
+	<input type="hidden" value="5">
+</li>
+</ul>
+
+<script type="text/javascript">
+var viewModel = ${comics.serializeWith('comicListSerializer').raw()};
+ko.applyBindings(viewModel);
+</script>

@@ -1,0 +1,116 @@
+p, h1, form, button {
+	border:0;
+	margin:0;
+	padding:0;
+}
+
+.comic {
+	float: none;
+	margin:0 auto;
+}
+
+div.formBlock {
+	border: 1px solid #CCC;
+	background-color: #EEE;
+	margin:0 auto;
+	width:480px;
+	padding:14px;
+	position: relative;
+}
+
+div.formBlock h1 {
+	font-size:20px;
+	font-weight:bold;
+	margin-bottom:8px;
+}
+
+div.formBlock p {
+	font-size:11px;
+	color:#666666;
+	margin-bottom:20px;
+	border-bottom:solid 1px #666666;
+	padding-bottom:10px;
+}
+
+div.formBlock label{
+	display:block;
+	font-weight:bold;
+	text-align:right;
+	width:140px;
+	float:left;
+}
+
+div.formBlock .subLabel{
+	color:#666666;
+	display:block;
+	font-size:11px;
+	font-weight:normal;
+	text-align:right;
+	width:140px;
+}
+
+div.formBlock input:not([type=checkbox]){
+	float:left;
+	font-size:12px;
+	padding:4px 2px;
+	border:solid 1px #aacfe4;
+	width:320px;
+	margin:2px 0 20px 10px;
+}
+
+div.formBlock input[type=checkbox]{
+	clear: none;
+}
+
+div.formBlock button {
+	clear:both;
+	margin-left:150px;
+	width:125px;
+	height:31px;
+	text-align:center;
+	line-height:31px;
+	color:#222222;
+	font-size:11px;
+	font-weight:bold;
+}
+
+div.resultsPreview {
+	position: absolute;
+	left: 400px;
+	top: 64px;
+	border: 1px solid #CCC;
+	background-color: #EEE;
+	padding: 12px;
+	margin: 0px;
+	width: 240px;
+	max-height: 240px;
+}
+
+div.resultsPreview span {
+	float: left;
+	clear: both;
+}
+
+div.resultsPreview .small {
+	font-size: 10px;
+	float: right;
+	clear: both;
+}
+
+div.resultsPreview ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.ok {
+	background-color: #D4FFDE!important;
+}
+
+button.rightFloat {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	height:24px!important;
+	line-height:24px!important;
+}
