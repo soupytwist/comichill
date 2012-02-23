@@ -29,12 +29,12 @@ public class Authentication extends Controller {
             	Logger.warn(nfe, "Unable to parse uid in the session; uid=%s", session.get("uid"));
             }
         }
-        if (user == null) {
+        /*if (user == null) {
         	// If the user is not logged in, track them as a guest
             user = User.guest();
             Logger.debug("Setting guest user %s", user.toString());
             setAuthenticated(user);
-        }
+        }*/
         renderArgs.put("user", user);
     }
 	
@@ -98,7 +98,8 @@ public class Authentication extends Controller {
 		else
 			Logger.info("User has logged out %s", user.toString());
 		session.clear();
-		Application.logout();
+		//Application.logout();  This was needed to clear the javascript cache
+		Application.index();
 	}
 
 	public static User requireLoggedIn() {

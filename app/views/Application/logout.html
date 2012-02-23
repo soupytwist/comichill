@@ -1,6 +1,11 @@
-#{extends "barebone.html" /}
+<html>
+<head><title>Logging out...</title></head>
+<body>
+If you are not redirected, please click <a href="@{Application.index}">here</a>.
 <script language="javascript">
-if (localStorage)
-	delete localStorage.home_subscriptions;
+//if (localStorage)
+//delete localStorage.home_subscriptions;
 window.location.replace('/');
 </script>
+</body>
+</html>

@@ -18,10 +18,11 @@ GET     /                                       Application.index
 GET     /about                                  Application.about
 GET     /contact                                Application.contact
 GET     /home                                   Application.home
-GET     /login                                  Application.login
-POST    /doLogin                                Users.login
+GET     /login                                  Users.login
+POST    /login                                  Users.login
 GET     /logout                                 Users.logout
-GET     /register                               Application.register
+GET     /register                               Users.register
+POST    /register                               Users.register
 GET     /comics/?                               Application.all
 GET     /comics/{label}/{<[0-9]+>sid}/?         Viewer.viewBySid
 GET     /queue/{label}/{<[0-9]+>sid}/?          Viewer.viewQueue

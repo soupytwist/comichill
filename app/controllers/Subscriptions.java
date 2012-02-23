@@ -80,9 +80,11 @@ public class Subscriptions extends Controller {
     	User connected = Authentication.requireLoggedIn();
     	Strip strip = Strip.getById(id);
     	Subscription sub = Subscription.getByUserAndCid(connected, strip.cid);
-    	sub.bookmark = strip.sid;
-    	sub.latest = Math.max(sub.latest, strip.sid);
-    	sub.update();
+    	if (sub != null) {
+	    	sub.bookmark = strip.sid;
+	    	sub.latest = Math.max(sub.latest, strip.sid);
+	    	sub.update();
+    	}
     	ok();
     }
 	

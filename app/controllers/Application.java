@@ -66,9 +66,5 @@ public class Application extends Controller {
     public static void logout() {
     	render();
     }
-	
-	public static void register() {
-		render();
-	}
     
 }

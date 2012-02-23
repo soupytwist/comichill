@@ -10,7 +10,7 @@ If you encounter any problems on this site, please <a href="@{Application.contac
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
 #{/ifErrors}
-#{form @Users.createUser()}
+#{form @Users.register(), method: 'POST'}
 #{field 'email'}
 <dl><label for='${field.name}'>Email:</label></dl>
 <dt><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='${flash.email}'/></dt>
@@ -20,6 +20,11 @@ If you encounter any problems on this site, please <a href="@{Application.contac
 <dl><label for='${field.name}'>Password:</label></dl>
 <dt><input type='password' name='${field.name}' value=''/></dt>
 #{errors 'password'}<li>${error}</li>#{/errors}
+#{/field}
+#{field 'retype_password'}
+<dl><label for='${field.name}'>Retype Password:</label></dl>
+<dt><input type='password' name='${field.name}' value=''/></dt>
+#{errors 'retype_password'}<li>${error}</li>#{/errors}
 #{/field}
 <dl></dl><dt><input type='submit' value='Register' /></dt>
 #{/form}

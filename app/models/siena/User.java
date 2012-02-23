@@ -29,7 +29,9 @@ public class User extends Model {
 	
 	// Default no-arguments constructor
 	public User() {
+		super();
 		this.adminPrivelege = false;
+		this.id = -1L;
 	}
 	
 	public User(String email) {
