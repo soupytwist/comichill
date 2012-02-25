@@ -25,7 +25,9 @@ var defaultComic = {
 	author: "",
 	homepage: "http://www.",
 	numStrips: 0,
-	tags: ""
+	tags: "",
+	rankPop: 0,
+	rankHits: 0
 };
 
 var defaultStrip = {
@@ -91,8 +93,8 @@ function Comic() {
 	self.latestUrl = ko.computed(function() { return '/comics/'+self.data.label()+'/'+(self.sub.latest()+1); });
 	self.unreadCount = ko.computed(function() {return (self.sub.latest()==0)? self.data.numStrips()-1 : self.data.numStrips() - self.sub.latest(); });
 	self.details = ko.observable(false);
-	self.showDetails = function() { self.details(true); };
-	self.hideDetails = function() { self.details(false); };
+	self.showDetails = function() { /*self.details(true);*/ };
+	self.hideDetails = function() { /*self.details(false);*/ };
 	self.subscribe = function() {
 		self.sub.cid(self.data.id());
 		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); });

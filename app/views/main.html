@@ -1,9 +1,11 @@
 #{extends 'barebone.html' /}
 
+		#{set 'moreMeta'}
 		<meta property="og:title" content="Comic Hill"/>
 		<meta property="og:site_name" content="Comic Hill"/>
-		<meta property="og:image" content="@@{'public/images/preview.png'}"/> 
-
+		<meta property="og:image" content="@@{'public/images/preview.png'}"/>
+		#{/set} 
+		
     	<div id="content-wrapper"><div id="content">
         #{doLayout /}
         </div></div>

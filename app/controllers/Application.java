@@ -22,11 +22,7 @@ import models.siena.User;
 public class Application extends Controller {
     
     public static void index() {
-    	User connected = Authentication.connected();
-    	if (connected != null && !connected.isGuest())
-    		render();
-    	else
-    		renderTemplate("Application/all.html");
+    	render();
     }
     
     public static void about() {

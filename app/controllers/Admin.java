@@ -14,7 +14,8 @@ import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 
-import jobs.Updater;
+import jobs.Judgement;
+import jobs.RssUpdater;
 
 import pojo.StripNode;
 
@@ -134,8 +135,14 @@ public class Admin extends Controller {
 	public static void doUpdates() {
 		Authentication.requireAdmin();
 		List<RssStripSource> feeds = RssStripSource.getAllEnabled();
-		new Updater().now();
+		new RssUpdater().now();
 		render(feeds);
 	}
 	
+	public static void doJudgement() {
+		Authentication.requireAdmin();
+		new Judgement().now();
+		flash.put("message", "Judgement has begun...");
+		Application.index();
+	}
 }

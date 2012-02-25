@@ -10,6 +10,7 @@ import play.data.validation.Required;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import siena.Query;
 import util.Serializers;
 
 
@@ -23,7 +24,7 @@ public class Subscription extends Model {
 	
 	@Required
 	@Min(value = 0)
-	public int bookmark, latest;
+	public int bookmark, latest, hits;
 	
 	@Required
 	public User owner;
@@ -59,20 +60,25 @@ public class Subscription extends Model {
 	}
 	
 	public static Subscription getById(Long id) {
-		return Model.all(Subscription.class).getByKey(id);
+		return all().getByKey(id);
 	}
 	
 	public static List<Subscription> getByUser(User user) {
-		return (List<Subscription>) Model.all(Subscription.class).filter("owner", user).fetch();
+		return (List<Subscription>) all().filter("owner", user).fetch();
 	}
 	
 	public static Subscription getByUserAndCid(User user, Long cid) {
-		return Model.all(Subscription.class).filter("owner", user).filter("cid", cid).get();
+		return all().filter("owner", user).filter("cid", cid).get();
+	}
+	
+	public static Query<Subscription> all() {
+		return Model.all(Subscription.class);
 	}
 	
 	public void save() {
 		if (bookmark > latest)
 			latest = bookmark;
+		hits++;
 		super.save();
 	}
 	

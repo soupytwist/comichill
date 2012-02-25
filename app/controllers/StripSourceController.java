@@ -10,7 +10,6 @@ import play.Logger;
 import play.data.binding.Binder;
 import play.mvc.Controller;
 import pojo.StripNode;
-import util.JsonObjectBinder;
 
 import models.siena.ArchiveStripSource;
 import models.siena.Comic;
@@ -24,11 +23,12 @@ public class StripSourceController extends Controller {
 		StripSource ss = StripSource.getById(id);
 		
 		if (ss != null) {
+			Logger.warn("Deleting a StripSource: %s", ss.toString());
 			ss.delete();
 			ok();
 		} else {
 			response.status = 400;
-			renderJSON("ERROR StripSource does not exist; Invalid id");
+			renderText("ERROR StripSource does not exist; Invalid id");
 		}
 	}
 }

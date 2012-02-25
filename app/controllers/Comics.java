@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Priority;
@@ -16,6 +17,7 @@ import play.data.validation.Required;
 import play.mvc.Controller;
 import siena.Query;
 import util.My;
+import util.Serializers;
 
 public class Comics extends Controller {
 	
@@ -27,33 +29,29 @@ public class Comics extends Controller {
     public static void getAll() {
 		List<Comic> comics = Comic.all().fetch();
 		Logger.debug("Found %d comics", comics.size());
-    	renderJSON(My.mapByKey("id", comics.toArray()));
+    	renderJSON(Serializers.gson.toJson(My.mapByKey("id", comics.toArray())));
     }
     
-	// REST API
 	public static void getByLabel(String label) {
 		Logger.debug("Getting comic by label %s", label);
-		renderJSON(Comic.getByLabel(label));
+		renderJSON(Serializers.gson.toJson(Comic.getByLabel(label)));
 	}
 	
 	public static void getByTag(String tag) {
 		List<Comic> comics = Comic.all().search( "|"+tag+"|", "tags").fetch();
-		renderJSON(My.mapByKey("id", comics.toArray()));
+		renderJSON(Serializers.gson.toJson(My.mapByKey("id", comics.toArray())));
 	}
 	
 	public static void get(Long id) {
 		Logger.debug("Getting comic by id %d", id);
-		renderJSON(Comic.getById(id));
+		renderJSON(Serializers.gson.toJson(Comic.getById(id)));
 	}
 	
 	public static void create(JsonObject body) {
 		// First check if the comic already exists
-		body.remove("created");
-		body.remove("updated");
-		body.remove("id");
-		Comic comic = new Gson().fromJson(body, Comic.class);
-		Comic existing = Comic.getByLabel(comic.label);
+		Comic comic = Serializers.gson.fromJson(body, Comic.class);
 		Logger.debug("Comics.create: received "+comic.toString());
+		Comic existing = Comic.getByLabel(comic.label);
 		
 		if (existing == null) {
 			// Check validation
@@ -61,7 +59,7 @@ public class Comics extends Controller {
 				// Insert the comic
 				Logger.info("Creating comic %s %s", comic.label, comic.toString());
 				comic.insert();
-				renderJSON(comic);
+				renderJSON(Serializers.gson.toJson(comic));
 			} else {
 				// TODO Improve method for returning validation errors
 				response.status = 400;
@@ -75,9 +73,7 @@ public class Comics extends Controller {
 	}
 	
 	public static void update(Long id, JsonObject body) {
-		body.remove("created");
-		body.remove("updated");
-		Comic comic = new Gson().fromJson(body, Comic.class);
+		Comic comic = Serializers.gson.fromJson(body, Comic.class);
 		Comic existing = Comic.getById(id);
 		Logger.debug("Comics.update: received "+comic.toString());
 		
@@ -93,7 +89,7 @@ public class Comics extends Controller {
 				// Persist in the database
 				Logger.info("Updating comic %s: %s -> %s", comic.label, old, existing.toString());
 				existing.update();
-				renderJSON(existing);
+				renderJSON(Serializers.gson.toJson(existing));
 			} else {
 				response.status = 400;
 				renderJSON(validation.errorsMap());
@@ -114,12 +110,6 @@ public class Comics extends Controller {
 			response.status = 400;
 			renderText("ERROR Comic does not exist");
 		}
-	}
-	
-	public static void list() {
-		List<Comic> comics = Comic.all().fetch();
-		Logger.debug("There are %d comics", comics.size());
-		render(comics);
 	}
 	
 }

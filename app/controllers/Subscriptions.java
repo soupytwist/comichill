@@ -83,7 +83,7 @@ public class Subscriptions extends Controller {
     	if (sub != null) {
 	    	sub.bookmark = strip.sid;
 	    	sub.latest = Math.max(sub.latest, strip.sid);
-	    	sub.update();
+	    	sub.save();
     	}
     	ok();
     }

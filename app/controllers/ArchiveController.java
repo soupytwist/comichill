@@ -14,7 +14,6 @@ import play.mvc.Controller;
 import play.libs.F;
 import play.libs.F.T2;
 import pojo.StripNode;
-import util.JsonObjectBinder;
 import util.Serializers;
 
 import models.siena.ArchiveStripSource;
@@ -24,63 +23,33 @@ import models.siena.StripSource;
 
 public class ArchiveController extends Controller {
 	
-	public static void fetch(JsonObject body) {
-		try {
-			body.remove("created");
-			body.remove("updated");
-			
-			ArchiveStripSource archive = new Gson().fromJson(body, ArchiveStripSource.class);
-			Logger.debug("Got ArchiveStripSource: %s", archive.toString());
-			
-			List<StripNode> strips = null;
-			if (archive != null) {
-				strips = archive.load();
-			}
-			
-			renderJSON(strips);
-		} catch (Exception e) {
-			Logger.error("Error fetching archive links;\n%s", e.toString());
-			response.status = 400;
-			renderJSON("ERROR");
-		}
-	}
-	
 	public static void get(Long id) {
 		ArchiveStripSource archive = ArchiveStripSource.getById(id);
-		renderJSON(archive);
+		renderJSON(Serializers.gson.toJson(archive));
 	}
 	
 	public static void create(JsonObject body) {
 		try {
-			body.remove("created");
-			body.remove("updated");
-			body.remove("id");
-			
-			ArchiveStripSource archive = new Gson().fromJson(body, ArchiveStripSource.class);
-			
+			ArchiveStripSource archive = Serializers.gson.fromJson(body, ArchiveStripSource.class);
 			Logger.debug("Got ArchiveStripSource: %s", archive.toString());
 			
 			if (archive != null && validation.valid(archive).ok) {
 				archive.insert();
-				renderJSON(archive);
+				renderJSON(Serializers.gson.toJson(archive));
 			} else {
 				response.status = 400;
-				renderJSON("ERROR");
+				renderText("ERROR");
 			}
 		} catch (Exception e) {
 			Logger.error("Error creating archive;\n%s", e.toString());
 			response.status = 400;
-			renderJSON("ERROR");
+			renderText("ERROR");
 		}
 	}
 	
 	public static void update(Long id, JsonObject body) {
 		try {
-			// TODO More error checking in update
-			Logger.debug("Received RSS update object: %s", body.toString());
-			body.remove("created");
-			body.remove("updated");
-			ArchiveStripSource archive = new Gson().fromJson(body, ArchiveStripSource.class);
+			ArchiveStripSource archive = Serializers.gson.fromJson(body, ArchiveStripSource.class);
 			ArchiveStripSource existing = ArchiveStripSource.getById(archive.id);
 			Logger.debug(existing.toString()+"\n"+archive.toString());
 			
@@ -96,21 +65,21 @@ public class ArchiveController extends Controller {
 					existing.update();
 					
 					Logger.info("Updated archive %d: %s -> %s", archive.id, old, existing.toString());
-					renderJSON(archive);
+					renderJSON(Serializers.gson.toJson(archive));
 				} else {
 					Logger.error("Error updating archive; changes failed to validate");
 					response.status = 400;
-					renderJSON("ERROR");
+					renderText("ERROR");
 				}
 			} else {
 				Logger.error("Error updating archive; Models are missing");
 				response.status = 400;
-				renderJSON("ERROR");
+				renderText("ERROR");
 			}
 		} catch (Exception e) {
 			Logger.error("Error updating archive;\n%s", e.toString());
 			response.status = 400;
-			renderJSON("ERROR");
+			renderText("ERROR");
 		}
 	}
 }

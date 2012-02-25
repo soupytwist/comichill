@@ -7,6 +7,12 @@
 #{stylesheet 'viewer.css' /}
 #{set title:comic.title +" - "+ strip.sid /}
 
+#{set 'moreMeta'}
+<meta property="og:title" content="#{get 'title' /}"/>
+<meta property="og:site_name" content="Comic Hill"/>
+<meta property="og:image" content="@@{'/data/banners/'+comic.label+'.png'}"/> 
+#{/set}
+
 <iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.strip.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>
 <iframe class="cframe" id="cframe2" data-bind="fadeVisible: f2.visible(), cframeSrc: f2.data.strip.url()"></iframe>
 

@@ -10,8 +10,12 @@
             #{404 result /}
         #{/if}
         #{else}
-            <h1>Not found</h1>
+            <h1>Not found! :(</h1>
+            <p>Sorry! If you were linked to this page from Comic Hill, please let me know what happened!</p>
+            <p>You can contact me at <a href="@{Application.contact()}">this page</a>.</p>
+            <br/>
             <p>
+            	(You can ignore this part)
                 ${result.message}
             </p>
         #{/else}

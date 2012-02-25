@@ -13,7 +13,7 @@ public class SerializerExtensions extends JavaExtensions {
      * Serialize a model to JSON with a given serializer.
      */
     public static String serializeWith(Object model, String serializer) throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException {
-        JSONSerializer js = (JSONSerializer) Serializers.class.getField(serializer).get(null);
+    	JSONSerializer js = (JSONSerializer) Serializers.class.getField(serializer).get(null);
         return js.serialize(model);
     }
      

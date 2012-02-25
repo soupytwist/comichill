@@ -76,6 +76,10 @@ GET    /rest/subscriptions/all                  Subscriptions.getAll
 
 GET    /admin/commit/strips                     CommitController.commitStrips
 
+# Start Jobs
+GET    /job/updater                             Admin.doUpdates
+GET    /job/judgement                           Admin.doJudgement
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

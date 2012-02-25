@@ -1,5 +1,6 @@
 package models.siena;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import siena.Generator;
 import siena.Id;
 import siena.Model;
 import siena.Query;
+import util.Serializers;
 
 public class Comic extends Model {
 	
@@ -17,20 +19,27 @@ public class Comic extends Model {
 	public Long id;
 	
 	@Required
-	public String title, label, author, homepage, tags;
+	public String title, label, author, homepage;
+	
+	public String tags;
 	
 	@GeneratedValue
 	public int numStrips;
 	
 	@GeneratedValue
-	public Date created, updated;
+	public int rankPop, rankHits;
+	
+	@GeneratedValue
+	public Long created, updated;
 	
 	// Default no-arguments constructor
 	public Comic() {
-		this.created = new Date();
-		this.updated = new Date();
+		this.created = new Date().getTime();
+		this.updated = new Date().getTime();
 		this.numStrips = 0;
 		this.id = -1L;
+		this.rankPop = 0;
+		this.rankHits = 0;
 	}
 	
 	public Comic(String acronym, String title, String author, String homepage) {
@@ -53,6 +62,10 @@ public class Comic extends Model {
 		return ++numStrips;
 	}
 	
+	public String[] tagsAsList() {
+		return tags.split("|");
+	}
+	
 	public Strip newStrip(String url, String title) {
 		return new Strip(this, url, title);
 	}
@@ -70,12 +83,11 @@ public class Comic extends Model {
 	}
 	
 	public void save() {
-		this.updated = new Date();
+		this.updated = new Date().getTime();
 		super.save();
 	}
 	
 	public String toString() {
-		return "[Comic ID="+id+" label="+label+" title="+title+" author="+author+" homepage="+homepage+" numStrips="+numStrips+" created="+created+"]";
+		return Serializers.gson.toJson(this);
 	}
-	
 }

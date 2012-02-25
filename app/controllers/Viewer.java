@@ -16,10 +16,16 @@ public class Viewer extends Controller {
 	public static void viewBySid(String label, int sid) {
 		User connected = Authentication.connected();
 		Comic comic = Comic.getByLabel(label);
+		
+		if (comic == null) {
+			flash.put("message", "The comic you are trying to view does not exist!");
+			Application.index();
+		}
+		
 		Strip strip = Strip.get(comic.id, sid);
 		
 		if (strip == null) {
-			flash.put("message", "The comic you are trying to view does not exist!");
+			flash.put("message", "The strip you are trying to view does not exist!");
 			Application.index();
 		}
 		

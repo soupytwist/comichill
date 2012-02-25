@@ -14,9 +14,9 @@ body {
 #content-wrapper {
 	margin: 64px auto 24px;
 	padding: 12px;
-	width: 800px;
+	width: 924px;
 	border-radius: 8px;
-	overflow: auto;
+	overflow: show;
 }
 
 .content-with-text {
@@ -67,6 +67,10 @@ body {
 
 .comic-hill {
 	clear: both;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	overflow: hidden;
 }
 
 .comic a {
@@ -80,9 +84,9 @@ body {
 
 .comic {
 	float: left;
-	margin: 6px 6px;
-	width: 380px;
-	height: 120px;
+	margin: 6px 0px;
+	width: 282px;
+	height: 80px;
 	border: 3px solid #000;
 	border-radius: 12px;
 	overflow: hidden;
@@ -175,6 +179,43 @@ body {
 	cursor: pointer;
 }
 
+.comic-hill .column {
+	float: left;
+	width: 288px;
+	margin: 0px 6px;
+	padding: 0px;
+	padding-bottom:9000px;
+	margin-bottom:-9000px;
+}
+
+#first {
+	margin-top: 50px;
+}
+
+#middle {
+}
+
+#last {
+	margin-top: 50px;
+}
+
+.column h1.title {
+	margin: 0;
+	padding: 6px 12px;
+	width: 258px;
+	float: left;
+	border-radius: 12px;
+	background-color: white;
+	border: 3px solid black;
+	text-align: center;
+}
+
+.column img.title {
+	margin: 0;
+	width: 282px;
+	float: left;
+}
+
 .status {
 	color: gray;
 	font-weight: bold;
@@ -193,7 +234,7 @@ input.hasError {
 }
 
 div#home-all {
-	position: absolute;
+	position: fixed;
 	left: 0px;
 	bottom: 0px;
 	width: 120px;
@@ -235,15 +276,6 @@ div.my-alert {
 	border: 2px solid black;
 }
 
-h1.title {
-	margin: 0;
-	padding: 6px 12px;
-	float: left;
-	border-radius: 12px;
-	background-color: white;
-	border: 3px solid black;
-}
-
 div#add-subscriptions-dialog {
 	display: none;
 	margin: 24px;
@@ -254,4 +286,16 @@ div#add-subscriptions-dialog {
 	border: 3px solid black;
 }
 
-
+noscript {
+	position: fixed;
+	font-size: 32px;
+	font-weight: bold;
+	padding: 6px;
+	color: white;
+	background-color: black;
+	left: 10%;
+	right: 10%;
+	top: 120px;
+	border-radius: 12px;
+	text-align: center;
+}

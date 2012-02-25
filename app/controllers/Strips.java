@@ -18,6 +18,7 @@ import models.siena.StripQueue;
 import models.siena.User;
 
 import util.My;
+import util.Serializers;
 
 public class Strips extends Controller {
 	
@@ -25,26 +26,21 @@ public class Strips extends Controller {
 		Logger.debug("Getting strip by id %d", id);
 		Strip strip = Strip.getById(id);
 		Comic comic = strip.getComic();
-		renderJSON(My.map(strip, comic));
+		renderJSON(Serializers.gson.toJson(My.map(strip, comic)));
 	}
 	
 	public static void getBySid(String label, int sid) {
 		Comic comic = Comic.getByLabel(label);
 		if (comic != null) {
 			Strip strip = Strip.get(comic.id, sid);
-			renderJSON(strip);
+			renderJSON(Serializers.gson.toJson(strip));
 		}
 	}
 	
 	public static void getByComic(String label) {
 		Comic comic = Comic.getByLabel(label);
 		List<Strip> strips = Strip.getStripsByCid(comic.id).order("sid").fetch();
-		Map<Integer, Strip> ids = new HashMap(strips.size());
-		int i = 0;
-		for (Strip s : strips) {
-			ids.put(i++, s);
-		}
-		renderJSON(ids);
+		renderJSON(Serializers.gson.toJson(strips));
 	}
 	
 	public static void getQueue(Long id) {
@@ -52,7 +48,7 @@ public class Strips extends Controller {
 		Strip strip = Strip.getById(id);
 		queue.add(Strip.getStripsByCid(strip.cid).fetch());
 		queue.setCurrent(strip);
-		renderJSON(queue.toJSON());
+		renderJSON(Serializers.gson.toJson(queue.toJSON()));
 	}
 	
 	public static String bulkImport(List<StripNode> nodes, Comic comic) {

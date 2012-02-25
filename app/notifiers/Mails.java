@@ -26,5 +26,13 @@ public class Mails extends Mailer {
 			setFrom("ComicHill.com <no-reply@comichill.com>");
 			send(user);
 		}
-   }
+	}
+	
+	public static void notifyMe(String sub, String body) {
+		addRecipient("nick@comichill.com");
+		setSubject("[NOTIFY] %s", sub);
+		setReplyTo("no-reply@comichill.com");
+		setFrom("Application Notification <application@comichill.com>");
+		send(body);
+	}
 }

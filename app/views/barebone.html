@@ -3,6 +3,8 @@
     <head>
         <title>#{get 'title' /}</title>
         <meta charset="${_response_encoding}">
+        <meta http-equiv="content-language" content="en">
+        #{get 'moreMeta' /}
         <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
         #{get 'moreStyles' /}
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
@@ -13,6 +15,7 @@
     </head>
     <body>
         #{include 'topnav.html' /}
+        <noscript>Please enable javascript!</noscript>
         %{if (flash.message) print "<script type='text/javascript'>myAlert(\""+flash.message+"\");</script>"}%
         #{doLayout /}
     </body>
