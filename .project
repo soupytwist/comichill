@@ -17,13 +17,7 @@
 	</natures>
 	<linkedResources><link><name>siena-2.0.6</name><type>2</type><location>/web/comichill/modules/siena-2.0.6/app</location></link>
 <link><name>conf/siena-2.0.6</name><type>2</type><location>/web/comichill/modules/siena-2.0.6/conf</location></link>
-<link><name>secure</name><type>2</type><location>/opt/play-1.2.3/modules/secure/app</location></link>
-<link><name>conf/secure</name><type>2</type><location>/opt/play-1.2.3/modules/secure/conf</location></link>
-<link><name>public/secure</name><type>2</type><location>/opt/play-1.2.3/modules/secure/public</location></link>
 <link><name>playapps-1.4</name><type>2</type><location>/web/comichill/modules/playapps-1.4/app</location></link>
 <link><name>conf/playapps-1.4</name><type>2</type><location>/web/comichill/modules/playapps-1.4/conf</location></link>
-<link><name>greenscript-1.2.8</name><type>2</type><location>/web/comichill/modules/greenscript-1.2.8/app</location></link>
-<link><name>conf/greenscript-1.2.8</name><type>2</type><location>/web/comichill/modules/greenscript-1.2.8/conf</location></link>
-<link><name>public/greenscript-1.2.8</name><type>2</type><location>/web/comichill/modules/greenscript-1.2.8/public</location></link>
 </linkedResources>
 </projectDescription>

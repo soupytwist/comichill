@@ -1,18 +1,12 @@
 #{extends 'main.html' /}
-#{js 'knockout-models jquery-ui-1.8.17.min' /}
+#{knockout /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
 <img src='/img/title.png' />
 <h1 class='title'>All Comics</h1>
 <div class="comic-hill" data-bind="template: {name: templateName, foreach: comics}"></div>
-
-%{ if (user != null && !user.isGuest()) { }%
-<a  href="@{Application.index}">
-<div id="home-mine"></div></a>
-<a href="@{Subscriptions.generateUpdateQueue}">
-<div id="home-updates"></div></a>
-%{ } }%
-
 <script type="text/javascript">
 
 ko.bindingHandlers.slideVisible = {

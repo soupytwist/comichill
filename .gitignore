@@ -4,7 +4,10 @@ playapps-1.4
 greenscript-1.2.8
 public/greenscript-1.2.8
 public/javascripts/routes.js
+public/images
 .settings
+.classpath
+.project
 conf/application.conf
 data
 eclipse

@@ -7,8 +7,11 @@
         <meta http-equiv="content-language" content="en">
         #{get 'moreMeta' /}
         <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-        #{css "main", loadAll: true/}
-		#{js loadAll: true/}
+        <script src="@{'/public/javascripts/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+        <script src="@{'/public/javascripts/alerts.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+        #{get 'moreScripts' /}
+        <link rel="stylesheet" media="screen" href="@{'/public/stylesheets/main.css'}">
+        #{get 'moreStyles' /}
     </head>
     <body>
         #{include 'topnav.html' /}

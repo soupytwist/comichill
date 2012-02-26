@@ -1,7 +1,8 @@
 #{extends 'main.html' /}
-#{js 'knockout-models jquery-ui-1.8.17.min' /}
-#{css 'admin' /}
-#{include 'public/templates/templates.html' /}
+#{knockout /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{stylesheet 'admin.css' /}
+#{include 'public/html/templates.html' /}
 #{set title:'Edit Comic' /}
 
 <div data-bind="template: {name: 'comic-template-noauth', data: comic}"></div>
