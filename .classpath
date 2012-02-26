@@ -3,7 +3,9 @@
 	<classpathentry excluding="views/**" kind="src" path="app"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="siena-2.0.6"/>
+	<classpathentry kind="src" path="secure"/>
 	<classpathentry kind="src" path="playapps-1.4"/>
+	<classpathentry kind="src" path="greenscript-1.2.8"/>
 	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/opt/play-1.2.3/framework/play-1.2.3.jar" sourcepath="/opt/play-1.2.3/framework/src" />
@@ -42,6 +44,16 @@
 	<classpathentry kind="lib" path="/web/comichill/modules/siena-2.0.6/lib/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/modules/siena-2.0.6/lib/play-siena.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/modules/playapps-1.4/lib/play-playapps.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/lesscss-engine-1.1.5.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/google-closure.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/junit-4.8.1.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/commons-logging-api-1.1.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/jcoffeescript-1.1.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/greenscript-core-1.2.8.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/play-greenscript.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/modules/greenscript-1.2.8/lib/yuicompressor-2.4.7.jar"/>
 	<classpathentry kind="lib" path="/opt/play-1.2.3/framework/lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="/opt/play-1.2.3/framework/lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="/opt/play-1.2.3/framework/lib/commons-beanutils-1.8.3.jar"/>

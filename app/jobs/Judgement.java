@@ -30,9 +30,13 @@ public class Judgement extends Job {
 		// and the number of hits from each subscription
 		for (Subscription sub : subs) {
 			cmap.get(sub.cid).rankPop++;
-			cmap.get(sub.cid).rankHits += sub.hits;
-			sub.hits = -1;
-			sub.save();
+			
+			// Only need to reset the hit counter if it has changed
+			if (sub.hits > 0) {
+				cmap.get(sub.cid).rankHits += sub.hits;
+				sub.hits = -1;
+				sub.save();
+			}
 		}
 		
 		// Get the list of comics again from the db

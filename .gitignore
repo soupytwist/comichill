@@ -1,6 +1,9 @@
 precompiled
 siena-2.0.6
 playapps-1.4
+greenscript-1.2.8
+public/greenscript-1.2.8
+public/javascripts/routes.js
 .settings
 conf/application.conf
 data

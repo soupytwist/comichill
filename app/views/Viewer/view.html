@@ -1,16 +1,14 @@
 #{extends 'barebone.html' /}
-#{script 'knockout-2.0.0.debug.js' /}
-#{script 'knockout.mapping-latest.debug.js' /}
-#{script 'knockout-models.js' /}
-#{script 'jquery-ui-1.8.17.min.js' /}
-#{script 'view/viewer.js' /}
-#{stylesheet 'viewer.css' /}
+#{js 'knockout-models viewer' /}
+#{css 'viewer' /}
 #{set title:comic.title +" - "+ strip.sid /}
 
 #{set 'moreMeta'}
 <meta property="og:title" content="#{get 'title' /}"/>
+<meta property="og:description" content="Read your favorite webcomics on Comic Hill!"/>
+<meta property="og:type" content="comichill:comic" />
 <meta property="og:site_name" content="Comic Hill"/>
-<meta property="og:image" content="@@{'/data/banners/'+comic.label+'.png'}"/> 
+<meta property="og:image" content="@@{'/data/banners/'+comic.label+'.png'}"/>
 #{/set}
 
 <iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.strip.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>

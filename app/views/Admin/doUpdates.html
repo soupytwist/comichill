@@ -1,8 +1,6 @@
 #{extends 'main.html' /}
-#{stylesheet 'admin.css' /}
-#{script 'knockout-2.0.0.debug.js' /}
-#{script 'knockout.mapping-latest.debug.js' /}
-#{script 'knockout-models.js' /}
+#{js 'knockout-models' /}
+#{css 'admin' /}
 #{set title:'Updates' /}
 
 <ul data-bind="foreach: feeds">

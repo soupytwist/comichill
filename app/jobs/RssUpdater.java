@@ -62,6 +62,7 @@ public class RssUpdater extends Job<String> {
 				} catch (Exception e) {
 					// If for some reason we can't load the feed...
 					Logger.error("[RSSUPDATER] Failed to load Rss Feed: %s", rss.src);
+					Mails.notifyMe("RssUpdater WARNING", "Failed to load Rss Feed: "+rss.src);
 					e.printStackTrace();
 				}
 			}

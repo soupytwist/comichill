@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
 var route_get = {
 	comic_by_label: #{jsAction @Comics.get(':label') /},
 	comic: #{jsAction @Comics.get(':id') /},
@@ -38,5 +36,3 @@ var route_delete = {
 	rss: #{jsAction @StripSourceController.delete(':id') /},
 	archive: #{jsAction @StripSourceController.delete(':id') /}
 }
-
-</script>

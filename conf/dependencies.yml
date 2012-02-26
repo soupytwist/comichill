@@ -3,5 +3,6 @@
 require:
     - play -> playapps 1.4
     - play -> siena 2.0.6
+    - play -> greenscript 1.2.8
     - net.sf.flexjson -> flexjson 2.1
     - org.htmlparser -> htmlparser 1.6

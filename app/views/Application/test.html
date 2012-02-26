@@ -1,6 +1,0 @@
-#{extends 'main.html' /}
-#{set title:'Import Strips' /}
-<h1>Import Strips</h1>
-%{ for ( strip in strips ) { }%
-${strip.title} - <a href="${strip.url}">${strip.url}</a><br/>
-%{ } }%
