@@ -90,8 +90,6 @@ GET     /img/fb/                                staticDir:${fbimgPath}
 GET     /img/                                   staticDir:public/images
 
 # Map static resources from the /app/public folder to the /public path
-%{ jsPath = play.Play.configuration.getProperty('javscript.path'); }%
-GET     /public/javascripts/routes.js           staticFile:${jsPath}/routes.js
 GET     /public/                                staticDir:public
 
 %{ if (play.mode.isDev()) }%
