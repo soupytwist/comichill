@@ -274,6 +274,7 @@ div.my-alert {
 	padding: 12px;
 	border-radius: 8px;
 	border: 2px solid black;
+	z-index: 1001;
 }
 
 div#add-subscriptions-dialog {
@@ -298,4 +299,5 @@ noscript {
 	top: 120px;
 	border-radius: 12px;
 	text-align: center;
+	z-index: 1000;
 }

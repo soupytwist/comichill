@@ -134,9 +134,9 @@ public class Admin extends Controller {
 	
 	public static void doUpdates() {
 		Authentication.requireAdmin();
-		List<RssStripSource> feeds = RssStripSource.getAllEnabled();
 		new RssUpdater().now();
-		render(feeds);
+		flash.put("message", "Updater has begun...");
+		Application.index();
 	}
 	
 	public static void doJudgement() {

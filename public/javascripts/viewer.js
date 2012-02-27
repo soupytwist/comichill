@@ -46,8 +46,8 @@ function AppViewModel() {
 	self.qlen = ko.observable(0);
 	self.f1 = new Frame();
 	self.f2 = new Frame();
-	self.cur = f1;
-	self.off = f2;
+	self.cur = self.f1;
+	self.off = self.f2;
 	self.off.visible(false);
 	self.preloadStrip = function(qpos) {
 		if (qpos >= 0 && qpos < self.qlen()) {
