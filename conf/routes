@@ -92,6 +92,5 @@ GET     /img/                                   staticDir:public/images
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-%{ if (play.mode.isDev()) }%
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+*       /_/{controller}/{action}                {controller}.{action}
