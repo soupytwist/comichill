@@ -21,8 +21,6 @@ public class Strip extends Model {
 	@Required
 	public String url, title;
 	
-	public String imgSrc;
-	
 	// Default no-arguments constructor
 	public Strip() {
 	}

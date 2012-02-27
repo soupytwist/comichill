@@ -23,7 +23,8 @@ public class Bootstrap extends Job {
         	Logger.info("[BOOTSTRAP] Starting jsroutes file creation");
         	Template template = TemplateLoader.load("jsroutes.html");
         	RenderTemplate parsed = new RenderTemplate(template, new HashMap<String, Object>());
-        	File jsroutesFile = new File("public/javascripts/routes.js");
+        	String path = Play.configuration.getProperty("javascript.path");
+        	File jsroutesFile = new File(path+"/routes.js");
         	FileWriter fw = new FileWriter(jsroutesFile);
         	fw.write(parsed.getContent());
         	fw.close();
