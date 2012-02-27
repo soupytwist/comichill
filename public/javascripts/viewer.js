@@ -38,15 +38,16 @@ function Frame() {
 	var self = this;
 	self.data = new Strip();
 	self.visible = ko.observable(true);
-	self.url = ko.computed(function() { return self.data.strip.url(); });
 }
 
 function AppViewModel() {
 	var self = this;
 	self.q = ko.observable(0);
 	self.qlen = ko.observable(0);
-	self.cur = new Frame();
-	self.off = new Frame();
+	self.f1 = new Frame();
+	self.f2 = new Frame();
+	self.cur = f1;
+	self.off = f2;
 	self.off.visible(false);
 	self.preloadStrip = function(qpos) {
 		if (qpos >= 0 && qpos < self.qlen()) {
