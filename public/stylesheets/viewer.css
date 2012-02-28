@@ -15,10 +15,10 @@ a.nav-disabled {
 
 div#viewer-prev {
 	position: absolute;
-	left: 0px;
+	left: 32px;
 	bottom: 0px;
-	width: 100px;
-	height: 120px;
+	width: 96px;
+	height: 96px;
 	background-image: url('/img/back.png');
 	z-index: 10;
 }
@@ -26,7 +26,7 @@ div#viewer-prev {
 div#viewer-hill {
 	position: absolute;
 	left: 25%;
-	bottom: -20px;
+	bottom: -44px;
 	width: 600px;
 	height: 120px;
 	background-image: url('/img/hill.png');
@@ -35,10 +35,10 @@ div#viewer-hill {
 
 div#viewer-next {
 	position: absolute;
-	right: 0px;
+	right: 32px;
 	bottom: 0px;
-	width: 100px;
-	height: 120px;
+	width: 96px;
+	height: 96px;
 	background-image: url('/img/next.png');
 	z-index: 10;
 }

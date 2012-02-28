@@ -63,8 +63,8 @@ function AppViewModel() {
 			self.preloadStrip(self.q());
 		
 		self.switchFrames();
-		server_get("visit", {id: self.cur.data.strip.id()});
-		var title = self.cur.data.comic.label()+' - '+self.cur.data.strip.sid();
+		if (loggedIn) server_get("visit", {id: self.cur.data.strip.id()});
+		var title = self.cur.data.comic.title()+' - '+self.cur.data.strip.title();
 		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip), q: self.q()}, title, '/comics/'+self.cur.data.comic.label()+'/'+self.cur.data.strip.sid());
 		document.title = title;
 	};
