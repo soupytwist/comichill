@@ -108,3 +108,40 @@ function AppViewModel() {
 }
 var viewModel = new AppViewModel();
 ko.applyBindings(viewModel);
+
+function showSeek() {
+	var seekwin = document.createElement('div');
+	var shadow = document.createElement('div');
+	$(seekwin).attr('id', 'seekWindow');
+	$(shadow).attr('id', 'shadow');
+	$(shadow).bind('click', hideSeek);
+	
+	var seeklist = document.createElement('ul');
+	$(seeklist).attr('id', 'seekList');
+	
+	for (var idx in queue) {
+		var strip = queue[idx];
+		var item = document.createElement('li');
+		$(item).attr('q', idx);
+		if (idx == viewModel.q()) $(item).attr('id', 'strip-current');
+		$(item).html(strip.sid + "&nbsp;&nbsp;-&nbsp;&nbsp;" + strip.title);
+		$(item).bind('click', function() { seekTo($(this).attr('q')); });
+		$(seeklist).append(item);
+	}
+	
+	$(seekwin).append(seeklist);
+	$('body').append(shadow);
+	$('#shadow').fadeIn(250);
+	$('body').append(seekwin);
+}
+
+function seekTo(id) {
+	viewModel.q(id);
+	viewModel.changeStrip();
+	hideSeek();
+}
+
+function hideSeek() {
+	$('#shadow').fadeOut(250, function () { $('#shadow').remove(); });
+	$('#seekWindow').remove();
+}
