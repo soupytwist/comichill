@@ -80,10 +80,10 @@ public class Admin extends Controller {
 			flash.put("message", "There was a problem uploading.");
 		} else {
 			try {
-				String basePath = Play.configuration.getProperty("banner.path");
+				//String basePath = Play.configuration.getProperty("banner.path");
 				
 				try {
-					File banner = new File(basePath+"/"+label+".png");
+					File banner = Play.getFile("data/banners/"+label+".png");
 					FileUtils.copyFile(img, banner);
 					flash.put("message", "Upload successful!");
 				} catch (Exception e) {
