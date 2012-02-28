@@ -74,36 +74,29 @@ public class Admin extends Controller {
 		render(comic, feeds, archives, found);
 	}
 	
-	public static void uploadBanner(String label) {
-		Authentication.requireAdmin();
-		render(label);
-	}
-	
-	public static void doUploadBanner(String label, File img) {
+	public static void uploadBanner(String label, File img) {
 		Authentication.requireAdmin();
 		if (img == null) {
 			flash.put("message", "There was a problem uploading.");
-			Admin.uploadBanner(label);
-		}
-		try {
-			String basePath = Play.configuration.getProperty("banner.path");
-			
+		} else {
 			try {
-				File banner = new File(basePath+"/"+label+".png");
-				FileUtils.copyFile(img, banner);
+				String basePath = Play.configuration.getProperty("banner.path");
+				
+				try {
+					File banner = new File(basePath+"/"+label+".png");
+					FileUtils.copyFile(img, banner);
+					flash.put("message", "Upload successful!");
+				} catch (Exception e) {
+					flash.put("message", "Error writing to the file");
+					Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
+				}
 			} catch (Exception e) {
-				flash.put("message", "Error writing to the file");
+				flash.put("message", "There was a problem uploading.");
 				Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
-				Admin.uploadBanner(label);
 			}
-			
-			flash.put("message", "Upload successful!");
-			Admin.editComic(label);
-		} catch (Exception e) {
-			flash.put("message", "There was a problem uploading.");
-			Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
-			Admin.uploadBanner(label);
 		}
+		
+		Admin.editComic(label);
 	}
 	
 	public static void loadArchive(Long id) {

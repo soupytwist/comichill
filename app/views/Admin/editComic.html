@@ -23,7 +23,7 @@
 </div>
 
 <div class="formBlock" data-bind="css: {ok: bannerExists()}">
-#{form @Admin.doUploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
+#{form @Admin.uploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Upload a Banner</h1>
 <p>Pick a banner to upload for this comic</p>
 #{field 'img' }
