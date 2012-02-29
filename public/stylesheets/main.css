@@ -303,3 +303,7 @@ noscript {
 	text-align: center;
 	z-index: 1000;
 }
+
+.always-show * {
+	display: block!important;
+}

@@ -5,7 +5,7 @@
 #{include 'public/html/templates.html' /}
 #{set title:'Edit Comic' /}
 
-<div data-bind="template: {name: 'comic-template-noauth', data: comic}"></div>
+<div class="always-show" data-bind="template: {name: 'comic-template-noauth', data: comic}"></div>
 <div class="spacer"></div>
 
 <div class="formBlock" data-bind="css: {ok: comic.persisted()}">
