@@ -22,9 +22,6 @@ public class User extends Model {
 	@Required
 	public boolean adminPrivelege;
 	
-	@Required
-	public UserAuthentication auth;
-	
 	public StripQueue queue;
 	
 	// Default no-arguments constructor
@@ -65,19 +62,6 @@ public class User extends Model {
 	
 	public static User guest() {
 		return new User(null);
-	}
-	
-	public void generateAuthentication(String password) {
-		this.auth = new UserAuthentication(this.id, password);
-	}
-	
-	public void fetchUserAuth() {
-		auth = Model.getByKey(UserAuthentication.class, id);
-	}
-	
-	public void insert() {
-		this.auth.insert();
-		super.insert();
 	}
 	
 	public String toString() {

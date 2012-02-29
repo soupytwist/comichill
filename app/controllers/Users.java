@@ -4,7 +4,7 @@ import models.siena.Strip;
 import models.siena.StripQueue;
 import models.siena.Subscription;
 import models.siena.User;
-import models.siena.UserAuthentication;
+import models.siena.BasicAuthentication;
 import play.Logger;
 import play.data.validation.Email;
 import play.data.validation.MaxSize;
@@ -18,17 +18,16 @@ import play.mvc.With;
 public class Users extends Controller {
 	
 	public static void login(String email, String password) {
-		if (email == null) {
-			render();
+		if (email != null) {
+			checkAuthenticity();
+			if (Authentication.standardLogin(email, password)) {
+				Application.index();
+			} else {
+				validation.addError("password", "Your email or password was incorrect.");
+				params.flash();
+			}
 		}
-		checkAuthenticity();
-		if (Authentication.standardLogin(email, password)) {
-			Application.index();
-		} else {
-			validation.addError("password", "Your email or password was incorrect.");
-			flash.keep();
-			render(email);
-		}
+		render();
 	}
 	
 	public static void logout() {
@@ -62,14 +61,16 @@ public class Users extends Controller {
 			validation.addError("email", "This email address is already registered");
 			Logger.warn("A user has attempted to register with an existing email address; email=%s existing=%s", email, existing.toString());
 		} else {
-			// Generate the authentication object for this user
-			newUser.generateAuthentication(password);
 			newUser.insert();
 			if (newUser.id == -1) {
 				Logger.error("User creation failed; Tried to insert the following user:\n%s", newUser.toString());
 				params.flash();
 				flash.put("message", "There was an error processing your request. I apologize for the inconvenience. Please try again later.");
 				render();
+			} else {
+				// Generate the authentication object for this user
+				BasicAuthentication auth = new BasicAuthentication(newUser.id, password);
+				auth.insert();
 			}
 		}
 		

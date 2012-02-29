@@ -12,23 +12,25 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 import play.Logger;
 import play.data.validation.Validation;
 
+import siena.Generator;
 import siena.Id;
 import siena.Model;
 
-public class UserAuthentication extends Model {
+public class BasicAuthentication extends Model {
 
 	public static final int SALT_LENGTH = 20;
 	
-	@Id
-	public Long id;
+	@Id(Generator.NONE)
+	public Long uid;
 	
 	public String hash, salt;
 	
 	// Default no-arguments constructor
-	public UserAuthentication() {
+	public BasicAuthentication() {
 	}
 	
-	public UserAuthentication(Long id, String plaintext) {
+	public BasicAuthentication(Long uid, String plaintext) {
+		this.uid = uid;
 		byte[] salt = generateSalt();
 		
 		if (salt == null || salt.length != SALT_LENGTH) {
@@ -61,7 +63,7 @@ public class UserAuthentication extends Model {
 	}
 	
 	public boolean match(String plaintext) {
-		UserAuthentication check = new UserAuthentication();
+		BasicAuthentication check = new BasicAuthentication();
 		try {
 			check.applySalt(plaintext, Base64.decode(this.salt));
 			return check.hash.equals(this.hash);
@@ -80,5 +82,9 @@ public class UserAuthentication extends Model {
 	
 	public String toString() {
 		return "[UserAuthentication hash="+hash+" salt="+salt+"]";
+	}
+
+	public static BasicAuthentication getByUid(Long uid) {
+		return Model.getByKey(BasicAuthentication.class, uid);
 	}
 }

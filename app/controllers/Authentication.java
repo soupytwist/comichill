@@ -5,7 +5,7 @@ import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
 import models.siena.User;
-import models.siena.UserAuthentication;
+import models.siena.BasicAuthentication;
 
 public class Authentication extends Controller {
 
@@ -56,22 +56,22 @@ public class Authentication extends Controller {
 	 * @return
 	 * 	Whether or not the login was successful
 	 */
-	public static boolean standardLogin(String email, String pass) {
+	static boolean standardLogin(String email, String pass) {
 		// TODO Check if this is necessary, may cause problems
-		session.clear();
+		//session.clear();
 		
 		// Get the user and his Authentication object
 		User user = User.getByEmail(email);
 		
 		if (user!=null) {
-			user.fetchUserAuth();
+			BasicAuthentication auth = BasicAuthentication.getByUid(user.id);
 			
 			// Perform the authentication
-			if (user.auth.match(pass)) {
-				Logger.info("Authentication accepted");
+			if (auth.match(pass)) {
+				Logger.debug("Authentication accepted; user %s successfully logged in", email);
 				setAuthenticated(user);
 			} else {
-				Logger.info("Authentication failed");
+				Logger.debug("Authentication failed for user %s", email);
 				user = null;
 			}
 		}

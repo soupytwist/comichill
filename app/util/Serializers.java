@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.Date;
 
-import models.siena.UserAuthentication;
+import models.siena.BasicAuthentication;
 
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
