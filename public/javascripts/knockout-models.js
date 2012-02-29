@@ -92,20 +92,14 @@ function Comic() {
 	self.bookmarkUrl = ko.computed(function() { return (self.sub.bookmark()==0)? '/comics/'+self.data.label()+'/1' : '/comics/'+self.data.label()+'/'+self.sub.bookmark(); });
 	self.latestUrl = ko.computed(function() { return '/comics/'+self.data.label()+'/'+(self.sub.latest()+1); });
 	self.unreadCount = ko.computed(function() {return (self.sub.latest()==0)? self.data.numStrips()-1 : self.data.numStrips() - self.sub.latest(); });
-	self.details = ko.observable(false);
-	self.showDetails = function() { /*self.details(true);*/ };
-	self.hideDetails = function() { /*self.details(false);*/ };
 	self.subscribe = function() {
 		self.sub.cid(self.data.id());
-		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); });
-		if (localStorage)
-			delete localStorage.home_subscriptions;
+		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); extraBindings(); });
 	};
 	self.unsubscribe = function() {
 		server_delete('subscription', self.sub.id());
 		ko.mapping.fromJS(defaultSubscription, self.sub);
-		if (localStorage)
-			delete localStorage.home_subscriptions;
+		extraBindings();
 	};
 }
 

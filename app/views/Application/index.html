@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{knockout /}
 #{script 'jquery-ui-1.8.17.min.js' /}
+#{script 'templateFunctions.js' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
@@ -30,27 +31,6 @@ Click <a href="@{Application.all}">here</a> to find your favorite comics and dis
 <div id="home-updates"></div></a>
 
 <script type="text/javascript">
-
-ko.bindingHandlers.slideVisible = {
-	init: function() {},
-    update: function(element, valueAccessor, allBindingsAccessor) {
-        // First get the latest data that we're bound to
-        var value = valueAccessor(), allBindings = allBindingsAccessor();
-         
-        // Next, whether or not the supplied model property is observable, get its current value
-        var valueUnwrapped = ko.utils.unwrapObservable(value); 
-        
-        var dir = allBindings['dir'];
-        
-        // Now manipulate the DOM element
-        if (valueUnwrapped && element.style.display == 'none') {
-        	$(element).show('slide', {direction: dir}, 160);
-        } else if (!valueUnwrapped) {
-        	$(element).hide('slide', {direction: dir}, 160);
-        }
-    }
-};
-
 function AppViewModel() {
 	var self = this;
 	self.newest = ko.observableArray();
@@ -69,6 +49,8 @@ function AppViewModel() {
 		self.popular(self.popular.splice(0, 10));
 		self.hits.sort(sortHits);
 		self.hits(self.hits.splice(0, 10));
+		console.log($("div.comic").size());
+		extraBindings();
 	};
 	
 	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
@@ -123,6 +105,7 @@ function addSubscriptions(subData) {
 			}
 			ko.mapping.fromJS(value, comic.sub);
 	});
+	extraBindings();
 	if (count == 0)
 		$("#add-subscriptions-dialog").fadeIn();
 }

@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{knockout /}
 #{script 'jquery-ui-1.8.17.min.js' /}
+#{script 'templateFunctions.js' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
@@ -8,27 +9,6 @@
 <h1 class='title'>All Comics</h1>
 <div class="comic-hill" data-bind="template: {name: templateName, foreach: comics}"></div>
 <script type="text/javascript">
-
-ko.bindingHandlers.slideVisible = {
-	init: function() {},
-    update: function(element, valueAccessor, allBindingsAccessor) {
-        // First get the latest data that we're bound to
-        var value = valueAccessor(), allBindings = allBindingsAccessor();
-         
-        // Next, whether or not the supplied model property is observable, get its current value
-        var valueUnwrapped = ko.utils.unwrapObservable(value); 
-        
-        var dir = allBindings['dir'];
-        
-        // Now manipulate the DOM element
-        if (valueUnwrapped && element.style.display == 'none') {
-        	$(element).show('slide', {direction: dir}, 160);
-        } else if (!valueUnwrapped) {
-        	$(element).hide('slide', {direction: dir}, 160);
-        }
-    }
-};
-
 
 function AppViewModel() {
 	var self = this;
@@ -55,6 +35,7 @@ function addComics(comicData) {
 			ko.mapping.fromJS(value, newComic.data);
 			viewModel.comics.push(newComic);
 		});
+	extraBindings();
 }
 
 function addSubscriptions(subData) {
@@ -69,6 +50,7 @@ function addSubscriptions(subData) {
 			}
 			ko.mapping.fromJS(value, comic.sub);
 	});
+	extraBindings();
 }
 
 ko.applyBindings(viewModel);

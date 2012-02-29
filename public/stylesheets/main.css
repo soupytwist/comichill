@@ -112,6 +112,7 @@ body {
 	font-size: 16px;
 	border-top-left-radius: 12px;
 	border-bottom-right-radius: 6px;
+	display: none;
 }
 
 .comic .author {
@@ -124,6 +125,7 @@ body {
 	font-size: 16px;
 	border-bottom-left-radius: 12px;
 	border-top-right-radius: 6px;
+	display: none;
 }
 
 .comic .subscribe-button {
