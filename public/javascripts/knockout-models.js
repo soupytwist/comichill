@@ -53,13 +53,13 @@ function Rss() {
 	self.fetch = function(success, error) {
 		self.results.removeAll();
 		if (self.data.src() != "http://www.") {
-			server_post('rss_fetch', ko.mapping.toJS(self.data),
+			var send = ko.mapping.fromJS(ko.mapping.toJS(self.data));
+			send.id(-1);
+			server_post('rss_fetch', send,
 				function(jsonObj) {
 					for (key in jsonObj) {
 						self.results.push(jsonObj[key]);
 					}
-					if (success)
-						success();
 				}, function() { if (error) error() }
 			);
 		}
