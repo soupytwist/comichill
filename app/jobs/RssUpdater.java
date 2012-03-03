@@ -68,7 +68,7 @@ public class RssUpdater extends Job<String> {
 			}
 		}
 		
-		Logger.info("[UPDATER] Updater is finished!");
+		Logger.info("[RSSUPDATER] Updater is finished!");
 	}
 	
 }

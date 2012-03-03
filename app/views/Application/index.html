@@ -49,7 +49,6 @@ function AppViewModel() {
 		self.popular(self.popular.splice(0, 10));
 		self.hits.sort(sortHits);
 		self.hits(self.hits.splice(0, 10));
-		console.log($("div.comic").size());
 		extraBindings();
 	};
 	

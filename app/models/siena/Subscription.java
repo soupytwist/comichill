@@ -33,6 +33,10 @@ public class Subscription extends Model {
 	public Subscription() {	
 	}
 	
+	public Subscription(User owner, Long cid) { 
+		this(owner, cid, 0);
+	}
+	
 	public Subscription(User owner, Long cid, int sid) {
 		this.owner = owner;
 		this.cid = cid;
@@ -40,41 +44,68 @@ public class Subscription extends Model {
 		this.latest = sid;
 	}
 	
+	/**
+	 * Updates the bookmark to the given sid, updates latest if applicable
+	 * @param sid
+	 */
 	public void visit(int sid) {
 		this.bookmark = sid;
 		save();
 	}
 	
+	/**
+	 * Updates the bookmark to match the given subscription
+	 * @param sub
+	 */
 	public void updateWith(Subscription sub) {
 		this.bookmark = sub.bookmark;
 		if (sub.latest > this.latest)
 			this.latest = sub.latest;
 	}
-	
-	public Subscription(User owner, Long cid) { 
-		this(owner, cid, 0);
-	}
-	
+
+	/**
+	 * Get the Comic subscribed to
+	 * @return Comic model object
+	 */
 	public Comic getComic() {
 		return Comic.getById(cid);
 	}
 	
+	/**
+	 * Get a Subscription by id
+	 */
 	public static Subscription getById(Long id) {
 		return all().getByKey(id);
 	}
 	
+	/**
+	 * Gets all subscriptions in the database for a given user
+	 * @param user
+	 */
 	public static List<Subscription> getByUser(User user) {
 		return (List<Subscription>) all().filter("owner", user).fetch();
 	}
 	
+	/**
+	 * Get a user's subscription to a particular comic if it exists
+	 * @param user The User to lookup
+	 * @param cid The comic subscribed to
+	 */
 	public static Subscription getByUserAndCid(User user, Long cid) {
 		return all().filter("owner", user).filter("cid", cid).get();
 	}
 	
+	/**
+	 * Convenience method for fetching models with Siena
+	 * @return An unfiltered Query
+	 */
 	public static Query<Subscription> all() {
 		return Model.all(Subscription.class);
 	}
 	
+	/**
+	 * Persists this model in the database and updates latest so that bookmark <= latest
+	 */
 	public void save() {
 		if (bookmark > latest)
 			latest = bookmark;
@@ -83,7 +114,6 @@ public class Subscription extends Model {
 	}
 	
 	public String toString() {
-		// TODO Serialize toString for Subscription
 		return Serializers.subscriptionSerializer.serialize(this);
 	}
 }

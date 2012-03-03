@@ -59,6 +59,12 @@ public abstract class StripSource extends Model {
 		super.update();
 	}
 	
+	/**
+	 * Matches a String to a given regular expression pattern
+	 * @param str The String to be matched
+	 * @param pattern The pattern to match against
+	 * @return The matched part(s) of the input
+	 */
 	protected String match(String str, String pattern) {
 		String matched = "";
 		
@@ -70,7 +76,7 @@ public abstract class StripSource extends Model {
 				matched = m.group();
 			} else {
 				for (int i = 0; i < m.groupCount(); i++)
-					matched += m.group(i+1)+"\n";
+					matched += m.group(i+1);
 			}
 		}
 		
@@ -78,7 +84,6 @@ public abstract class StripSource extends Model {
 	}
 	
 	public String toString() {
-		//return "ID="+id+" comic="+comic+" src="+src+" titlePattern="+titlePattern+" urlPattern="+urlPattern+" created="+created;
 		return Serializers.sourceSerializer.serialize(this);
 	}
 }
