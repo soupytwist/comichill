@@ -13,6 +13,8 @@ public class User extends Model {
 
 	public static final int PASSWORD_LENGTH_MIN = 6, PASSWORD_LENGTH_MAX = 40;
 	
+	public static final int REGULAR_USER = 0, ADMIN_USER = 1, DUMMY_USER = 2;
+	
 	@Id(Generator.AUTO_INCREMENT)
 	public Long id;
 	
@@ -20,14 +22,14 @@ public class User extends Model {
 	public String email;
 	
 	@Required
-	public boolean adminPrivelege;
+	public int role;
 	
 	public StripQueue queue;
 	
 	// Default no-arguments constructor
 	public User() {
 		super();
-		this.adminPrivelege = false;
+		this.role = REGULAR_USER;
 		this.id = -1L;
 	}
 	
@@ -49,7 +51,7 @@ public class User extends Model {
 	}
 
 	public boolean isAdmin() {
-		return adminPrivelege;
+		return this.role == ADMIN_USER;
 	}
 	
 	public static User getById(Long id) {
@@ -65,6 +67,19 @@ public class User extends Model {
 	}
 	
 	public String toString() {
-		return "[User ID="+id+" email="+email+" adminPrivilege="+adminPrivelege+"]";
+		return "[User ID="+id+" email="+email+" role="+roleAsString()+"]";
+	}
+	
+	public String roleAsString() {
+		switch(role) {
+		case REGULAR_USER:
+			return "regular";
+		case ADMIN_USER:
+			return "admin";
+		case DUMMY_USER:
+			return "dummy";
+		default:
+			return "UNCATEGORIZED";
+		}
 	}
 }

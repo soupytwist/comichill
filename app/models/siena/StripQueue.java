@@ -19,6 +19,7 @@ import util.Serializers;
 public class StripQueue extends Model {
 
 	public static final int MAX_QUEUE_SIZE = 100;
+	public static final int CUTOFF_COUNT = 12;
 	
 	@Id(Generator.AUTO_INCREMENT)
 	public Long id;	

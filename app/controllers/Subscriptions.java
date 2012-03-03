@@ -27,12 +27,12 @@ public class Subscriptions extends Controller {
 		User connected = Authentication.requireLoggedIn();
 		List<Subscription> subscriptions = Subscription.getByUser(connected);
 		StripQueue q = new StripQueue();
-		int count = StripQueue.MAX_QUEUE_SIZE;
 		for (Subscription sub : subscriptions) {
-			List<Strip> strips = Strip.getStripsByCid(sub.cid).order("sid").filter("sid >", sub.latest) .fetch(count);
-			q.add(strips);
-			if ((count = StripQueue.MAX_QUEUE_SIZE - q.size()) <= 0)
-				break;
+			int count = sub.unreadCount();
+			if (count > 0 && count < StripQueue.CUTOFF_COUNT) {
+				List<Strip> strips = Strip.getStripsByCid(sub.cid).order("sid").filter("sid >", sub.latest).fetch();
+				q.add(strips);
+			}
 		}
 		if (q.isEmpty()) {
 			flash.put("message", "There are no new updates!");
@@ -44,9 +44,7 @@ public class Subscriptions extends Controller {
 		connected.queue = q;
 		connected.save();
 		Logger.debug("done");
-		Strip strip = q.getCurrent();
-		Comic comic = strip.getComic();
-		Viewer.viewQueue(comic.label, strip.sid);
+		Viewer.viewQueue();
 	}
 	
 	public static void get(Long id) {

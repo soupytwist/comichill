@@ -86,9 +86,7 @@ function AppViewModel() {
 		if (window.history.pushState) {
 			var title = self.cur.data.comic.label()+' - '+self.cur.data.strip.sid();
 			window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip)}, title);
-			if (mode == "null")
-				mode = "noqueue";
-			server_get(mode, {'id': self.cur.data.strip.id()},
+			server_get((useQueue? "queue" : "noqueue"), {'id': self.cur.data.strip.id()},
 					function(data) {
 						queue = data[0];
 						comics = data[1];

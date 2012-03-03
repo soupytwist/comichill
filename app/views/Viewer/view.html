@@ -25,7 +25,7 @@
 </div></div>
 
 <script>
-var mode = "${mode}";
+var useQueue = %{print useQueue;}%;
 var loggedIn = %{print user!=null;}%;
 viewModel.init(%{ print strip.serializeWith("stripSerializer").raw() }%, %{ print comic.serializeWith("comicSerializer").raw() }%);
 ko.applyBindings(viewModel);

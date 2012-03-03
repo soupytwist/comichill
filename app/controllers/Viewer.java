@@ -14,7 +14,6 @@ import pojo.NavigationFrame;
 public class Viewer extends Controller {
 	
 	public static void viewBySid(String label, int sid) {
-		User connected = Authentication.connected();
 		Comic comic = Comic.getByLabel(label);
 		
 		if (comic == null) {
@@ -29,15 +28,7 @@ public class Viewer extends Controller {
 			Application.index();
 		}
 		
-		if (connected != null && !connected.isGuest()) {
-			Subscription sub = Subscription.getByUserAndCid(connected, strip.cid);
-			if (sub != null)
-				sub.visit(strip.sid);
-		}
-		
-		NavigationFrame nav = new NavigationFrame(strip);
-		String mode = "noqueue";
-		renderTemplate("Viewer/view.html", strip, comic, nav, mode);
+		view(strip, comic, false);
 	}
 	
 	public static void viewByLabel(String label) {
@@ -53,10 +44,30 @@ public class Viewer extends Controller {
 		viewBySid(label, comic.numStrips);
 	}
 	
-	public static void viewQueue(String label, int sid) {
+	public static void viewQueueBySid(String label, int sid) {
+		Comic comic = Comic.getByLabel(label);
+		
+		if (comic == null) {
+			flash.put("message", "The comic you are trying to view does not exist!");
+			Application.index();
+		}
+		
+		Strip strip = Strip.get(comic.id, sid);
+		
+		if (strip == null) {
+			flash.put("message", "The strip you are trying to view does not exist!");
+			Application.index();
+		}
+		
+		view(strip, comic, true);
+	}
+	
+	public static void viewQueue() {
 		User connected = Authentication.connected();
-		if (connected == null || connected.isGuest())
-			viewBySid(label, sid);
+		if (connected == null || connected.isGuest()) {
+			flash.put("message", "You need to be logged in to have a queue!");
+			Application.index();
+		}
 		
 		StripQueue queue = connected.queue;
 		
@@ -64,35 +75,74 @@ public class Viewer extends Controller {
 			queue.get();
 			
 			if (!queue.isEmpty()) {
-				Comic comic = Comic.getByLabel(label);
-				
-				if (comic == null) {
-					flash.put("message", "The comic you are trying to view does not exist!");
-					Application.index();
-				}
-				
-				Strip strip = Strip.get(comic.id, sid);
-				
-				if (queue.setCurrent(strip)) {
-					Logger.debug("Queued successfully");
-					queue.update();
-					NavigationFrame nav = queue.getFrame();
-					String mode = "queue";
-					renderTemplate("Viewer/view.html", strip, comic, nav, mode);
-				} else {
-					Logger.warn("Failed to set position in queue; strip.id=%d", strip.id);
-					viewBySid(label, sid);
-				}
+				Strip strip = queue.getCurrent();
+				Comic comic = strip.getComic();
+				viewQueueBySid(comic.label, strip.sid);
 			} else {
 				Logger.debug("User's queue is empty");
 				flash.put("message", "Your queue is empty!");
-				viewBySid(label, sid);
+				Application.index();
 			}
 		} else  {
-			Logger.debug("User tried to access nonexistant queue");
-			flash.put("message", "Your queue is empty!");
-			viewBySid(label, sid);
+			Subscriptions.generateUpdateQueue();
 		}
+	}
+	
+	protected static void view(Strip strip, Comic comic, boolean useQueue) {
+		User connected = Authentication.connected();
+		NavigationFrame nav = null;
+		
+		if (useQueue && connected != null) {
+			// Get the current queue
+			StripQueue queue = connected.queue;
+			if (queue != null) {
+				queue.get();
+				
+				// If the queue is empty, forget it
+				if (queue.isEmpty()) {
+					Logger.debug("Queue is empty; id=%d", queue.id);
+					flash.put("message", "The queue is empty!");
+					Application.index();
+				}
+				
+				// Get the strip and comic from the queue if they are not provided
+				if (strip == null) {
+					strip = queue.getCurrent();
+					if (strip == null) {
+						Logger.warn("Queue contains invalid strip id; queue id=%d", queue.id);
+						flash.put("message", "An error occurred  :(");
+						Application.index();
+					} else {
+						comic = strip.getComic();
+					}
+				} else if (! queue.setCurrent(strip)) { // Try to set our place in the queue
+					flash.put("message", "Unable to set place in the queue!");
+					Application.index();
+				} else {
+					// Update the user's queue
+					queue.update();
+				}
+				
+				// Generate the navigation frame
+				nav = queue.getFrame();
+			} else {
+				Logger.warn("User tried to access nonexistant queue");
+				flash.put("message", "The queue you are trying to access does not exist!");
+				viewBySid(comic.label, strip.sid);
+			}
+		} else {
+			// Get the navigation frame from the strip
+			nav = new NavigationFrame(strip);
+		}
+		
+		// Update the user's subscription if they are logged in
+		if (connected != null) {
+			Subscription sub = Subscription.getByUserAndCid(connected, strip.cid);
+			if (sub != null)
+				sub.visit(strip.sid);
+		}
+		
+		renderTemplate("Viewer/view.html", strip, comic, nav, useQueue);
 	}
 	
 }

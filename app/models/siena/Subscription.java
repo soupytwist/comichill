@@ -116,4 +116,8 @@ public class Subscription extends Model {
 	public String toString() {
 		return Serializers.subscriptionSerializer.serialize(this);
 	}
+
+	public int unreadCount() {
+		return getComic().numStrips - this.latest;
+	}
 }

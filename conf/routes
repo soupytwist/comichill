@@ -25,7 +25,8 @@ GET     /register                               Users.register
 POST    /register                               Users.register
 GET     /comics/?                               Application.all
 GET     /comics/{label}/{<[0-9]+>sid}/?         Viewer.viewBySid
-GET     /queue/{label}/{<[0-9]+>sid}/?          Viewer.viewQueue
+GET     /queue/?                                Viewer.viewQueue
+GET     /queue/{label}/{<[0-9]+>sid}/?          Viewer.viewQueueBySid
 GET     /comics/{label}/?                       Viewer.viewByLabel
 GET     /strips/{<[0-9]+>id}/?                  Viewer.viewById
 GET     /visit/{<[0-9]+>id}                     Subscriptions.visit
