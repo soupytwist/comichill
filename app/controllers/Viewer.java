@@ -117,7 +117,7 @@ public class Viewer extends Controller {
 					}
 				} else if (! queue.setCurrent(strip)) { // Try to set our place in the queue
 					flash.put("message", "Unable to set place in the queue!");
-					Application.index();
+					viewBySid(comic.label, strip.sid);
 				} else {
 					// Update the user's queue
 					queue.update();

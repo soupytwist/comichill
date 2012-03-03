@@ -69,6 +69,9 @@ public class RssUpdater extends Job<String> {
 		}
 		
 		Logger.info("[RSSUPDATER] Updater is finished!");
+		
+		// Refresh the comic cache
+		new ComicCacher().now();
 	}
 	
 }

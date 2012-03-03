@@ -21,7 +21,7 @@ public class Bootstrap extends Job {
     	// Create the routes.js file with URLs for the REST API / AJAX
         try {
         	Logger.info("[BOOTSTRAP] Starting jsroutes file creation");
-        	Template template = TemplateLoader.load("jsroutes.html");
+        	Template template = TemplateLoader.load("Data/jsroutes.js");
         	RenderTemplate parsed = new RenderTemplate(template, new HashMap<String, Object>());
         	
         	File jsroutesFile = Play.getFile("public/javascripts/routes.js");
@@ -33,6 +33,9 @@ public class Bootstrap extends Job {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[BOOTSTRAP] Creating jsroutes file failed; %s", e.getMessage());
         }
+        
+    	// Call the ComicCacher job
+        new ComicCacher().now();
     }
     
 }

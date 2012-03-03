@@ -65,7 +65,7 @@ function AppViewModel() {
 		self.switchFrames();
 		if (loggedIn) server_get("visit", {id: self.cur.data.strip.id()});
 		var title = self.cur.data.comic.title()+' - '+self.cur.data.strip.title();
-		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip), q: self.q()}, title, '/comics/'+self.cur.data.comic.label()+'/'+self.cur.data.strip.sid());
+		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip), q: self.q()}, title, '/'+(useQueue? "queue" : "comics")+'/'+self.cur.data.comic.label()+'/'+self.cur.data.strip.sid());
 		document.title = title;
 	};
 	self.switchFrames = function() {
@@ -122,7 +122,7 @@ function showSeek() {
 		var item = document.createElement('li');
 		$(item).attr('q', idx);
 		if (idx == viewModel.q()) $(item).attr('id', 'strip-current');
-		$(item).html(strip.sid + "&nbsp;&nbsp;-&nbsp;&nbsp;" + strip.title);
+		$(item).html(comics[strip.cid].label + ' - ' + strip.sid + "&nbsp;&nbsp;-&nbsp;&nbsp;" + strip.title);
 		$(item).bind('click', function() { seekTo($(this).attr('q')); });
 		$(seeklist).append(item);
 	}

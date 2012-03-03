@@ -1,6 +1,7 @@
 #{extends 'main.html' /}
 #{knockout /}
 #{script 'jquery-ui-1.8.17.min.js' /}
+#{script 'comicCache.js' /}
 #{script 'templateFunctions.js' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
@@ -19,13 +20,12 @@ function AppViewModel() {
 
 var viewModel = new AppViewModel();
 
-server_get('comics', {}, function(comicData) { addComics(comicData);
-	if (viewModel.loggedIn()){
-		server_get('subscriptions', {}, function(subData) {
-			addSubscriptions(subData);
-		});
-	}
-});
+addComics(comicCache);
+if (viewModel.loggedIn()){
+	server_get('subscriptions', {}, function(subData) {
+		addSubscriptions(subData);
+	});
+}
 
 function addComics(comicData) {
 	viewModel.comics.removeAll();

@@ -26,11 +26,14 @@ public class Subscription extends Model {
 	@Min(value = 0)
 	public int bookmark, latest, hits;
 	
+	public float zoom;
+	
 	@Required
 	public User owner;
 	
 	// Default no-arguments constructor
-	public Subscription() {	
+	public Subscription() {
+		this.zoom = 1f;
 	}
 	
 	public Subscription(User owner, Long cid) { 
@@ -54,13 +57,14 @@ public class Subscription extends Model {
 	}
 	
 	/**
-	 * Updates the bookmark to match the given subscription
+	 * Updates the bookmark and zoom to match the given subscription
 	 * @param sub
 	 */
 	public void updateWith(Subscription sub) {
 		this.bookmark = sub.bookmark;
 		if (sub.latest > this.latest)
 			this.latest = sub.latest;
+		this.zoom = sub.zoom;
 	}
 
 	/**

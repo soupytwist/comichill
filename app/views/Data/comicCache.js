@@ -1,0 +1,1 @@
+var comicCache = %{print jsonData}%;
