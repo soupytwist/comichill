@@ -5,8 +5,7 @@ public/javascripts/routes.js
 public/javascripts/comicCache.js
 public/images
 .settings
-.classpath
-.project
+
 conf/application.conf
 data
 eclipse
