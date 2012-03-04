@@ -42,12 +42,18 @@ POST    /contact                                Application.doContact
 
 # Administration Panel
 GET     /admin                                  Admin.adminPanel
-GET     /admin/doUpdates                        Admin.doUpdates
 GET     /admin/loadArchive/{<[0-9]+>id}/?       Admin.loadArchive
 GET     /admin/edit/{label}/{<[0-9]+>id}/?      Admin.editComic
 GET     /admin/edit/{label}/?                   Admin.editComic
 POST    /admin/banner/{label}                   Admin.uploadBanner
 POST    /admin/csv/{label}                      Admin.importCSV
+GET     /admin/commit/strips                    CommitController.commitStrips
+
+# Start Jobs
+GET    /job/updater                             Admin.doUpdates
+GET    /job/judgement                           Admin.doJudgement
+GET    /job/comiccacher                         Admin.doComicCacher
+GET    /job/bootstrap                           Admin.doBootstrap
 
 # REST / JSON
 GET    /rest/comics/all                         Comics.getAll
@@ -77,12 +83,6 @@ POST   /rest/subscription                       Subscriptions.create
 PUT    /rest/subscription/{<[0-9]+>id}          Subscriptions.update
 DELETE /rest/subscription/{<[0-9]+>id}          Subscriptions.delete
 GET    /rest/subscriptions/all                  Subscriptions.getAll
-
-GET    /admin/commit/strips                     CommitController.commitStrips
-
-# Start Jobs
-GET    /job/updater                             Admin.doUpdates
-GET    /job/judgement                           Admin.doJudgement
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

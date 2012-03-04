@@ -3,6 +3,7 @@
 #{set title:'Admin Panel' /}
 
 <h1>Admin Panel</h1>
+<h3>Comics</h3>
 <div class="comic-hill always-show">
 %{for (comic in comics) { }%
 <div class="comic">
@@ -15,3 +16,9 @@
 </div>
 %{ } }%
 </div>
+<br/>
+<h3>Jobs</h3>
+<a href="@{Admin.doUpdates}">Run Updater</a><br/>
+<a href="@{Admin.doJudgement}">Run Judgement</a><br/>
+<a href="@{Admin.doComicCacher}">Run ComicCacher</a><br/>
+<a href="@{Admin.doBootstrap}">Run Bootstrap</a>

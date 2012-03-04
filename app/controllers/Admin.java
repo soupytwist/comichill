@@ -14,6 +14,8 @@ import java.util.List;
 import jobs.RssUpdater;
 import org.apache.commons.io.FileUtils;
 
+import jobs.Bootstrap;
+import jobs.ComicCacher;
 import jobs.Judgement;
 import jobs.RssUpdater;
 
@@ -165,13 +167,27 @@ public class Admin extends Controller {
 		Authentication.requireAdmin();
 		new RssUpdater().now();
 		flash.put("message", "Updater has begun...");
-		Application.index();
+		Admin.adminPanel();
 	}
 	
 	public static void doJudgement() {
 		Authentication.requireAdmin();
 		new Judgement().now();
 		flash.put("message", "Judgement has begun...");
-		Application.index();
+		Admin.adminPanel();
+	}
+	
+	public static void doComicCacher() {
+		Authentication.requireAdmin();
+		new ComicCacher().now();
+		flash.put("message", "ComicCacher has begun...");
+		Admin.adminPanel();
+	}
+	
+	public static void doBootstrap() {
+		Authentication.requireAdmin();
+		new Bootstrap().now();
+		flash.put("message", "Bootstrap has begun...");
+		Admin.adminPanel();
 	}
 }
