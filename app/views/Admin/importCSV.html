@@ -1,14 +1,13 @@
 #{extends 'main-text.html' /}
 #{knockout /}
 #{stylesheet 'admin.css' /}
-#{set title:'Import Strips from Archive' /}
+#{set title:'Import Strips from CSV' /}
 
-<h1>Import Strips for ${comic.title} - (${comic.label})</h1>
+<h1>Import Strips from CSV for ${comic.title} - (${comic.label})</h1>
 <br/>
 Or... <a href="@{Admin.editComic(comic.label)}">edit ${comic.label}</a><br/>
 <br/>
 Current number of strips: ${comic.numStrips}<br/>
-<a href="${archive.src}">${archive.src}</a><br/>
 <div class="status" data-bind="text: viewModel.statusText(), css: {statusError: viewModel.status() < 0, statusOK: viewModel.status() == 1}"></div>
 <button onclick="commit()">Commit</button>
 <br/>

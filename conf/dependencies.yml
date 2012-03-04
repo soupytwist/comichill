@@ -5,3 +5,4 @@ require:
     - play -> siena 2.0.6
     - net.sf.flexjson -> flexjson 2.1
     - org.htmlparser -> htmlparser 1.6
+    - net.sf.opencsv -> opencsv 2.0

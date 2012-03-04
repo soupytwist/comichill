@@ -15,6 +15,7 @@
 	<classpathentry kind="lib" path="/web/comichill/lib/commons-pool-1.2.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/lib/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/lib/relaxngDatatype-20020414.jar"/>
+	<classpathentry kind="lib" path="/web/comichill/lib/opencsv-2.0.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/lib/htmlparser-1.6.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/lib/commons-dbcp-1.2.1.jar"/>
 	<classpathentry kind="lib" path="/web/comichill/lib/flexjson-2.1.jar"/>

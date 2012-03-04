@@ -33,6 +33,17 @@
 #{/form}
 </div>
 
+<div class="formBlock ok">
+#{form @Admin.importCSV(comic.label), method:'POST', enctype:'multipart/form-data'}
+<h1>Import Strips from CSV</h1>
+<p>Pick a CSV file to upload</p>
+#{field 'csv' }
+<label>File:<span class="subLabel">CSV file</span></label><input type='file' name='${field.name}'  class='${field.errorClass}'/><br/>
+#{/field}
+<button type='submit' >Upload</button>
+#{/form}
+</div>
+
 <!-- ko foreach: rssFeeds -->
 	<div class="formBlock" data-bind="css: {ok: persisted()}">
 	<form class="formClass" data-bind="submit: function() { submitAction($data, 'rss'); }">

@@ -5,13 +5,13 @@ import models.siena.Comic;
 import models.siena.RssStripSource;
 import models.siena.StripSource;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import jobs.RssUpdater;
 import org.apache.commons.io.FileUtils;
 
 import jobs.Judgement;
@@ -22,6 +22,8 @@ import pojo.StripNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.InputSource;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 import play.Logger;
 import play.Play;
@@ -122,6 +124,40 @@ public class Admin extends Controller {
 		} else {
 			response.status = 400;
 			renderText("The archive with ID="+id+" does not exist.");
+		}
+	}
+	
+	public static void importCSV(String label, File csv) {
+		Comic comic = Comic.getByLabel(label);
+		if (comic == null) {
+			flash.put("message", "The comic with label "+label+" does not exist!");
+			Admin.editComic(label);
+		}
+		
+		if (csv == null) {
+			flash.put("message", "No file was received!");
+			Admin.editComic(label);
+		}
+		
+		List<StripNode> nodes = new ArrayList<StripNode>();
+		
+		try {
+			CSVReader in = new CSVReader(new FileReader(csv));
+			String line[];
+			while ((line = in.readNext()) != null && line.length >= 2) {
+				StripNode node = new StripNode(line[0], line[1]);
+				nodes.add(node);
+			}
+			
+			// Cache the result so that it does not need to be resent or recalculated
+			String commitKey = "csv_"+comic.id+"_"+new Date().getTime();
+			Cache.set(commitKey, nodes, "5mn");
+			
+			render(nodes, comic, commitKey);
+			
+		} catch (Exception e) {
+			flash.put("message", "There was an error processing the CSV file!");
+			Admin.editComic(label);
 		}
 	}
 	
