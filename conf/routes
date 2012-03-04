@@ -23,6 +23,8 @@ POST    /login                                  Users.login
 GET     /logout                                 Users.logout
 GET     /register                               Users.register
 POST    /register                               Users.register
+GET     /account                                Users.accountInfo
+POST    /account                                Users.accountInfo
 GET     /comics/?                               Application.all
 GET     /comics/{label}/{<[0-9]+>sid}/?         Viewer.viewBySid
 GET     /queue/?                                Viewer.viewQueue

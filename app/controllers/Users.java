@@ -1,4 +1,7 @@
 package controllers;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 import models.siena.Comic;
 import models.siena.Strip;
 import models.siena.StripQueue;
@@ -34,7 +37,11 @@ public class Users extends Controller {
 		Authentication.logout();
 	}
 	
-	public static void register(@Required @Email String email, @Required @MinSize(User.PASSWORD_LENGTH_MIN) @MaxSize(User.PASSWORD_LENGTH_MAX) String password, String retype_password) {
+	public static void register(
+			@Required @Email String email,
+			@Required @MinSize(User.PASSWORD_LENGTH_MIN) @MaxSize(User.PASSWORD_LENGTH_MAX) String password,
+			String retype_password) {
+		
 		if (email == null) {
 			validation.clear();
 			render();
@@ -84,6 +91,84 @@ public class Users extends Controller {
 			Logger.debug("Registration is complete; Redirecting user...");
 			Authentication.setAuthenticated(newUser);
 			Application.index();
+		}
+	}
+	
+	public static void accountInfo(
+			@Required @Email String email,
+			@Required String current_password,
+			@MinSize(User.PASSWORD_LENGTH_MIN) @MaxSize(User.PASSWORD_LENGTH_MAX) String new_password,
+			String retype_new_password) {
+		
+		// Get the logged in user
+		User connected = Authentication.requireLoggedIn();
+		
+		// If the email field is absent, form has not been submitted yet
+		if (email == null) {
+			validation.clear();
+			render();
+		}
+		// Check the authenticity token
+		checkAuthenticity();
+		
+		// Check that the current_password is correct
+		BasicAuthentication auth = BasicAuthentication.getByUid(connected.id);
+		if (auth != null && current_password != null && (! auth.match(current_password)))
+			validation.addError("current_password", "The password you entered is incorrect");
+		
+		// Check for validation errors before doing anything
+		if (validation.hasErrors()) {
+			Logger.debug("Validation errors: %s", validation.errorsMap());
+			params.flash();
+			validation.keep();
+			render();
+		}
+		
+		// If the email has changed, update it
+		if (! email.equalsIgnoreCase(connected.email)) {
+			// First, check if the email address is already in use
+			Logger.debug("Checking for existing user with email=%s", email);
+			User existing = User.getByEmail(email);
+			
+			if (existing != null) {
+				Logger.warn("A user has attempted to update their email to an existing email address; email=%s existing=%s", email, existing.toString());
+				validation.addError("email", "This email address is already in use");
+				params.flash();
+				validation.keep();
+				render();
+			} else {
+				connected.email = email;
+				connected.update();
+			}
+		}
+		
+		// Update the password if the user entered a new password
+		if (new_password != null && new_password.length() > 0) {
+			// Check that the new password matches the retyped password
+			if (!new_password.equals(retype_new_password)) {
+				validation.addError("retype_new_password", "The passwords you entered did not match");
+			} else {
+				try {
+					// Set the new password
+					auth.applySalt(new_password, auth.generateSalt());
+					auth.save();
+				} catch (Exception e) {
+					// This shouldn't happen!
+					Logger.error("Generating salt failed");
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		if (validation.hasErrors()) {
+			Logger.debug("Validation errors exist; returning to accountInfo page");
+			params.flash();
+			validation.keep();
+			render();
+		} else {
+			Logger.info("User updated their preferences; %s", connected);
+			flash.put("message", "Your account has been updated!");
+			render();
 		}
 	}
 	

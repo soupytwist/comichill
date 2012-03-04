@@ -1,0 +1,35 @@
+#{extends 'main-text.html' /}
+#{set title:'Change Password' /}
+<h1>Account Info</h1>
+<p>
+Use this form to change your password or email address. To change your password, you must enter your current
+password, then select a new password. To change your email only, leave the 'new password' field empty.<br/>
+<br/>
+If you encounter any problems on this site, please <a href="@{Application.contact}">contact me</a>.<br/>
+</p>
+#{ifErrors}
+   <h3>Please correct the errors below!</h3>
+#{/ifErrors}
+#{form @Users.accountInfo(), method: 'POST'}
+#{field 'email'}
+<dl><label for='${field.name}'>Email:</label></dl>
+<dt><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='%{ if (flash.email) print flash.email; else print user.email;}%'/></dt>
+#{errors 'email'}<li>${error}</li>#{/errors}
+#{/field}
+#{field 'current_password'}
+<dl><label for='${field.name}'>Current Password:</label></dl>
+<dt><input type='password' name='${field.name}' value=''/></dt>
+#{errors 'current_password'}<li>${error}</li>#{/errors}
+#{/field}
+#{field 'new_password'}
+<dl><label for='${field.name}'>New Password:</label></dl>
+<dt><input type='password' name='${field.name}' value=''/></dt>
+#{errors 'new_password'}<li>${error}</li>#{/errors}
+#{/field}
+#{field 'retype_new_password'}
+<dl><label for='${field.name}'>Retype Password:</label></dl>
+<dt><input type='password' name='${field.name}' value=''/></dt>
+#{errors 'retype_new_password'}<li>${error}</li>#{/errors}
+#{/field}
+<dl></dl><dt><input type='submit' value='Register' /></dt>
+#{/form}
