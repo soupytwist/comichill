@@ -25,14 +25,6 @@ public class Application extends Controller {
     	render();
     }
     
-    public static void about() {
-    	render();
-    }
-    
-    public static void contact() {
-    	render();
-    }
-    
     public static void doContact(@Required @Email String email, @Required @MaxSize(2048) String messageBody) {
     	if (validation.hasErrors()) {
     		params.flash();
@@ -59,8 +51,19 @@ public class Application extends Controller {
     	render();
     }
     
-    public static void logout() {
+    public static void about() {
     	render();
     }
     
+    public static void contact() {
+    	render();
+    }
+    
+    public static void privacy() {
+    	render();
+    }
+    
+    public static void terms() {
+    	render();
+    }
 }

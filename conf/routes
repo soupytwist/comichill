@@ -17,6 +17,8 @@
 GET     /                                       Application.index
 GET     /about                                  Application.about
 GET     /contact                                Application.contact
+GET     /privacy                                Application.privacy
+GET     /terms                                  Application.terms
 GET     /home                                   Application.home
 GET     /login                                  Users.login
 POST    /login                                  Users.login
