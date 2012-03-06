@@ -123,7 +123,7 @@ function showSeek() {
 		$(item).attr('q', idx);
 		if (idx == viewModel.q()) $(item).attr('id', 'strip-current');
 		$(item).html(comics[strip.cid].label + ' - ' + strip.sid + "&nbsp;&nbsp;-&nbsp;&nbsp;" + strip.title);
-		$(item).bind('click', function() { seekTo($(this).attr('q')); });
+		$(item).bind('click', function() { seekTo(Number($(this).attr('q'))); });
 		$(seeklist).append(item);
 	}
 	
