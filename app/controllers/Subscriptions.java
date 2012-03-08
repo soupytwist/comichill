@@ -86,6 +86,16 @@ public class Subscriptions extends Controller {
     	ok();
     }
 	
+    public static void zoom(Long cid, float scale) {
+    	User connected = Authentication.requireLoggedIn();
+    	Subscription sub = Subscription.getByUserAndCid(connected, cid);
+    	if (sub != null) {
+    		sub.zoom = scale;
+    		sub.save();
+    	}
+    	ok();
+    }
+    
 	public static void create(JsonObject body) {
 		// User must be logged in to add a subscription
 		User connected = Authentication.requireLoggedIn();

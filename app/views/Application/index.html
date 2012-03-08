@@ -74,7 +74,7 @@ var viewModel = new AppViewModel();
 
 addComics(comicCache);
 if (viewModel.loggedIn()){
-	server_get('subscriptions', {}, function(subData) {
+	loadSubscriptions(true, function(subData) {
 		addSubscriptions(subData);
 	});
 }
@@ -112,10 +112,4 @@ function addSubscriptions(subData) {
 
 ko.applyBindings(viewModel);
 extraBindings();
-
-(function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
 </script>

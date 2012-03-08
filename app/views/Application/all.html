@@ -22,7 +22,7 @@ var viewModel = new AppViewModel();
 
 addComics(comicCache);
 if (viewModel.loggedIn()){
-	server_get('subscriptions', {}, function(subData) {
+	loadSubscriptions(true, function(subData) {
 		addSubscriptions(subData);
 	});
 }

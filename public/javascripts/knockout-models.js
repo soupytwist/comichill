@@ -110,6 +110,13 @@ function Strip() {
 	self.link = ko.computed(function() { return '/comics/'+self.comic.label()+'/'+self.strip.sid(); });
 }
 
+function loadSubscriptions(refresh, callback, errorfct) {
+	if (!refresh && sessionStorage && sessionStorage.subs)
+		callback(JSON.parse(sessionStorage.subs));
+	else
+		server_get('subscriptions', {}, function(data) { if (sessionStorage) sessionStorage.subs = JSON.stringify(data); callback(data); }, errorfct);
+}
+
 function server_get(route, params, successFct, errorFct) {
 	$.ajax({
 		url: route_get[route](params),

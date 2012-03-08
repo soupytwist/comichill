@@ -34,6 +34,7 @@ GET     /queue/{label}/{<[0-9]+>sid}/?          Viewer.viewQueueBySid
 GET     /comics/{label}/?                       Viewer.viewByLabel
 GET     /strips/{<[0-9]+>id}/?                  Viewer.viewById
 GET     /visit/{<[0-9]+>id}                     Subscriptions.visit
+GET     /zoom/{<[0-9]+>id}/{<[0-9\.]+>scale}    Subscriptions.zoom
 GET     /updates/?                              Subscriptions.generateUpdateQueue
 
 GET     /tag/{tag}                              Comics.getByTag

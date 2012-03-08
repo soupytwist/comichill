@@ -12,7 +12,8 @@ var route_get = {
 	commit_strips: #{jsAction @CommitController.commitStrips(':commitKey') /},
 	subscriptions: #{jsAction @Subscriptions.getAll() /},
 	comics: #{jsAction @Comics.getAll() /},
-	visit: #{jsAction @Subscriptions.visit(':id') /}
+	visit: #{jsAction @Subscriptions.visit(':id') /},
+	zoom: #{jsAction @Subscriptions.zoom(':cid', ':scale') /}
 }
 
 var route_post = {

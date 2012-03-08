@@ -37,7 +37,7 @@ public class Serializers {
                 "id", "label", "title", "author", "homepage", "tags").exclude("*").prettyPrint(prettyPrint);
         
         stripSerializer = new JSONSerializer().include(
-                "id", "sid", "url", "title").exclude("*").prettyPrint(prettyPrint);
+                "id", "cid", "sid", "url", "title").exclude("*").prettyPrint(prettyPrint);
         
         sourceSerializer = new JSONSerializer().include(
                 "src", "id", "created", "updated").exclude("*").prettyPrint(prettyPrint);

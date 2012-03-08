@@ -33,6 +33,7 @@ var queue = Array();
 var comics = Array();
 var qdir=1;
 var allowChange = true;
+var subs = null;
 
 function Frame() {
 	var self = this;
@@ -63,7 +64,13 @@ function AppViewModel() {
 			self.preloadStrip(self.q());
 		
 		self.switchFrames();
-		if (loggedIn) server_get("visit", {id: self.cur.data.strip.id()});
+		if (loggedIn) {
+			server_get("visit", {id: self.cur.data.strip.id()});
+			if (subs && subs[self.cur.data.strip.cid()]) {
+				var sub = subs[self.cur.data.strip.cid()];
+				applyZoom(sub['zoom']);
+			}
+		}
 		var title = self.cur.data.comic.title()+' - '+self.cur.data.strip.title();
 		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip), q: self.q()}, title, '/'+(useQueue? "queue" : "comics")+'/'+self.cur.data.comic.label()+'/'+self.cur.data.strip.sid());
 		document.title = title;
@@ -81,6 +88,13 @@ function AppViewModel() {
 	self.init = function(stripData, comicData) {
 		ko.mapping.fromJS(stripData, self.cur.data.strip);
 		ko.mapping.fromJS(comicData, self.cur.data.comic);
+		loadSubscriptions(false, function(data) {
+			subs = data;
+			if (subs[self.cur.data.strip.cid()]) {
+				var sub = subs[self.cur.data.strip.cid()];
+				applyZoom(sub['zoom']);
+			}
+		});
 		
 		// Apply HTML5 history API JS bindings
 		if (window.history.pushState) {
@@ -93,7 +107,6 @@ function AppViewModel() {
 						viewModel.q(data[2]);
 						viewModel.qlen(data[3]);
 						if (self.q()+qdir > 0 && self.q()+qdir < self.qlen()) self.preloadStrip(self.q()+qdir);
-						// Apply HTML5 history API JS bindings
 						$('a#nav-next').bind('click', function(e) { qdir=1; viewModel.q(viewModel.q()+1); viewModel.changeStrip(); e.preventDefault(); });
 						$('a#nav-prev').bind('click', function(e) { qdir=-1; viewModel.q(viewModel.q()-1); viewModel.changeStrip(); e.preventDefault(); });
 						$('a#nav-next').attr('data-bind', "visible: q() < qlen()-1");
@@ -123,7 +136,7 @@ function showSeek() {
 		$(item).attr('q', idx);
 		if (idx == viewModel.q()) $(item).attr('id', 'strip-current');
 		$(item).html(comics[strip.cid].label + ' - ' + strip.sid + "&nbsp;&nbsp;-&nbsp;&nbsp;" + strip.title);
-		$(item).bind('click', function() { seekTo(Number($(this).attr('q'))); });
+		$(item).bind('click', seekFromList);
 		$(seeklist).append(item);
 	}
 	
@@ -131,6 +144,10 @@ function showSeek() {
 	$('body').append(shadow);
 	$('#shadow').fadeIn(250);
 	$('body').append(seekwin);
+}
+
+function seekFromList() {
+	seekTo(Number($(this).attr('q')));
 }
 
 function seekTo(id) {
@@ -142,4 +159,21 @@ function seekTo(id) {
 function hideSeek() {
 	$('#shadow').fadeOut(250, function () { $('#shadow').remove(); });
 	$('#seekWindow').remove();
+}
+
+function applyZoom(scale) {
+	var frameId = (viewModel.cur == viewModel.f1) ? "#cframe1" : "#cframe2";
+	$(frameId).css({
+		"-moz-transform": "scale( "+scale+")",
+		"moz-transform-origin": "0 0",
+		"-webkit-transform": "scale( "+scale+")",
+		"-webkit-transform-origin": "0 0",
+		"height": (100/scale)+"%",
+		"width": (100/scale)+"%"
+	});
+}
+
+function zoom(scale) {
+	applyZoom(scale);
+	server_get('zoom', {cid: viewModel.cur.data.comic.id(), scale: scale}, loadSubscriptions(true, function(data) { subs = data; }));
 }
