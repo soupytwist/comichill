@@ -175,5 +175,5 @@ function applyZoom(scale) {
 
 function zoom(scale) {
 	applyZoom(scale);
-	server_get('zoom', {cid: viewModel.cur.data.comic.id(), scale: scale}, loadSubscriptions(true, function(data) { subs = data; }));
+	server_get('zoom', {cid: viewModel.cur.data.comic.id(), scale: scale}, function(data) { loadSubscriptions(true, function(data) { subs = data; } }));
 }
