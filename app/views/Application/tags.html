@@ -1,0 +1,81 @@
+#{extends 'main.html' /}
+#{knockout /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{script 'cache/comics.js' /}
+#{script 'cache/tags.js' /}
+#{script 'templateFunctions.js' /}
+#{include 'public/html/templates.html' /}
+#{set title:'Comic Hill' /}
+
+<img src='/img/title.png' />
+
+<div id="tag-view">
+<h1 data-bind="text: 'By Tag: ' + selectedTag(), visible: comics().length > 0"></h1>
+<div class="comic-hill" data-bind="template: {name: templateName, foreach: comics}, visible: comics().length > 0">
+</div>
+</div>
+
+<h1 class='title'>Tags</h1>
+<div data-bind="foreach: tags">
+<div class="tag" data-bind="text: $data, event: { click: selectTag }, css: { selected: $data == $root.selectedTag() }"></div>
+</div>
+<script type="text/javascript">
+
+function AppViewModel() {
+	var self = this;
+	self.tags = ko.observableArray();
+	$.each(sys_tags, function(key, value) { self.tags.push(key); });
+	self.tags.sort();
+	
+	self.selectedTag = ko.observable("");
+	self.comics = ko.observableArray();
+	
+	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
+	self.templateName = function(comic) { return (self.loggedIn() ? ((comic.sub.id() == -1) ? 'comic-template' : 'comic-template-subscribed') : 'comic-template-noauth'); };
+}
+
+var viewModel = new AppViewModel();
+
+function selectTag(tag) {
+	if (viewModel.comics().length > 0) {
+		$("#tag-view").hide("blind", {}, 250, function() { viewModel.comics.removeAll(); selectTag(tag); });
+		return;
+	}
+	viewModel.selectedTag(tag);
+	if (! sys_tags[tag]) {
+		myAlert("There was an error loading this tag");
+		return;
+	}
+	$.each(sys_tags[tag],
+		function(index, value) {
+			var newComic = new Comic();
+			ko.mapping.fromJS(sys_comics[value], newComic.data);
+			viewModel.comics.push(newComic);
+		});
+	extraBindings();
+	if (viewModel.loggedIn()){
+		loadSubscriptions(false, function(subData) {
+			addSubscriptions(subData);
+		});
+	}
+	$("#tag-view").show("blind", {}, 250);
+}
+
+function addSubscriptions(subData) {
+	$.each(subData,
+		function(index, value) {
+			var comic = null;
+			for (var tmp in viewModel.comics()) {
+				if (viewModel.comics()[tmp].data.id() == index) {
+					comic = viewModel.comics()[tmp];
+					break;
+				}
+			}
+			if (comic) ko.mapping.fromJS(value, comic.sub);
+	});
+	extraBindings();
+}
+
+ko.applyBindings(viewModel);
+
+</script>
