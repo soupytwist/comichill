@@ -37,7 +37,8 @@ GET     /visit/{<[0-9]+>id}                     Subscriptions.visit
 GET     /zoom/{<[0-9]+>id}/{<[0-9\.]+>scale}    Subscriptions.zoom
 GET     /updates/?                              Subscriptions.generateUpdateQueue
 
-GET     /tag/{tag}                              Comics.getByTag
+GET     /tags                                   Application.tags
+GET     /tags/{tag}                             Comics.getByTag
 
 GET     /user/queue/{<[0-9]+>id}                Users.getQueue
 GET     /strips/queue/{<[0-9]+>id}              Strips.getQueue
@@ -56,6 +57,7 @@ GET     /admin/commit/strips                    CommitController.commitStrips
 GET    /job/updater                             Admin.doUpdates
 GET    /job/judgement                           Admin.doJudgement
 GET    /job/comiccacher                         Admin.doComicCacher
+GET    /job/tagbuilder                          Admin.doTagBuilder
 GET    /job/bootstrap                           Admin.doBootstrap
 
 # REST / JSON

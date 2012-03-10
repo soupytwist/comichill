@@ -21,7 +21,7 @@ a.nav-disabled {
 }
 
 div#viewer-prev {
-	position: absolute;
+	position: fixed;
 	left: 32px;
 	bottom: 0px;
 	width: 96px;
@@ -41,7 +41,7 @@ div#viewer-hill {
 }
 
 div#viewer-next {
-	position: absolute;
+	position: fixed;
 	right: 32px;
 	bottom: 0px;
 	width: 96px;
@@ -51,13 +51,13 @@ div#viewer-next {
 }
 
 div#seek {
-	position: absolute;
-	left: 252px;
-	top: 24px;
+	position: fixed;
+	left: 45%;
+	bottom: 0px;
 	width: 96px;
 	height: 48px;
 	background-image: url('/img/seek.png');
-	z-index: 15;
+	z-index: 10;
 	cursor: pointer;
 }
 

@@ -18,6 +18,7 @@ import jobs.Bootstrap;
 import jobs.ComicCacher;
 import jobs.Judgement;
 import jobs.RssUpdater;
+import jobs.TagBuilder;
 
 import pojo.StripNode;
 
@@ -181,6 +182,13 @@ public class Admin extends Controller {
 		Authentication.requireAdmin();
 		new ComicCacher().now();
 		flash.put("message", "ComicCacher has begun...");
+		Admin.adminPanel();
+	}
+	
+	public static void doTagBuilder() {
+		Authentication.requireAdmin();
+		new TagBuilder().now();
+		flash.put("message", "TagBuilder has begun...");
 		Admin.adminPanel();
 	}
 	

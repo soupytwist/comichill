@@ -218,6 +218,22 @@ body {
 	float: left;
 }
 
+.tag {
+	margin: 0 6px;
+	padding: 6px 12px;
+	width: auto;
+	float: left;
+	border-radius: 12px;
+	background-color: white;
+	border: 3px solid black;
+	text-align: center;
+	cursor: pointer;
+}
+
+.tag.selected {
+	background-color: yellow;
+}
+
 .status {
 	color: gray;
 	font-weight: bold;

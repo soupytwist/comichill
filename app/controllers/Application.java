@@ -42,9 +42,11 @@ public class Application extends Controller {
     }
     
     public static void all() {
-    	// User must be logged in to add a subscription
-		List<Comic> comics = Comic.all().fetch();
-    	render(comics);
+    	render();
+    }
+    
+    public static void tags() {
+    	render();
     }
 
     public static void login() {

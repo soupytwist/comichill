@@ -2,7 +2,7 @@
 #{knockout /}
 #{script 'jquery-ui-1.8.17.min.js' /}
 #{script 'templateFunctions.js' /}
-#{script 'comicCache.js' /}
+#{script 'cache/comics.js' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
@@ -72,7 +72,7 @@ function sortNewest(left, right) {
 
 var viewModel = new AppViewModel();
 
-addComics(comicCache);
+addComics(sys_comics);
 if (viewModel.loggedIn()){
 	loadSubscriptions(true, function(subData) {
 		addSubscriptions(subData);

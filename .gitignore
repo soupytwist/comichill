@@ -2,7 +2,7 @@ precompiled
 siena-2.0.6
 playapps-1.4
 public/javascripts/routes.js
-public/javascripts/comicCache.js
+public/javascripts/cache
 public/images
 .settings
 .classpath

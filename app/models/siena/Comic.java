@@ -63,7 +63,11 @@ public class Comic extends Model {
 	}
 	
 	public String[] tagsAsList() {
-		return tags.split("|");
+		if (tags == null)
+			return new String[0];
+		
+		// Remove the first and last pipe and then split
+		return tags.substring(1, tags.length()-1).split("\\|");
 	}
 	
 	public Strip newStrip(String url, String title) {

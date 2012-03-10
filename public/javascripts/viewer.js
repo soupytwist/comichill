@@ -121,6 +121,14 @@ var viewModel = new AppViewModel();
 ko.applyBindings(viewModel);
 
 function showSeek() {
+	// Do not let the seek window pop up if it is not ready or is already shown
+	if (viewModel.qlen() == 0) {
+		window.setTimeout("showSeek()", 100);
+		return;
+	} else if ($("#seekWindow").size() != 0) {
+		return;
+	}
+	
 	var seekwin = document.createElement('div');
 	var shadow = document.createElement('div');
 	$(seekwin).attr('id', 'seekWindow');
@@ -182,8 +190,8 @@ function applyZoom(scale) {
 		$(fx.elem).css(
 				{	"-moz-transform": "scale("+now+")",
 					"-webkit-transform": "scale("+now+")",
-					"-o-transform": "scale("+scale+")",
-					"-ms-transform": "scale("+scale+")",
+					"-o-transform": "scale("+now+")",
+					"-ms-transform": "scale("+now+")",
 					"height": (100/now)+"%",
 					"width": (100/now)+"%"
 				});
