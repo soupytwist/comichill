@@ -1,5 +1,6 @@
 #{extends 'barebone.html' /}
 #{knockout /}
+#{script 'jquery-ui-1.8.17.min.js' /}
 #{script 'viewer.js' /}
 #{stylesheet 'viewer.css' /}
 #{set title:comic.title +" - "+ strip.title /}
@@ -15,19 +16,23 @@
 <iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.strip.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>
 <iframe class="cframe" id="cframe2" data-bind="fadeVisible: f2.visible(), cframeSrc: f2.data.strip.url()"></iframe>
 
-
+<div id="viewer-ctl-activate" data-bind="visible: !showCtl(), event: { mouseover: function() { showCtl(true); } }"></div>
+<div id="viewer-ctl-deactivate" data-bind="visible: showCtl(), event: { mouseover: function() { showCtl(false); } }"></div>
+<div id="viewer-ctl" data-bind="viewerCtlVisible: showCtl()">
 <a id="nav-prev" %{if (nav.prev != null) { 
 if (useQueue) { }%href="@{Viewer.viewQueueBySid(nav.prev.comic.label, nav.prev.sid)}"%{ }
 else { }%href="@{Viewer.viewBySid(nav.prev.comic.label, nav.prev.sid)}"%{ } }
 else{ }%href="/" class="nav-disabled"%{}}%>
 <div id="viewer-prev"></div></a>
 <div id="seek" title="Click to seek between comics" onclick="showSeek()"></div>
+<div id="zoom-out" data-bind="visible: loggedIn" title="Zoom out" onclick="zoomBy(-.1)"></div>
+<div id="zoom-in" data-bind="visible: loggedIn" title="Zoom in" onclick="zoomBy(.1)"></div>
 <a id="nav-next" %{if (nav.next != null) {
 if (useQueue) { }%href="@{Viewer.viewQueueBySid(nav.next.comic.label, nav.next.sid)}"%{ }
 else { }%href="@{Viewer.viewBySid(nav.next.comic.label, nav.next.sid)}"%{ } }
 else{ }%href="/" class="nav-disabled"%{}}%>
 <div id="viewer-next"></div></a>
-
+</div>
 
 <script>
 var useQueue = %{print useQueue;}%;

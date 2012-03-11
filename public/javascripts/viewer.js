@@ -29,6 +29,16 @@ ko.bindingHandlers.fadeVisible = {
 	    }
 };
 
+ko.bindingHandlers.viewerCtlVisible = {
+	    update: function(element, valueAccessor, allBindingsAccessor) {
+	        var value = valueAccessor(), allBindings = allBindingsAccessor();
+	        var valueUnwrapped = ko.utils.unwrapObservable(value); 
+	        console.log("received: " + valueUnwrapped);
+	        if (valueUnwrapped)	    $(element).stop(true,true).show("drop", {direction: 'down'}, 250);
+	        else	        		$(element).stop(true,true).hide("drop", {direction: 'down'}, 250);
+	    }
+};
+
 var queue = Array();
 var comics = Array();
 var qdir=1;
@@ -43,6 +53,7 @@ function Frame() {
 
 function AppViewModel() {
 	var self = this;
+	self.showCtl = ko.observable(false);
 	self.q = ko.observable(0);
 	self.qlen = ko.observable(0);
 	self.f1 = new Frame();
@@ -199,6 +210,21 @@ function applyZoom(scale) {
 }
 
 function zoom(scale) {
+	applyZoom(scale);
+	server_get('zoom', {cid: viewModel.cur.data.comic.id(), scale: scale}, function(data) { loadSubscriptions(true, function(data) { subs = data; } )});
+}
+
+function zoomBy(change) {
+	var scale = 1.0;
+	if (subs[viewModel.cur.data.strip.cid()]) {
+		var sub = subs[viewModel.cur.data.strip.cid()];
+		scale = sub['zoom'];
+	}
+	scale += change;
+	
+	if (scale < .5) { myAlert("You can't zoom out that much, get a bigger monitor."); return; }
+	if (scale > 2) { myAlert("You can't zoom in that much, this isn't CSI."); return; }
+	
 	applyZoom(scale);
 	server_get('zoom', {cid: viewModel.cur.data.comic.id(), scale: scale}, function(data) { loadSubscriptions(true, function(data) { subs = data; } )});
 }
