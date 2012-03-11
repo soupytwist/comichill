@@ -22,11 +22,12 @@ a.nav-disabled {
 
 div#viewer-ctl {
 	position: fixed;
-	left: 0px;
+	left: 12px;
 	bottom: 0px;
 	width: 100%;
 	height: 80px;
 	background-image: url('/img/background.png');
+	background-position: center top;
 	z-index: 10;
 }
 
