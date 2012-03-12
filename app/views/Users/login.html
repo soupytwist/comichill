@@ -17,11 +17,11 @@ I am very sorry if this happens, but if it does, you can register again <a href=
 	#{form @Users.login(), method: 'POST'}
 	#{field 'email'}
 	<label>Email:<span class="subLabel">Your email</span></label><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/><br/>
-	#{errors 'email'}<li>${error}</li>#{/errors}
+	#{errors 'email'}<span class="error">${error}</span>#{/errors}
 	#{/field}
 	#{field 'password'}
 	<label>Password:<span class="subLabel">Careful now</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
-	#{errors 'password'}<li>${error}</li>#{/errors}
+	#{errors 'password'}<span class="error">${error}</span>#{/errors}
 	#{/field}
 	#{field 'rememberMe'}
 	<label>Remember me:<span class="subLabel">Your computer only!</span></label><input id="remember-box" name='${field.name}' type="checkbox" onchange="rememberWarning()"/>
