@@ -27,7 +27,7 @@ Go ahead and register, but I can not guarantee your account will exist next time
 	#{errors 'password'}<span class="error">${error}</span>#{/errors}
 	#{/field}
 	#{field 'rememberMe'}
-	<label>Remember me:<span class="subLabel">Your computer only!</span></label><input id="remember-box" type="checkbox" onchange="rememberWarning()"/>
+	<label>Remember me:<span class="subLabel">Your computer only!</span></label><input id="remember-box" name='${field.name}' type="checkbox" onchange="rememberWarning()"/>
 	<span style="display: none" id="remember-warning">Do not use this on shared computers!</span><br/>
 	#{/field}
 	<div class="spacer"></div><p></p>
