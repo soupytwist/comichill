@@ -1,9 +1,11 @@
 package controllers;
 
 import play.Logger;
+import play.libs.Crypto;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
+import play.mvc.Http.Cookie;
 import models.siena.User;
 import models.siena.BasicAuthentication;
 
@@ -28,15 +30,43 @@ public class Authentication extends Controller {
             } catch (NumberFormatException nfe) {
             	Logger.warn(nfe, "Unable to parse uid in the session; uid=%s", session.get("uid"));
             }
+        } else {
+        	user = getRememberedUser();
         }
-        /*if (user == null) {
-        	// If the user is not logged in, track them as a guest
-            user = User.guest();
-            Logger.debug("Setting guest user %s", user.toString());
-            setAuthenticated(user);
-        }*/
         renderArgs.put("user", user);
     }
+	
+	/**
+	 * Gets the remembered user from a cookie and sets them in the session if one exists
+	 * @return The user that is active
+	 */
+	static User getRememberedUser() {
+		User user = null;
+    	Cookie remembered = request.cookies.get("RememberMe");
+    	if (remembered != null) {
+    		String cookieText = Crypto.decryptAES(remembered.value);
+    		String[] split = cookieText.split(" ");
+    		if (split.length == 2) {
+    			String email = split[0];
+    			try {
+    				Long uid = Long.parseLong(split[1]);
+    				user = User.getById(uid);
+    				if (email.equals(user.email)) {
+    					Logger.debug("Found logged in user via cookie %s", user.toString());
+    					setAuthenticated(user, true);
+    				} else {
+    					user = null;
+    					Logger.error("Could not authenticate user from cookie with ID=%d, email=%s", uid, email);
+    				}
+    			} catch (NumberFormatException nfe) {
+    				Logger.warn(nfe, "Unable to parse uid in the RememberMe cookie; uid=%s", split[1]);
+    			}
+    		} else {
+    			Logger.warn("Invalid cookie; %s", cookieText);
+    		}
+    	}
+    	return user;
+	}
 	
 	/**
 	 * Get the logged in user
@@ -53,10 +83,12 @@ public class Authentication extends Controller {
 	 * 	The user's email address
 	 * @param pass
 	 *  The user's plaintext password
+	 * @param rememberMe
+	 *  Whether the user wants to be logged in automatically next time
 	 * @return
 	 * 	Whether or not the login was successful
 	 */
-	static boolean standardLogin(String email, String pass) {
+	static boolean standardLogin(String email, String pass, boolean rememberMe) {
 		// TODO Check if this is necessary, may cause problems
 		//session.clear();
 		
@@ -69,7 +101,7 @@ public class Authentication extends Controller {
 			// Perform the authentication
 			if (auth.match(pass)) {
 				Logger.debug("Authentication accepted; user %s successfully logged in", email);
-				setAuthenticated(user);
+				setAuthenticated(user, rememberMe);
 			} else {
 				Logger.debug("Authentication failed for user %s", email);
 				user = null;
@@ -81,11 +113,13 @@ public class Authentication extends Controller {
 	/**
 	 * Stores a user in the session as logged in
 	 * @param user
-	 * 	The user that has successfully authenticated and should be logged in, or guest user
+	 * 	The user that has successfully authenticated and should be logged in, or guest user\
+	 * @param rememberMe
+	 *  Whether or not to set the RememberMe cookie for this user
 	 */
-	static void setAuthenticated(User user) {
-		if (!user.isGuest())
-			session.put("uid", user.id);
+	static void setAuthenticated(User user, boolean rememberMe) {
+		session.put("uid", user.id);
+		if (rememberMe) response.setCookie("RememberMe", Crypto.encryptAES(user.email+" "+user.id), "14d");
 	}
 	
 	/**
@@ -98,7 +132,7 @@ public class Authentication extends Controller {
 		else
 			Logger.info("User has logged out %s", user.toString());
 		session.clear();
-		//Application.logout();  This was needed to clear the javascript cache
+		response.removeCookie("RememberMe");
 		Application.index();
 	}
 

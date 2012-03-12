@@ -74,6 +74,16 @@ div.formBlock button {
 	font-weight:bold;
 }
 
+div.formBlock span.error {
+	font-size: 11px;
+	color: red;
+	float: left;
+	margin-left: 146px;
+	margin-bottom: 12px;
+	clear: both;
+	width:320px;
+}
+
 div.resultsPreview {
 	position: absolute;
 	left: 400px;

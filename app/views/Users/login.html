@@ -1,26 +1,45 @@
 #{extends 'main-text.html' /}
+#{stylesheet "admin.css" /}
 #{set title:'Login' /}
 <h1>Login</h1>
 <p>
 Please remember that the site is under under heavy development.<br/>
 If you are unable to log in, it is possible that your account no longer exists or has changed.<br/>
 I am very sorry if this happens, but if it does, you can register again <a href="@{Users.register}" >here</a>.<br/>
-<br/>
-If for some other reason you are unable to log in, please <a href="@{Application.contact}">contact me</a>.
 </p>
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
 #{/ifErrors}
-#{form @Users.login(), method: 'POST'}
-#{field 'email'}
-<dl><label for='${field.name}'>Email:</label></dl>
-<dt><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/></dt>
-#{errors 'email'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'password'}
-<dl><label for='${field.name}'>Password:</label></dl>
-<dt><input type='password' name='${field.name}' class='${field.errorClass}' value=''/></dt>
-#{errors 'password'}<li>${error}</li>#{/errors}
-#{/field}
-<dl></dl><dt><input type='submit' value='Login' /></dt>
-#{/form}
+<br/>
+<div class="formBlock">
+	<h1>Login with Comic Hill Account</h1>
+	<p>Login with your ComicHill account</p>
+	#{form @Users.login(), method: 'POST'}
+	#{field 'email'}
+	<label>Email:<span class="subLabel">Your email</span></label><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/><br/>
+	#{errors 'email'}<li>${error}</li>#{/errors}
+	#{/field}
+	#{field 'password'}
+	<label>Password:<span class="subLabel">Careful now</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'password'}<li>${error}</li>#{/errors}
+	#{/field}
+	#{field 'rememberMe'}
+	<label>Remember me:<span class="subLabel">Your computer only!</span></label><input id="remember-box" type="checkbox" onchange="rememberWarning()"/>
+	<span style="display: none" id="remember-warning">Do not use this on shared computers!</span><br/>
+	#{/field}
+	<div class="spacer"></div>
+	<button type='submit'>Login</button>
+	#{/form}
+</div>
+
+<br/>
+If for some other reason you are unable to log in, please <a href="@{Application.contact}">contact me</a>.
+
+<script type='text/javascript'>
+function rememberWarning() { 
+	if ($("#remember-box").attr("checked"))
+		$("#remember-warning").show();
+	else
+		$("#remember-warning").hide();
+}
+</script>

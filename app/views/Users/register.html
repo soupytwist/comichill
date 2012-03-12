@@ -1,30 +1,50 @@
 #{extends 'main-text.html' /}
+#{stylesheet "admin.css" /}
 #{set title:'Register' /}
-<h1>Register</h1>
+<h1>Registration</h1>
 <p>
 Warning!! This application is currently under heavy development.<br/>
 Go ahead and register, but I can not guarantee your account will exist next time you come back.<br/>
-<br/>
-If you encounter any problems on this site, please <a href="@{Application.contact}">contact me</a>.<br/>
 </p>
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
 #{/ifErrors}
-#{form @Users.register(), method: 'POST'}
-#{field 'email'}
-<dl><label for='${field.name}'>Email:</label></dl>
-<dt><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='${flash.email}'/></dt>
-#{errors 'email'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'password'}
-<dl><label for='${field.name}'>Password:</label></dl>
-<dt><input type='password' name='${field.name}' value=''/></dt>
-#{errors 'password'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'retype_password'}
-<dl><label for='${field.name}'>Retype Password:</label></dl>
-<dt><input type='password' name='${field.name}' value=''/></dt>
-#{errors 'retype_password'}<li>${error}</li>#{/errors}
-#{/field}
-<dl></dl><dt><input type='submit' value='Register' /></dt>
-#{/form}
+<br/>
+<div class="formBlock">
+	<h1>Create an Account</h1>
+	<p>It's easy! Just fill out the information below.</p>
+	#{form @Users.register(), method: 'POST'}
+	#{field 'email'}
+	<label>Email:<span class="subLabel">Your email</span></label><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/><br/>
+	#{errors 'email'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'password'}
+	<label>Password:<span class="subLabel">Pick something secure</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'password'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'retype_password'}
+	<label>Retype Password:<span class="subLabel">Careful now!!</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'password'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'rememberMe'}
+	<label>Remember me:<span class="subLabel">Your computer only!</span></label><input id="remember-box" type="checkbox" onchange="rememberWarning()"/>
+	<span style="display: none" id="remember-warning">Do not use this on shared computers!</span><br/>
+	#{/field}
+	<div class="spacer"></div><p></p>
+	<p>By clicking the 'Regiter' button, you acknowledge that you have probably haven't read, but at least agree with the <a href="@{Application.terms}">Terms of Use</a>.
+	Refer to the <a href="@{Application.privacy}">Privacy Policy</a> also if you want.</p>
+	<button type='submit'>Register</button>
+	#{/form}
+</div>
+
+<br/>
+If you encounter any problems on this site, please <a href="@{Application.contact}">contact me</a>.
+
+<script type='text/javascript'>
+function rememberWarning() { 
+	if ($("#remember-box").attr("checked"))
+		$("#remember-warning").show();
+	else
+		$("#remember-warning").hide();
+}
+</script>

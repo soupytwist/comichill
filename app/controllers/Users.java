@@ -20,10 +20,10 @@ import play.mvc.With;
 @With(Authentication.class)
 public class Users extends Controller {
 	
-	public static void login(String email, String password) {
+	public static void login(String email, String password, boolean rememberMe) {
 		if (email != null) {
 			checkAuthenticity();
-			if (Authentication.standardLogin(email, password)) {
+			if (Authentication.standardLogin(email, password, rememberMe)) {
 				Application.index();
 			} else {
 				validation.addError("password", "Your email or password was incorrect.");
@@ -40,7 +40,8 @@ public class Users extends Controller {
 	public static void register(
 			@Required @Email String email,
 			@Required @MinSize(User.PASSWORD_LENGTH_MIN) @MaxSize(User.PASSWORD_LENGTH_MAX) String password,
-			String retype_password) {
+			String retype_password,
+			boolean rememberMe) {
 		
 		if (email == null) {
 			validation.clear();
@@ -53,7 +54,6 @@ public class Users extends Controller {
 		if (validation.hasErrors()) {
 			Logger.debug("Validation errors: %s", validation.errorsMap());
 			params.flash();
-			validation.keep();
 			render();
 		}
 		
@@ -84,12 +84,11 @@ public class Users extends Controller {
 		if (validation.hasErrors()) {
 			Logger.debug("Validation errors exist; returning to registration page");
 			params.flash();
-			validation.keep();
 			render();
 		} else {
 			Logger.info("User successfully created; %s", newUser);
 			Logger.debug("Registration is complete; Redirecting user...");
-			Authentication.setAuthenticated(newUser);
+			Authentication.setAuthenticated(newUser, rememberMe);
 			Application.index();
 		}
 	}
@@ -120,7 +119,6 @@ public class Users extends Controller {
 		if (validation.hasErrors()) {
 			Logger.debug("Validation errors: %s", validation.errorsMap());
 			params.flash();
-			validation.keep();
 			render();
 		}
 		
@@ -134,7 +132,6 @@ public class Users extends Controller {
 				Logger.warn("A user has attempted to update their email to an existing email address; email=%s existing=%s", email, existing.toString());
 				validation.addError("email", "This email address is already in use");
 				params.flash();
-				validation.keep();
 				render();
 			} else {
 				connected.email = email;
@@ -163,7 +160,6 @@ public class Users extends Controller {
 		if (validation.hasErrors()) {
 			Logger.debug("Validation errors exist; returning to accountInfo page");
 			params.flash();
-			validation.keep();
 			render();
 		} else {
 			Logger.info("User updated their preferences; %s", connected);
