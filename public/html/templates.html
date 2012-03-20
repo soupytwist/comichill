@@ -17,7 +17,11 @@
 	</a>
 	<span class="title" data-bind="text: data.title()"></span>
 	<span class="author" data-bind="text: data.author()"></span>
-	<span class="subscribe-button" data-bind="event: { click: subscribe }">&nbsp;+&nbsp;</span>
+	<span class="subscribe-button" data-bind="event: { click: subscribePane }">&nbsp;+&nbsp;</span>
+	<div class="subscribe-at">
+		<div title="Start reading from the beginning" class="at-beginning" data-bind="event: { click: subscribe }">At Beginning</div>
+		<div title="Continue reading from the latest" class="at-end" data-bind="event: { click: subscribe }">At End</div>
+	</div>
 </div>
 </script><script type="text/html" id="comic-template-noauth">
 <div class="comic">

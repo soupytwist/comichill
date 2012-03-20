@@ -104,19 +104,6 @@ div#zoom-in {
 	cursor: pointer;
 }
 
-
-div#shadow {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	left: 0;
-	top: 0;
-	background-color: black;
-	opacity: 0.8;
-	z-index: 500;
-	display: none;
-}
-
 div#seekWindow {
 	background-color: white;
 	padding: 24px;

@@ -92,9 +92,14 @@ function Comic() {
 	self.bookmarkUrl = ko.computed(function() { return (self.sub.bookmark()==0)? '/comics/'+self.data.label()+'/1' : '/comics/'+self.data.label()+'/'+self.sub.bookmark(); });
 	self.latestUrl = ko.computed(function() { return '/comics/'+self.data.label()+'/'+(self.sub.latest()+1); });
 	self.unreadCount = ko.computed(function() {if (self.sub.id() == -1) return 0; else return (self.sub.latest()==0)? self.data.numStrips()-1 : self.data.numStrips() - self.sub.latest(); });
-	self.subscribe = function() {
+	self.subscribe = function(data, event) {
 		self.sub.cid(self.data.id());
-		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); extraBindings(); });
+		if ($(event.target).hasClass('at-end')) {
+			self.sub.bookmark(self.data.numStrips());
+			self.sub.latest(self.sub.bookmark());
+		}
+		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); extraBindings(); myAlert("Subsrciption added!"); });
+		if (hideSubscribePane) hideSubscribePane();
 	};
 	self.unsubscribe = function() {
 		server_delete('subscription', self.sub.id());
