@@ -1,5 +1,6 @@
 package jobs;
 
+import java.util.Calendar;
 import java.util.List;
 
 import notifiers.Mails;
@@ -20,20 +21,26 @@ import pojo.StripNode;
  * @author nick
  */
 @Every("2h")
-public class RssUpdater extends TrackedJob<String> {
+public class RssUpdater extends Job<String> {
+	
+	public static Calendar lastRun = null;
+	
+	public static String status = "not run";
 	
 	/**
 	 * Runs the job. Collects all updates from RSS feeds and adds them.
 	 */
 	public void doJob() {
 		// Tracking
-    	super.doJob();
+		lastRun = Calendar.getInstance();
     	
 		Logger.info("[RSSUPDATER] Updater is starting!");
 		List<RssStripSource> sources = RssStripSource.getAllEnabled();
+		int totalCreated = 0;
 		
 		if (sources == null) {
 			Logger.warn("[RSSUPDATER] RssStripSource.getAllEnabled returned null");
+			status = "no enabled RSS feeds";
 		} else {
 			Logger.info("[RSSUPDATER] Found %d RssStripSources; beginning import", sources.size());
 			
@@ -57,6 +64,7 @@ public class RssUpdater extends TrackedJob<String> {
 						}
 					}
 					Logger.info("[RSSUPDATER] Finished importing strips; comic=%s added=%d", comic.label, created);
+					totalCreated += created;
 					if (created > 2 && created == nodes.size()) {
 						Logger.warn("[RSSUPDATER] Rss Updater created strips for every comic in an Rss Feed; this could indicate a problem; comic=%s", comic.label);
 						Mails.notifyMe("RssUpdater WARNING", "Rss Updater created strips for every comic in an Rss Feed; this could indicate a problem; comic="+comic.label);
@@ -69,6 +77,7 @@ public class RssUpdater extends TrackedJob<String> {
 					e.printStackTrace();
 				}
 			}
+			status = totalCreated + " strips added";
 		}
 		
 		Logger.info("[RSSUPDATER] Updater is finished!");

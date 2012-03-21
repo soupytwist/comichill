@@ -2,6 +2,7 @@ package jobs;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import models.siena.Comic;
 
 import play.Logger;
 import play.Play;
+import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.mvc.Scope.RenderArgs;
 import play.mvc.results.RenderTemplate;
@@ -18,11 +20,15 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class ComicCacher extends TrackedJob {
+public class ComicCacher extends Job {
 
+	public static Calendar lastRun = null;
+	
+	public static String status = "not run";
+	
 	public void doJob() {
 		// Tracking
-    	super.doJob();
+		lastRun = Calendar.getInstance();
 		
     	// Create the comics.js file
         try {
@@ -39,10 +45,11 @@ public class ComicCacher extends TrackedJob {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[COMICCACHER] Finished creating comics.js file");
+        	status = "Successful";
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[COMICCACHER] Creating comics.js file failed; %s", e.getMessage());
-        	e.printStackTrace();
+        	status = "Failed";
         }
 	}
 	

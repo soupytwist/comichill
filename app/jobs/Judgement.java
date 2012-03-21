@@ -1,5 +1,6 @@
 package jobs;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +12,15 @@ import play.jobs.Every;
 import play.jobs.Job;
 
 @Every("6h")
-public class Judgement extends TrackedJob {
+public class Judgement extends Job {
 
+public static Calendar lastRun = null;
+	
+	public static String status = "not run";
+	
 	public void doJob() {
 		// Tracking
-    	super.doJob();
+		lastRun = Calendar.getInstance();
     	
 		Logger.info("[JUDGEMENT] Job has started!");
 		
@@ -29,6 +34,8 @@ public class Judgement extends TrackedJob {
 			comic.rankPop = 0;
 		}
 		
+		int totalHits = 0;
+		
 		// Now, sum the total number of subscriptions for each comic
 		// and the number of hits from each subscription
 		for (Subscription sub : subs) {
@@ -37,6 +44,7 @@ public class Judgement extends TrackedJob {
 			// Only need to reset the hit counter if it has changed
 			if (sub.hits > 0) {
 				cmap.get(sub.cid).rankHits += sub.hits;
+				totalHits += sub.hits;
 				sub.hits = -1;
 				sub.save();
 			}
@@ -54,6 +62,7 @@ public class Judgement extends TrackedJob {
 			c.save();
 		}
 		
+		status = "Total: " + totalHits + " hits";
 		Logger.info("[JUDGEMENT] Job has completed!");
 	}
 	

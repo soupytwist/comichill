@@ -3,6 +3,7 @@ package jobs;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,11 +21,15 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class TagBuilder extends TrackedJob {
+public class TagBuilder extends Job {
 
+public static Calendar lastRun = null;
+	
+	public static String status = "not run";
+	
 	public void doJob() {
 		// Tracking
-    	super.doJob();
+		lastRun = Calendar.getInstance();
     	
     	// Create the tags.js file
         try {
@@ -58,10 +63,11 @@ public class TagBuilder extends TrackedJob {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[TAGBUILDER] Finished creating tags.js file");
+        	status = "Successful";
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[TAGBUILDER] Creating tags.js file failed; %s", e.getMessage());
-        	e.printStackTrace();
+        	status = "Failure";
         }
 	}
 	
