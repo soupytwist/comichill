@@ -21,7 +21,13 @@
 </div>
 <br/>
 <h3>Jobs</h3>
-<table width="100%">
+<table style="width: 100%">
+<tr style="text-align: left">
+	<th width="15%">Job Name</th>
+	<th width="30%">Last Run</th>
+	<th width="45%">Message</th>
+	<th width="10%">Start</th>
+</tr>
 <tr>
 	<td width="15%">Bootstrap</td>
 	<td width="30%">%{print util.My.timeSince(jobs.Bootstrap.lastRun)}%</td>
