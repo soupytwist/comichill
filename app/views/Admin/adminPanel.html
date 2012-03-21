@@ -1,10 +1,11 @@
-#{extends 'main.html' /}
+#{extends 'main-text.html' /}
 #{knockout /}
+#{stylesheet 'admin.css' /}
 #{set title:'Admin Panel' /}
 
 <h1>Admin Panel</h1>
 <h3>Comics</h3>
-<div class="comic-hill always-show">
+<div class="comic-hill">
 %{for (comic in comics) { }%
 <div class="comic">
 	<a href="@{Admin.editComic(comic.label)}">
@@ -13,6 +14,8 @@
 	<span class="title">${comic.title}</span>
 	<span class="author">${comic.author}</span>
 	<div class="unread-count">Total ${comic.numStrips}</div>
+	%{ if (rssFeeds.containsKey(comic.id)) {
+		if (rssFeeds.get(comic.id).enabled) { }%<div class="rss-icon has-rss"></div>%{ } else { }%<div class="rss-icon no-rss"></div>%{ } } }%
 </div>
 %{ } }%
 </div>

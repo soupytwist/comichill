@@ -87,8 +87,12 @@ public class RssStripSource extends StripSource {
 		return Model.all(RssStripSource.class).getByKey(id);
 	}
 	
+	public static Query<RssStripSource> all() {
+		return Model.all(RssStripSource.class);
+	}
+	
 	public static List<RssStripSource> getAllEnabled() {
-		return Model.all(RssStripSource.class).filter("enabled", true).fetch();
+		return all().filter("enabled", true).fetch();
 	}
 	
 	public static List<RssStripSource> getByComic(Long cid) {

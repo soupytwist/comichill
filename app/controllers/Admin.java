@@ -11,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import jobs.RssUpdater;
 import org.apache.commons.io.FileUtils;
 
@@ -34,6 +36,8 @@ import play.cache.Cache;
 import play.data.validation.Required;
 import play.mvc.Controller;
 import play.mvc.With;
+import util.My;
+import util.Serializers;
 
 @With(Authentication.class)
 public class Admin extends Controller {
@@ -49,7 +53,9 @@ public class Admin extends Controller {
 	public static void adminPanel() {
 		Authentication.requireAdmin();
 		List<Comic> comics = Comic.all().fetch();
-		render(comics);
+		Map<Object, Object> rssFeeds = My.mapByKey("cid", RssStripSource.all().fetch().toArray());
+		System.out.println(Serializers.gson.toJson(rssFeeds));
+		render(comics, rssFeeds);
 	}
 	
 	public static void editComic(String label) {

@@ -370,10 +370,6 @@ noscript {
 	z-index: 1000;
 }
 
-.always-show * {
-	display: block!important;
-}
-
 div#shadow {
 	position: fixed;
 	width: 100%;
