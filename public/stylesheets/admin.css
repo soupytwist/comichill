@@ -84,6 +84,27 @@ div.formBlock span.error {
 	width:320px;
 }
 
+.collapsed h1 {
+	margin: 0!important;
+}
+
+.collapsed * :not(h1) {
+	display: none!important;
+}
+
+.collapse-button {
+	position: absolute;
+	bottom: -1px;
+	right: -1px;
+	width: 64px;
+	height: 16px;
+	background-color: #EEE;
+	border: 1px solid #CCC;
+	text-align: center;
+	font-size: 12px;
+	cursor: pointer;
+}
+
 div.resultsPreview {
 	position: absolute;
 	left: 400px;

@@ -9,20 +9,20 @@
 <div class="spacer"></div>
 
 <div class="formBlock" data-bind="css: {ok: comic.persisted()}">
-<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
-<h1 data-bind="text: viewModel.pageTitle()"></h1>
-<p>Edit the comic properties below</p>
-<label>Label:<span class="subLabel">Short name for comic</span></label><input id="labelField" type='text' data-bind="value: comic.data.label, disable: comic.persisted()"/><br/>
-<label>Title:<span class="subLabel">Full name for comic</span></label><input type='text' data-bind="value: comic.data.title"/><br/>
-<label>Author:<span class="subLabel">Whoever does it</span></label><input type='text' data-bind="value: comic.data.author"/><br/>
-<label>Homepage:<span class="subLabel">Just the URL</span></label><input type='text' data-bind="value: comic.data.homepage"/><br/>
-<label>Tags:<span class="subLabel">Put some tags</span></label><input type='text' data-bind="value: comic.data.tags"/><br/>
-<button type='submit' data-bind="text: comic.persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
-</form>
-<div class="spacer"></div>
+	<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
+	<h1 data-bind="text: viewModel.pageTitle()"></h1>
+	<p>Edit the comic properties below</p>
+	<label>Label:<span class="subLabel">Short name for comic</span></label><input id="labelField" type='text' data-bind="value: comic.data.label, disable: comic.persisted()"/><br/>
+	<label>Title:<span class="subLabel">Full name for comic</span></label><input type='text' data-bind="value: comic.data.title"/><br/>
+	<label>Author:<span class="subLabel">Whoever does it</span></label><input type='text' data-bind="value: comic.data.author"/><br/>
+	<label>Homepage:<span class="subLabel">Just the URL</span></label><input type='text' data-bind="value: comic.data.homepage"/><br/>
+	<label>Tags:<span class="subLabel">Put some tags</span></label><input type='text' data-bind="value: comic.data.tags"/><br/>
+	<button type='submit' data-bind="text: comic.persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
+	</form>
+	<div class="spacer"></div>
 </div>
 
-<div class="formBlock" data-bind="css: {ok: bannerExists()}">
+<div class="formBlock collapsed" data-bind="css: {ok: bannerExists()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 #{form @Admin.uploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Upload a Banner</h1>
 <p>Pick a banner to upload for this comic</p>
@@ -33,7 +33,7 @@
 #{/form}
 </div>
 
-<div class="formBlock ok">
+<div class="formBlock ok collapsed"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 #{form @Admin.importCSV(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Import Strips from CSV</h1>
 <p>Pick a CSV file to upload</p>
@@ -45,7 +45,7 @@
 </div>
 
 <!-- ko foreach: rssFeeds -->
-	<div class="formBlock" data-bind="css: {ok: persisted()}">
+<div class="formBlock collapsed" data-bind="css: {ok: persisted() && data.enabled()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 	<form class="formClass" data-bind="submit: function() { submitAction($data, 'rss'); }">
 	<h1><input type="checkbox" data-bind="checked: data.enabled"/> RSS Feed<span data-bind="text: ' ('+ (data.enabled()?'enabled':'disabled') +')'"></span></h1>
 	<button class="rightFloat" data-bind="click: $root.removeRss">Delete</button>
@@ -64,11 +64,11 @@
 			<li><span data-bind="text: title"></span><a class="small" data-bind="attr: {href: url}, text: url"></a></li>
 		</ul>
 	</div>
-	</div>
+</div>
 <!-- /ko -->
 
-<div data-bind="foreach: archives">
-	<div class="formBlock" data-bind="css: {ok: persisted()}">
+<!-- ko foreach: archives -->
+<div class="formBlock collapsed" data-bind="css: {ok: persisted()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 	<form class="formClass" data-bind="submit: function() { submitAction($data, 'archive'); }">
 	<h1>Archive</h1>
 	<button class="rightFloat" data-bind="click: $root.removeArchive">Delete</button>
@@ -81,17 +81,10 @@
 	<div class="spacer"></div>
 	<button type='submit' data-bind="text: persisted() ? 'Update' : 'Create', disable: viewModel.status() == 2" ></button>
 	</form>
-	<div class="resultsPreview" data-bind="visible: results().length > 0">
-		<ul data-bind="foreach: results">
-			<li><span data-bind="text: title"></span><a class="small" data-bind="attr: {href: url}, text: url"></a></li>
-		</ul>
-	</div>
-	</div>
 </div>
+<!-- /ko -->
 <input type="button" onclick="addRssAction(new Rss())" value="Add Rss" />
 <input type="button" onclick="addArchiveAction(new Archive())" value="Add Archive" />
-
-<div class="status" data-bind="text: viewModel.statusText(), css: {statusError: viewModel.status() < 0, statusOK: viewModel.status() == 1}"></div>
 
 <script type="text/javascript">
 function AppViewModel() {
@@ -101,7 +94,6 @@ function AppViewModel() {
 	self.rssFeeds = ko.observableArray();
 	self.archives = ko.observableArray();
 	self.status = ko.observable(0);
-	self.statusText = ko.observable("Hello, world!");
 	self.bannerExists = ko.observable(false);
 	self.pageTitle = ko.computed(function() {
 		var data = self.comic.data;
@@ -130,7 +122,6 @@ function submitAction(obj, type) {
 	viewModel.status(2);
 	server_post(type,obj.data,
 		function(data, textStatus, jqXHR) {
-			viewModel.statusText("Success!");
 			viewModel.status(1);
 			ko.mapping.fromJS(data, obj.data);
 			myAlert("Success!");
@@ -149,12 +140,12 @@ function addArchiveAction(archive) {
 }
 
 function ajaxSuccess(data, textStatus, jqXHR) {
-	viewModel.statusText("Success!");
 	viewModel.status(1);
+	myAlert("Success!");
 }
 
 function ajaxError(jqXHR, textStatus, errorThrown) {
-	viewModel.statusText("Error!\n"+textStatus+"\n"+errorThrown);
+	myAlert("Error!\n"+textStatus+"\n"+errorThrown);
 	viewModel.status(-1);
 }
 
@@ -184,5 +175,13 @@ viewModel.bannerExists(true);
 $("input#labelField").change(
 	function() { window.location.replace('/admin/edit/'+viewModel.comic.data.label()); }
 );
+
+function toggleCollapsed(elm) {
+	if ($(elm).parent().hasClass("collapsed"))
+		$(elm).text("collapse");
+	else
+		$(elm).text("expand");
+	$(elm).parent().toggleClass("collapsed", 250);
+}
 
 </script>

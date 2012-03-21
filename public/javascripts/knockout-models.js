@@ -69,18 +69,8 @@ function Rss() {
 function Archive() {
 	var self = this;
 	self.data = ko.mapping.fromJS(defaultArchive);
-	self.results = ko.observableArray();
 	self.persisted = ko.computed(function() { return self.data.id() != -1; });
 	self.persistKey = null;
-	self.fetch = function(success, error) {
-		if (self.data.src() != "http://www.") {
-			server_post('archive_fetch', ko.mapping.toJS(self.data),
-				function(jsonObj) {
-					self.results(jsonObj);
-				}, function() { if (error) error() }
-			);
-		}
-	};
 }
 
 function Comic() {
@@ -98,7 +88,7 @@ function Comic() {
 			self.sub.bookmark(self.data.numStrips());
 			self.sub.latest(self.sub.bookmark());
 		}
-		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); extraBindings(); myAlert("Subsrciption added!"); });
+		server_post('subscription', self.sub, function(data) { ko.mapping.fromJS(data, self.sub); extraBindings(); myAlert("Subscription added!"); });
 		if (hideSubscribePane) hideSubscribePane();
 	};
 	self.unsubscribe = function() {
