@@ -11,9 +11,12 @@ import play.jobs.Every;
 import play.jobs.Job;
 
 @Every("6h")
-public class Judgement extends Job {
+public class Judgement extends TrackedJob {
 
 	public void doJob() {
+		// Tracking
+    	super.doJob();
+    	
 		Logger.info("[JUDGEMENT] Job has started!");
 		
 		List<Subscription> subs = Subscription.all().fetch();

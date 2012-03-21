@@ -21,7 +21,35 @@
 </div>
 <br/>
 <h3>Jobs</h3>
-<a href="@{Admin.doUpdates}">Run Updater</a><br/>
-<a href="@{Admin.doJudgement}">Run Judgement</a><br/>
-<a href="@{Admin.doComicCacher}">Run ComicCacher</a><br/>
-<a href="@{Admin.doBootstrap}">Run Bootstrap</a>
+<table width="100%">
+<tr>
+	<td width="15%">Bootstrap</td>
+	<td width="30%">%{print jobs.Bootstrap.timeSinceLastRun()}%</td>
+	<td width="45%">%{print jobs.Bootstrap.status}%</td>
+	<td width="10%"><a href="@{Admin.doBootstrap}">Run now</a></td>
+</tr>
+<tr>
+	<td width="15%">Comic Cacher</td>
+	<td width="30%">%{print jobs.ComicCacher.timeSinceLastRun()}%</td>
+	<td width="45%">%{print jobs.ComicCacher.status}%</td>
+	<td width="10%"><a href="@{Admin.doComicCacher}">Run now</a></td>
+</tr>
+<tr>
+	<td width="15%">Tag Builder</td>
+	<td width="30%">%{print jobs.TagBuilder.timeSinceLastRun()}%</td>
+	<td width="45%">%{print jobs.TagBuilder.status}%</td>
+	<td width="10%"><a href="@{Admin.doTagBuilder}">Run now</a></td>
+</tr>
+<tr>
+	<td width="15%">Rss Updater</td>
+	<td width="30%">%{print jobs.RssUpdater.timeSinceLastRun()}%</td>
+	<td width="45%">%{print jobs.RssUpdater.status}%</td>
+	<td width="10%"><a href="@{Admin.doUpdates}">Run now</a></td>
+</tr>
+<tr>
+	<td width="15%">Judgement</td>
+	<td width="30%">%{print jobs.Judgement.timeSinceLastRun()}%</td>
+	<td width="45%">%{print jobs.Judgement.status}%</td>
+	<td width="10%"><a href="@{Admin.doJudgement}">Run now</a></td>
+</tr>
+</table>

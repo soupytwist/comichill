@@ -10,7 +10,6 @@ import models.siena.Comic;
 
 import play.Logger;
 import play.Play;
-import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.mvc.Scope.RenderArgs;
 import play.mvc.results.RenderTemplate;
@@ -19,9 +18,12 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class ComicCacher extends Job {
+public class ComicCacher extends TrackedJob {
 
 	public void doJob() {
+		// Tracking
+    	super.doJob();
+		
     	// Create the comics.js file
         try {
         	Logger.info("[COMICCACHER] Starting comics.js file creation");

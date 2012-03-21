@@ -54,7 +54,7 @@ public class Admin extends Controller {
 		Authentication.requireAdmin();
 		List<Comic> comics = Comic.all().fetch();
 		Map<Object, Object> rssFeeds = My.mapByKey("cid", RssStripSource.all().fetch().toArray());
-		System.out.println(Serializers.gson.toJson(rssFeeds));
+		
 		render(comics, rssFeeds);
 	}
 	

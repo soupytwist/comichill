@@ -8,16 +8,18 @@ import org.apache.commons.io.FileUtils;
 
 import play.Logger;
 import play.Play;
-import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.mvc.results.RenderTemplate;
 import play.templates.Template;
 import play.templates.TemplateLoader;
 
 @OnApplicationStart
-public class Bootstrap extends Job {
+public class Bootstrap extends TrackedJob {
     
     public void doJob() {
+    	// Tracking
+    	super.doJob();
+    	
     	// Create the routes.js file with URLs for the REST API / AJAX
         try {
         	Logger.info("[BOOTSTRAP] Starting jsroutes file creation");

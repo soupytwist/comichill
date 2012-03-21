@@ -20,12 +20,15 @@ import pojo.StripNode;
  * @author nick
  */
 @Every("2h")
-public class RssUpdater extends Job<String> {
+public class RssUpdater extends TrackedJob<String> {
 	
 	/**
 	 * Runs the job. Collects all updates from RSS feeds and adds them.
 	 */
 	public void doJob() {
+		// Tracking
+    	super.doJob();
+    	
 		Logger.info("[RSSUPDATER] Updater is starting!");
 		List<RssStripSource> sources = RssStripSource.getAllEnabled();
 		

@@ -20,9 +20,12 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class TagBuilder extends Job {
+public class TagBuilder extends TrackedJob {
 
 	public void doJob() {
+		// Tracking
+    	super.doJob();
+    	
     	// Create the tags.js file
         try {
         	Logger.info("[TAGBUILDER] Starting tags.js file creation");
