@@ -1,6 +1,7 @@
 package controllers;
 
 import models.siena.ArchiveStripSource;
+
 import models.siena.Comic;
 import models.siena.JobResult;
 import models.siena.RssStripSource;
@@ -8,6 +9,7 @@ import models.siena.StripSource;
 
 import java.io.File;
 import java.io.FileReader;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,6 +36,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import play.Logger;
 import play.Play;
 import play.cache.Cache;
+import play.data.binding.As;
 import play.data.validation.Required;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -57,6 +60,30 @@ public class Admin extends Controller {
 		Map<Object, Object> rssFeeds = My.mapByKey("cid", RssStripSource.all().fetch().toArray());
 		Map<Integer, Object> results = My.map(JobResult.getByJobId(0), JobResult.getByJobId(1), JobResult.getByJobId(2), JobResult.getByJobId(3), JobResult.getByJobId(4));
 		render(comics, rssFeeds, results);
+	}
+	
+	public static void getJobResultsChart(int jobId, @As(",") String[] params) {
+		try {
+			List<JobResult> results = JobResult.getByJobId(jobId);
+			String result = "[ ";
+			
+			int r = 0;
+			for (JobResult jr : results) {
+				if (r++ != 0)
+					result += ",";
+				result += "["+jr.startTime;
+				for (String param : params) {
+					Field f = JobResult.class.getField(param);
+					result += ","+f.getInt(jr);
+				}
+				result += " ]";
+			}
+			result += " ]";
+			
+			renderJSON(result);
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	public static void editComic(String label) {
