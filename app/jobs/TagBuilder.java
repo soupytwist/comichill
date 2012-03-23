@@ -21,16 +21,11 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class TagBuilder extends Job {
-
-public static Calendar lastRun = null;
-	
-	public static String status = "not run";
+public class TagBuilder extends TrackedJob {
 	
 	public void doJob() {
-		// Tracking
-		lastRun = Calendar.getInstance();
-    	
+		startTracking();
+		
     	// Create the tags.js file
         try {
         	Logger.info("[TAGBUILDER] Starting tags.js file creation");
@@ -63,12 +58,18 @@ public static Calendar lastRun = null;
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[TAGBUILDER] Finished creating tags.js file");
-        	status = "Successful";
+        	track("Successful", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[TAGBUILDER] Creating tags.js file failed; %s", e.getMessage());
-        	status = "Failure";
+        	track("Failure", -1);
         }
+        endTracking();
+	}
+	
+	@Override
+	public int getJobId() {
+		return 1;
 	}
 	
 }

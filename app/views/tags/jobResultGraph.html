@@ -1,0 +1,33 @@
+<div class="job-result-graph">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 360 160">
+%{
+if (_results != null && _results.size() > 0) {
+	Long tmax = new Date().getTime();
+	Long tmin = tmax - 86400000;
+	double xscale = 360.0 / ((int)(tmax - tmin));
+	int max = 0;
+	
+	for (paramSet in _params) {
+		java.lang.reflect.Field f = models.siena.JobResult.class.getField(paramSet[0]);
+	
+		for (jr in _results) {
+			int field = f.getInt(jr);
+			if (field > max)
+				max = field;
+		}
+	}
+	double yscale = 160.0 / (max+1);
+	
+	for (paramSet in _params) {
+		String param = paramSet[0];
+		String color = paramSet[1];
+		java.lang.reflect.Field f = models.siena.JobResult.class.getField(param);
+		}%
+	<polygon points="0,160 %{ int i = 0; for (jr in _results) { print (((int)(jr.startTime-tmin)*xscale)+","+(160 - yscale * f.getInt(jr))+" "); } }% 360,160" name="${param}" style="fill:${color};opacity:0.5;stroke-width:0" />
+	%{
+	} 
+} else { }%
+	<text x=80 y=100 style="fill:#CCC;font-size:60px;">No data</text>
+%{ } }%
+</svg>
+</div>

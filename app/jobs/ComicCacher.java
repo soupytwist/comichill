@@ -20,15 +20,10 @@ import play.templates.TemplateLoader;
 import util.My;
 import util.Serializers;
 
-public class ComicCacher extends Job {
-
-	public static Calendar lastRun = null;
-	
-	public static String status = "not run";
+public class ComicCacher extends TrackedJob {
 	
 	public void doJob() {
-		// Tracking
-		lastRun = Calendar.getInstance();
+		startTracking();
 		
     	// Create the comics.js file
         try {
@@ -45,12 +40,18 @@ public class ComicCacher extends Job {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[COMICCACHER] Finished creating comics.js file");
-        	status = "Successful";
+        	track("Successful", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[COMICCACHER] Creating comics.js file failed; %s", e.getMessage());
-        	status = "Failed";
+        	track("Failed; "+e.getMessage(), -1);
         }
+        endTracking();
+	}
+	
+	@Override
+	public int getJobId() {
+		return 2;
 	}
 	
 }

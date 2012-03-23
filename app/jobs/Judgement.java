@@ -12,16 +12,11 @@ import play.jobs.Every;
 import play.jobs.Job;
 
 @Every("6h")
-public class Judgement extends Job {
-
-public static Calendar lastRun = null;
-	
-	public static String status = "not run";
+public class Judgement extends TrackedJob {
 	
 	public void doJob() {
-		// Tracking
-		lastRun = Calendar.getInstance();
-    	
+		startTracking();
+		
 		Logger.info("[JUDGEMENT] Job has started!");
 		
 		List<Subscription> subs = Subscription.all().fetch();
@@ -62,8 +57,14 @@ public static Calendar lastRun = null;
 			c.save();
 		}
 		
-		status = "Total: " + totalHits + " hits";
+		track("Total hits: " + totalHits, totalHits);
 		Logger.info("[JUDGEMENT] Job has completed!");
+		endTracking();
+	}
+	
+	@Override
+	public int getJobId() {
+		return 4;
 	}
 	
 }

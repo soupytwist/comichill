@@ -54,31 +54,4 @@ public class My {
 	}
 	
 	public static class Empty {}
-	
-	public static String timeSince(Calendar then) {
-		Calendar now = Calendar.getInstance();
-		
-		if (then == null) {
-			return "never";
-		}
-		
-		if (now.before(then)) {
-			return "In the future? " + then.toString();
-		}
-		
-		Long millis = now.getTimeInMillis() - then.getTimeInMillis();
-		Long minutes = (millis / 60000L);
-		Long hours = minutes / 60;
-		Long days = hours / 24;
-		hours = hours % 24;
-		minutes = minutes % 60;
-		
-		if (days > 0) {
-			return days + " day(s) " + hours + " hours ago"; 
-		} else if (hours > 0) {
-			return hours + " hours " + minutes + " minutes ago";
-		} else {
-			return minutes + " minutes ago";
-		}
-	}
 }

@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import models.siena.JobResult;
+
 import org.apache.commons.io.FileUtils;
 
 import play.Logger;
@@ -16,15 +18,10 @@ import play.templates.Template;
 import play.templates.TemplateLoader;
 
 @OnApplicationStart
-public class Bootstrap extends Job {
-    
-	public static Calendar lastRun = null;
-	
-	public static String status = "not run";
+public class Bootstrap extends TrackedJob {
 	
     public void doJob() {
-    	// Tracking
-    	lastRun = Calendar.getInstance();
+    	startTracking();
     	
     	// Create the routes.js file with URLs for the REST API / AJAX
         try {
@@ -37,15 +34,21 @@ public class Bootstrap extends Job {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[BOOTSTRAP] Finished creating jsroutes file");
-        	status = "Successful";
+        	track("Successful", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[BOOTSTRAP] Creating jsroutes file failed; %s", e.getMessage());
-        	status = "Failed";
+        	track("Failed; "+e.getMessage(), -1);
         }
+        endTracking();
         
     	// Call the ComicCacher job
         new ComicCacher().now();
     }
+
+	@Override
+	public int getJobId() {
+		return 0;
+	}
     
 }

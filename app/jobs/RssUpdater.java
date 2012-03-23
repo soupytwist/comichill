@@ -21,28 +21,24 @@ import pojo.StripNode;
  * @author nick
  */
 @Every("2h")
-public class RssUpdater extends Job<String> {
-	
-	public static Calendar lastRun = null;
-	
-	public static String status = "not run";
+public class RssUpdater  extends TrackedJob<String> {
 	
 	/**
 	 * Runs the job. Collects all updates from RSS feeds and adds them.
 	 */
 	public void doJob() {
-		// Tracking
-		lastRun = Calendar.getInstance();
-    	
+		startTracking();
+		
 		Logger.info("[RSSUPDATER] Updater is starting!");
 		List<RssStripSource> sources = RssStripSource.getAllEnabled();
 		int totalCreated = 0;
 		
 		if (sources == null) {
 			Logger.warn("[RSSUPDATER] RssStripSource.getAllEnabled returned null");
-			status = "no enabled RSS feeds";
+			track("No RSS Feeds enabled", -1);
 		} else {
 			Logger.info("[RSSUPDATER] Found %d RssStripSources; beginning import", sources.size());
+			track("Importing from "+sources.size()+" sources");
 			
 			for (RssStripSource rss : sources) {
 				try {
@@ -64,26 +60,36 @@ public class RssUpdater extends Job<String> {
 						}
 					}
 					Logger.info("[RSSUPDATER] Finished importing strips; comic=%s added=%d", comic.label, created);
+					track("Imported strips for comic="+comic.label+" added="+created);
 					totalCreated += created;
+					
 					if (created > 2 && created == nodes.size()) {
-						Logger.warn("[RSSUPDATER] Rss Updater created strips for every comic in an Rss Feed; this could indicate a problem; comic=%s", comic.label);
+						Logger.warn("[RSSUPDATER] Rss Updater created strips for every item in an Rss Feed; this could indicate a problem; comic=%s", comic.label);
 						Mails.notifyMe("RssUpdater WARNING", "Rss Updater created strips for every comic in an Rss Feed; this could indicate a problem; comic="+comic.label);
+						track("Created strips for every item in an Rss Feed for comic="+comic.label+" added="+created, -1);
 					}
 					
 				} catch (Exception e) {
 					// If for some reason we can't load the feed...
 					Logger.error("[RSSUPDATER] Failed to load Rss Feed: %s", rss.src);
 					Mails.notifyMe("RssUpdater WARNING", "Failed to load Rss Feed: "+rss.src);
+					track("Failed to load Rss Feed: "+rss.src, -1);
 					e.printStackTrace();
 				}
 			}
-			status = totalCreated + " strips added";
+			track("Total strips added: "+totalCreated, totalCreated);
 		}
 		
 		Logger.info("[RSSUPDATER] Updater is finished!");
+		endTracking();
 		
 		// Refresh the comic cache
 		new ComicCacher().now();
+	}
+	
+	@Override
+	public int getJobId() {
+		return 3;
 	}
 	
 }

@@ -21,41 +21,42 @@
 </div>
 <br/>
 <h3>Jobs</h3>
-<table style="width: 100%">
-<tr style="text-align: left">
-	<th width="15%">Job Name</th>
-	<th width="30%">Last Run</th>
-	<th width="45%">Message</th>
-	<th width="10%">Start</th>
+<table style="text-align: center;">
+<tr>
+	<th width="120px">Job Name</th>
+	<th width="182px">Health</th>
+	<th width="182px">Execution Time</th>
+	<th width="425x">Last Message</th>
 </tr>
 <tr>
-	<td width="15%">Bootstrap</td>
-	<td width="30%">%{print util.My.timeSince(jobs.Bootstrap.lastRun)}%</td>
-	<td width="45%">%{print jobs.Bootstrap.status}%</td>
-	<td width="10%"><a href="@{Admin.doBootstrap}">Run now</a></td>
+	<td>Bootstrap<br/><a href="@{Admin.doBootstrap}">run now</a></td>
+	<td>#{jobResultGraph results: results.get(0), params: [["count_ok", "green"], ["count_bad", "red"]] /}</td>
+	<td>#{jobResultGraph results: results.get(0), params: [["runtime", "blue"]] /}</td>
+	<td style="text-align: left; overflow: auto">%{ if (results.get(0).size() > 0) { print results.get(0).get(0).message.nl2br(); } else { print "-"; } }%</td>
 </tr>
 <tr>
-	<td width="15%">Comic Cacher</td>
-	<td width="30%">%{print util.My.timeSince(jobs.ComicCacher.lastRun)}%</td>
-	<td width="45%">%{print jobs.ComicCacher.status}%</td>
-	<td width="10%"><a href="@{Admin.doComicCacher}">Run now</a></td>
+	<td>Comic Cacher<br/><a href="@{Admin.doComicCacher}">run now</a></td>
+	<td>#{jobResultGraph results: results.get(1), params: [["count_ok", "green"], ["count_bad", "red"]] /}</td>
+	<td>#{jobResultGraph results: results.get(1), params: [["runtime", "blue"]] /}</td>
+	<td style="text-align: left; overflow: auto">%{ if (results.get(1).size() > 0) { print results.get(1).get(0).message.nl2br(); } else { print "-"; } }%</td>
 </tr>
 <tr>
-	<td width="15%">Tag Builder</td>
-	<td width="30%">%{print util.My.timeSince(jobs.TagBuilder.lastRun)}%</td>
-	<td width="45%">%{print jobs.TagBuilder.status}%</td>
-	<td width="10%"><a href="@{Admin.doTagBuilder}">Run now</a></td>
+	<td>Tag Builder<br/><a href="@{Admin.doTagBuilder}">run now</a></td>
+	<td>#{jobResultGraph results: results.get(2), params: [["count_ok", "green"], ["count_bad", "red"]] /}</td>
+	<td>#{jobResultGraph results: results.get(2), params: [["runtime", "blue"]] /}</td>
+	<td style="text-align: left; overflow: auto">%{ if (results.get(2).size() > 0) { print results.get(2).get(0).message.nl2br(); } else { print "-"; } }%</td>
 </tr>
 <tr>
-	<td width="15%">Rss Updater</td>
-	<td width="30%">%{print util.My.timeSince(jobs.RssUpdater.lastRun)}%</td>
-	<td width="45%">%{print jobs.RssUpdater.status}%</td>
-	<td width="10%"><a href="@{Admin.doUpdates}">Run now</a></td>
+	<td>RSS Updater<br/><a href="@{Admin.doUpdates}">run now</a></td>
+	<td>#{jobResultGraph results: results.get(3), params: [["count_ok", "green"], ["count_bad", "red"]] /}</td>
+	<td>#{jobResultGraph results: results.get(3), params: [["runtime", "blue"]] /}</td>
+	<td style="text-align: left; overflow: auto">%{ if (results.get(3).size() > 0) { print results.get(3).get(0).message.nl2br(); } else { print "-"; } }%</td>
 </tr>
 <tr>
-	<td width="15%">Judgement</td>
-	<td width="30%">%{print util.My.timeSince(jobs.Judgement.lastRun)}%</td>
-	<td width="45%">%{print jobs.Judgement.status}%</td>
-	<td width="10%"><a href="@{Admin.doJudgement}">Run now</a></td>
+	<td>Judgement<br/><a href="@{Admin.doJudgement}">run now</a></td>
+	<td>#{jobResultGraph results: results.get(4), params: [["count_ok", "green"], ["count_bad", "red"]] /}</td>
+	<td>#{jobResultGraph results: results.get(4), params: [["runtime", "blue"]] /}</td>
+	<td style="text-align: left; overflow: auto">%{ if (results.get(4).size() > 0) { print results.get(4).get(0).message.nl2br(); } else { print "-"; } }%</td>
 </tr>
+
 </table>

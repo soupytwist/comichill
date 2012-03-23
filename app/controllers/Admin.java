@@ -2,6 +2,7 @@ package controllers;
 
 import models.siena.ArchiveStripSource;
 import models.siena.Comic;
+import models.siena.JobResult;
 import models.siena.RssStripSource;
 import models.siena.StripSource;
 
@@ -54,8 +55,8 @@ public class Admin extends Controller {
 		Authentication.requireAdmin();
 		List<Comic> comics = Comic.all().fetch();
 		Map<Object, Object> rssFeeds = My.mapByKey("cid", RssStripSource.all().fetch().toArray());
-		
-		render(comics, rssFeeds);
+		Map<Integer, Object> results = My.map(JobResult.getByJobId(0), JobResult.getByJobId(1), JobResult.getByJobId(2), JobResult.getByJobId(3), JobResult.getByJobId(4));
+		render(comics, rssFeeds, results);
 	}
 	
 	public static void editComic(String label) {
