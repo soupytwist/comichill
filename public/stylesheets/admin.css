@@ -169,6 +169,10 @@ td .message-wrapper {
 	style="height: 100px;
 	text-align: left;
 	overflow: auto;
+	font-size: 12px;
+	font-family: monospace;
+	border: 1px solid #CCC;
+	padding: 6px;
 }
 
 .job-results-chart {

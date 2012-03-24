@@ -26,31 +26,31 @@
 	<th width="120px">Job Name</th>
 	<th width="202px">Health</th>
 	<th width="202px">Execution Time</th>
-	<th width="385x">Last Message</th>
+	<th width="371px">Last Message</th>
 </tr>
 <tr style="height: 100px">
 	<td>Bootstrap<br/><a href="@{Admin.doBootstrap}">run now</a></td>
 	<td><div id="job-results-chart-0-0" class="job-results-chart"></div></td>
 	<td><div id="job-results-chart-0-1" class="job-results-chart"></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(0).size() > 0) { print results.get(0).get(0).message.nl2br(); } else { print "-"; } }%</div></td>
+	<td><div class="message-wrapper">%{ if (results.get(0).size() > 0) { print results.get(0).get(0).message.nl2br(); } }%</div></td>
 </tr>
-<tr style="height: 100px">;
+<tr style="height: 100px">
 	<td>Tag Builder<br/><a href="@{Admin.doTagBuilder}">run now</a></td>
 	<td><div id="job-results-chart-1-0" class="job-results-chart"></div></td>
 	<td><div id="job-results-chart-1-1" class="job-results-chart"></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(1).size() > 0) { print results.get(1).get(0).message.nl2br(); } else { print "-"; } }%</div></td>
+	<td><div class="message-wrapper">%{ if (results.get(1).size() > 0) { print results.get(1).get(0).message.nl2br(); } }%</div></td>
 </tr>
 <tr style="height: 100px">
 	<td>Comic Cacher<br/><a href="@{Admin.doComicCacher}">run now</a></td>
 	<td><div id="job-results-chart-2-0" class="job-results-chart"></div></td>
 	<td><div id="job-results-chart-2-1" class="job-results-chart"></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(2).size() > 0) { print results.get(2).get(0).message.nl2br(); } else { print "-"; } }%</div></td>
+	<td><div class="message-wrapper">%{ if (results.get(2).size() > 0) { print results.get(2).get(0).message.nl2br(); } }%</div></td>
 </tr>
 <tr style="height: 100px">
 	<td>RSS Updater<br/><a href="@{Admin.doUpdates}">run now</a></td>
 	<td><div id="job-results-chart-3-0" class="job-results-chart"></div></td>
 	<td><div id="job-results-chart-3-1" class="job-results-chart"></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(3).size() > 0) { print results.get(3).get(0).message.nl2br(); } else { print "-"; } }%</div></td>
+	<td><div class="message-wrapper">%{ if (results.get(3).size() > 0) { print results.get(3).get(0).message.nl2br(); } }%</div></td>
 </tr>
 <tr style="height: 100px">
 	<td>Judgement<br/><a href="@{Admin.doJudgement}">run now</a></td>

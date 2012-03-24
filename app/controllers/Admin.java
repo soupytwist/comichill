@@ -65,8 +65,7 @@ public class Admin extends Controller {
 	public static void getJobResultsChart(int jobId, @As(",") String[] params) {
 		try {
 			List<JobResult> results = JobResult.getByJobId(jobId);
-			String result = "[ ";
-			
+			String result = "[";
 			int r = 0;
 			for (JobResult jr : results) {
 				if (r++ != 0)
@@ -76,9 +75,9 @@ public class Admin extends Controller {
 					Field f = JobResult.class.getField(param);
 					result += ","+f.getInt(jr);
 				}
-				result += " ]";
+				result += "]";
 			}
-			result += " ]";
+			result += "]";
 			
 			renderJSON(result);
 		} catch (Exception e) {
