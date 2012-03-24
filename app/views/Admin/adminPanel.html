@@ -81,7 +81,7 @@ function drawChart(jobId, chartId, params) {
 		for (r in data)
 			data[r][0] = new Date(data[r][0]);
 		var dt = new google.visualization.DataTable();
-		dt.addColumn('date', 'Time');
+		dt.addColumn('datetime', 'Time');
 		for (var param in params)
 			dt.addColumn('number', params[param]);
 		dt.addRows(data);

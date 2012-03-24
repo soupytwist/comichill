@@ -53,6 +53,6 @@ public class JobResult extends Model {
 	}
 	
 	public static List<JobResult> getByJobId(int jobId) {
-		return all().filter("jobId", jobId).order("startTime").fetch(HISTORY_LENGTH);
+		return all().filter("jobId", jobId).order("-startTime").fetch(HISTORY_LENGTH);
 	}
 }
