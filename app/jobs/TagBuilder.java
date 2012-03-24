@@ -58,11 +58,11 @@ public class TagBuilder extends TrackedJob {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[TAGBUILDER] Finished creating tags.js file");
-        	track("Successful", 1);
+        	track("Successful", "health", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[TAGBUILDER] Creating tags.js file failed; %s", e.getMessage());
-        	track("Failure", -1);
+        	track("Failed; "+e.getMessage(), "health", -1);
         }
         endTracking();
 	}

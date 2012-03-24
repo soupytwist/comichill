@@ -38,7 +38,8 @@ public class Judgement extends TrackedJob {
 			
 			// Only need to reset the hit counter if it has changed
 			if (sub.hits > 0) {
-				cmap.get(sub.cid).rankHits += sub.hits;
+				Comic comic = cmap.get(sub.cid);
+				comic.rankHits += sub.hits;
 				totalHits += sub.hits;
 				sub.hits = -1;
 				sub.save();
@@ -57,7 +58,7 @@ public class Judgement extends TrackedJob {
 			c.save();
 		}
 		
-		track("Total hits: " + totalHits, totalHits);
+		track("Total hits: " + totalHits, "hits", totalHits);
 		Logger.info("[JUDGEMENT] Job has completed!");
 		endTracking();
 	}

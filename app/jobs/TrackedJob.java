@@ -15,15 +15,15 @@ public abstract class TrackedJob<V> extends Job<V> {
 		Logger.debug("JobResult has been initialized for tracking");
 	}
 	
-	protected void track(String message, int level) {
+	protected void track(String message, String param, int value) {
 		if (myResult == null)
 			Logger.warn("Job tracking failed; JobResult was not initialized");
 		else
-			myResult.track(message, level);
+			myResult.track(message, param, value);
 	}
 	
 	protected void track(String message) {
-		track(message, 0);
+		track(message, null, 0);
 	}
 	
 	protected void endTracking() {

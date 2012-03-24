@@ -72,8 +72,7 @@ public class Admin extends Controller {
 					result += ",";
 				result += "["+jr.startTime;
 				for (String param : params) {
-					Field f = JobResult.class.getField(param);
-					result += ","+f.getInt(jr);
+					result += ","+jr.getParam(param);
 				}
 				result += "]";
 			}

@@ -35,7 +35,7 @@ public class RssUpdater  extends TrackedJob<String> {
 		
 		if (sources == null) {
 			Logger.warn("[RSSUPDATER] RssStripSource.getAllEnabled returned null");
-			track("No RSS Feeds enabled", -1);
+			track("No RSS Feeds enabled", "problems", 1);
 		} else {
 			Logger.info("[RSSUPDATER] Found %d RssStripSources; beginning import", sources.size());
 			track("Importing from "+sources.size()+" sources");
@@ -66,18 +66,18 @@ public class RssUpdater  extends TrackedJob<String> {
 					if (created > 2 && created == nodes.size()) {
 						Logger.warn("[RSSUPDATER] Rss Updater created strips for every item in an Rss Feed; this could indicate a problem; comic=%s", comic.label);
 						Mails.notifyMe("RssUpdater WARNING", "Rss Updater created strips for every comic in an Rss Feed; this could indicate a problem; comic="+comic.label);
-						track("Created strips for every item in an Rss Feed for comic="+comic.label+" added="+created, -1);
+						track("Created strips for every item in an Rss Feed for comic="+comic.label+" added="+created, "problems", 1);
 					}
 					
 				} catch (Exception e) {
 					// If for some reason we can't load the feed...
 					Logger.error("[RSSUPDATER] Failed to load Rss Feed: %s", rss.src);
 					Mails.notifyMe("RssUpdater WARNING", "Failed to load Rss Feed: "+rss.src);
-					track("Failed to load Rss Feed: "+rss.src, -1);
+					track("Failed to load Rss Feed: "+rss.src, "problems", 1);
 					e.printStackTrace();
 				}
 			}
-			track("Total strips added: "+totalCreated, totalCreated);
+			track("Total strips added: "+totalCreated, "updates", totalCreated);
 		}
 		
 		Logger.info("[RSSUPDATER] Updater is finished!");

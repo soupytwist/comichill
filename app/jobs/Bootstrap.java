@@ -34,11 +34,11 @@ public class Bootstrap extends TrackedJob {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[BOOTSTRAP] Finished creating jsroutes file");
-        	track("Successful", 1);
+        	track("Successful", "health", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[BOOTSTRAP] Creating jsroutes file failed; %s", e.getMessage());
-        	track("Failed; "+e.getMessage(), -1);
+        	track("Failed; "+e.getMessage(), "health", -1);
         }
         endTracking();
         

@@ -1,10 +1,15 @@
 package models.siena;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import play.Logger;
 
 import siena.Model;
 import siena.Query;
+import siena.embed.Embedded;
 
 public class JobResult extends Model {
 
@@ -14,15 +19,15 @@ public class JobResult extends Model {
 	
 	public Long startTime;
 	
-	public int runtime, count_bad, count_ok;
+	@Embedded
+	public Map<String, Integer> data;
 	
 	public String message;
 	
 	public JobResult() {
 		super();
+		data = new HashMap<String, Integer>();
 		startTime = new Date().getTime();
-		count_bad = 0;
-		count_ok = 0;
 	}
 	
 	public JobResult(int jobId) {
@@ -30,21 +35,26 @@ public class JobResult extends Model {
 		this.jobId = jobId;
 	}
 	
-	public void track(String message, int level) {
-		if (this.message == null)
-			this.message = message;
-		else
-			this.message += "\n"+message;
+	public void track(String message, String key, int value) {
+		if (this.message == null)	this.message = message;
+		else if (message != null)	this.message += "\n"+message;
 		
-		if (level < 0)
-			count_bad -= level;
-		else if (level > 0)
-			count_ok += level;
+		if (key != null) {
+			Integer cur = data.get(key);
+			if (cur != null)	data.put(key, cur + value);
+			else				data.put(key, value);
+		}
+	}
+	
+	public int getParam(String key) {
+		Integer res = data.get(key);
+		if (res == null)	return 0;
+		else				return res;
 	}
 	
 	@Override
 	public void insert() {
-		runtime = (int) (new Date().getTime() - startTime);
+		data.put("runtime", (int) (new Date().getTime() - startTime));
 		super.insert();
 	}
 	

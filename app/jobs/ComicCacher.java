@@ -40,11 +40,11 @@ public class ComicCacher extends TrackedJob {
         	fw.write(parsed.getContent());
         	fw.close();
         	Logger.info("[COMICCACHER] Finished creating comics.js file");
-        	track("Successful", 1);
+        	track("Successful", "health", 1);
         } catch (Exception e) {
         	// Couldn't open the file for writing, put an error!
         	Logger.error("[COMICCACHER] Creating comics.js file failed; %s", e.getMessage());
-        	track("Failed; "+e.getMessage(), -1);
+        	track("Failed; "+e.getMessage(), "health", -1);
         }
         endTracking();
 	}
