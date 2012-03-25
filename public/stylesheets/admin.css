@@ -157,10 +157,23 @@ button.rightFloat {
 	line-height:24px!important;
 }
 
+.always-show {
+	margin: 0 auto;
+	width: 480px;
+}
+
 .always-show * {
 	display: block!important;
-	float: none;
-	margin:0 auto;
+}
+
+.comic-thumbnail {
+	height: 84px;
+	max-width: 168px;
+	float: left;
+	margin: 6px 0px;
+	margin-left: 18px;
+	border: 1px solid #CCC;
+	background-color: #EEE;
 }
 
 td .message-wrapper {

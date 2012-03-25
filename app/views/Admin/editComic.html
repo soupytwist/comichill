@@ -5,7 +5,7 @@
 #{include 'public/html/templates.html' /}
 #{set title:'Edit Comic' /}
 
-<div class="always-show" data-bind="template: {name: 'comic-template-noauth', data: comic}"></div>
+<div class="always-show" data-bind="template: {name: 'comic-template-noauth', data: comic}"></div><img class="comic-thumbnail" data-bind="attr: {src: '/img/thumb/'+comic.data.label()+'.png' }"/>
 <div class="spacer"></div>
 
 <div class="formBlock" data-bind="css: {ok: comic.persisted()}">
@@ -22,12 +22,15 @@
 	<div class="spacer"></div>
 </div>
 
-<div class="formBlock collapsed" data-bind="css: {ok: bannerExists()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
+<div class="formBlock collapsed" data-bind="css: {ok: bannerExists() && thumbExists()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 #{form @Admin.uploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Upload a Banner</h1>
-<p>Pick a banner to upload for this comic</p>
-#{field 'img' }
-<label>Banner:<span class="subLabel">PNG file</span></label><input type='file' name='${field.name}'  class='${field.errorClass}'/><br/>
+<p>Pick a banner and/or thumbnail to upload for this comic</p>
+#{field 'banner_img' }
+<label>Banner:<span class="subLabel">PNG file</span></label><input type='file' name='${field.name}'/><br/>
+#{/field}
+#{field 'thumb_img' }
+<label>Thumbnail:<span class="subLabel">Max 3:1 aspect ratio</span></label><input type='file' name='${field.name}'/><br/>
 #{/field}
 <button type='submit' >Submit</button>
 #{/form}
@@ -38,7 +41,7 @@
 <h1>Import Strips from CSV</h1>
 <p>Pick a CSV file to upload</p>
 #{field 'csv' }
-<label>File:<span class="subLabel">CSV file</span></label><input type='file' name='${field.name}'  class='${field.errorClass}'/><br/>
+<label>File:<span class="subLabel">CSV file</span></label><input type='file' name='${field.name}' class='${field.errorClass}'/><br/>
 #{/field}
 <button type='submit' >Upload</button>
 #{/form}
@@ -95,6 +98,7 @@ function AppViewModel() {
 	self.archives = ko.observableArray();
 	self.status = ko.observable(0);
 	self.bannerExists = ko.observable(false);
+	self.thumbExists = ko.observable(false);
 	self.pageTitle = ko.computed(function() {
 		var data = self.comic.data;
 		return ((data.title() == null || data.title() == '') ? "New Comic" : data.title()) + " - (" +
@@ -171,7 +175,14 @@ $("img.banner").bind({
        $("img.banner").attr('src', "/img/banner/_new_comic.png");
    }
 });
+$("img.comic-thumbnail").bind({
+    error: function() {
+       viewModel.thumbExists(false);
+       $("img.comic-thumbnail").attr('src', "/img/thumb/_no_thumb.png");
+   }
+});
 viewModel.bannerExists(true);
+viewModel.thumbExists(true);
 $("input#labelField").change(
 	function() { window.location.replace('/admin/edit/'+viewModel.comic.data.label()); }
 );

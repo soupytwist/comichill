@@ -111,26 +111,38 @@ public class Admin extends Controller {
 		render(comic, feeds, archives, found);
 	}
 	
-	public static void uploadBanner(String label, File img) {
+	public static void uploadBanner(String label, File banner_img, File thumb_img) {
 		Authentication.requireAdmin();
-		if (img == null) {
-			flash.put("message", "There was a problem uploading.");
+		if (banner_img == null && thumb_img == null) {
+			flash.put("message", "No images were received by the server.");
 		} else {
-			try {
-				//String basePath = Play.configuration.getProperty("banner.path");
-				
-				try {
+			String message = "";
+			if (banner_img != null) {
+				try { // Upload the banner image
 					File banner = Play.getFile("data/banners/"+label+".png");
-					FileUtils.copyFile(img, banner);
-					flash.put("message", "Upload successful!");
+					FileUtils.copyFile(banner_img, banner);
+					message += "Succesfully uploaded banner!";
+				} catch (Exception e) {
+					message += "Error writing to the file";
+					Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
+				}
+			} else {
+				message += "No banner image received.";
+			}
+			message += "  |  ";
+			if (thumb_img == null) {
+				try { // Upload the thumbnail image
+					File thumb = Play.getFile("data/thumb/"+label+".png");
+					FileUtils.copyFile(thumb_img, thumb);
+					message += "Upload successful!";
 				} catch (Exception e) {
 					flash.put("message", "Error writing to the file");
 					Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
 				}
-			} catch (Exception e) {
-				flash.put("message", "There was a problem uploading.");
-				Logger.warn("There was an error uploading a banner for %s;\nError details: %s", label, e);
+			} else {
+				message += "No thumbnail image received.";
 			}
+			flash.put("message", message);
 		}
 		
 		Admin.editComic(label);

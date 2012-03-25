@@ -94,7 +94,7 @@ GET     /favicon.ico                            404
 
 # Images
 GET     /img/banner/                            staticDir:data/banners
-GET     /img/fb/                                staticDir:data/fb
+GET     /img/thumb/                             staticDir:data/thumb
 GET     /img/                                   staticDir:public/images
 
 # Map static resources from the /app/public folder to the /public path
