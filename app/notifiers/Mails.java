@@ -21,7 +21,7 @@ public class Mails extends Mailer {
 			Logger.warn("Tried to send an email to null user");
 		} else {
 			addRecipient(user.email);
-			setSubject("Welcome To Comic Hill!");
+			setSubject("Welcome to Comic Hill!");
 			setReplyTo("no-reply@comichill.com");
 			setFrom("ComicHill.com <no-reply@comichill.com>");
 			send(user);

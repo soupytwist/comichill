@@ -2,6 +2,8 @@ package controllers;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import notifiers.Mails;
+
 import models.siena.Comic;
 import models.siena.Strip;
 import models.siena.StripQueue;
@@ -87,6 +89,8 @@ public class Users extends Controller {
 			render();
 		} else {
 			Logger.info("User successfully created; %s", newUser);
+			Logger.debug("Sending registration email");
+			Mails.welcome(newUser);
 			Logger.debug("Registration is complete; Redirecting user...");
 			Authentication.setAuthenticated(newUser, rememberMe);
 			Application.index();
