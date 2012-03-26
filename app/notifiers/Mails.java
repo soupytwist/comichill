@@ -4,6 +4,7 @@ import play.*;
 import play.mvc.*;
 import java.util.*;
 
+import models.siena.BasicPasswordReset;
 import models.siena.User;
  
 public class Mails extends Mailer {
@@ -34,5 +35,13 @@ public class Mails extends Mailer {
 		setReplyTo("no-reply@comichill.com");
 		setFrom("Application Notification <application@comichill.com>");
 		send(body);
+	}
+	
+	public static void passwordResetLink(BasicPasswordReset reset) {
+		addRecipient(reset.email);
+		setSubject("Comic Hill - Reset your account password");
+		setReplyTo("no-reply@comichill.com");
+		setFrom("Password Reset Tool <password-reset@comichill.com>");
+		send(reset);
 	}
 }

@@ -1,4 +1,5 @@
 #{extends 'main-text.html' /}
+#{stylesheet "admin.css" /}
 #{set title:'Change Password' /}
 <h1>Account Info</h1>
 <p>
@@ -10,26 +11,28 @@ If you encounter any problems on this site, please <a href="@{Application.contac
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
 #{/ifErrors}
-#{form @Users.accountInfo(), method: 'POST'}
-#{field 'email'}
-<dl><label for='${field.name}'>Email:</label></dl>
-<dt><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='%{ if (flash.email) print flash.email; else print user.email;}%'/></dt>
-#{errors 'email'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'current_password'}
-<dl><label for='${field.name}'>Current Password:</label></dl>
-<dt><input type='password' name='${field.name}' value=''/></dt>
-#{errors 'current_password'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'new_password'}
-<dl><label for='${field.name}'>New Password:</label></dl>
-<dt><input type='password' name='${field.name}' value=''/></dt>
-#{errors 'new_password'}<li>${error}</li>#{/errors}
-#{/field}
-#{field 'retype_new_password'}
-<dl><label for='${field.name}'>Retype Password:</label></dl>
-<dt><input type='password' name='${field.name}' value=''/></dt>
-#{errors 'retype_new_password'}<li>${error}</li>#{/errors}
-#{/field}
-<dl></dl><dt><input type='submit' value='Register' /></dt>
-#{/form}
+<br/>
+<div class="formBlock">
+	<h1>Password Reset</h1>
+	<p>Pick a new password for your account</p>
+	#{form @Users.accountInfo(), method: 'POST'}
+	#{field 'email'}
+	<label>Email:<span class="subLabel">Your account email</span></label><input type='text' name='${field.name}'  class='autofocus ${field.errorClass}' value='%{ if (flash.email) print flash.email; else print user.email;}%'/><br/>
+	#{errors 'email'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'current_password'}
+	<label>Current Password:<span class="subLabel">For extra security</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'current_password'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'new_password'}
+	<label>New Password:<span class="subLabel">Something you'll remember</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'new_password'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	#{field 'retype_new_password'}
+	<label>Retype Password:<span class="subLabel">Careful now</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	#{errors 'retype_new__password'}<span class="error">${error}</span>#{/errors}
+	#{/field}
+	<div class="spacer"></div>
+	<button type='submit'>Update my Account</button>
+	#{/form}
+</div>

@@ -1,9 +1,11 @@
 package controllers;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 
 import notifiers.Mails;
 
+import models.siena.BasicPasswordReset;
 import models.siena.Comic;
 import models.siena.Strip;
 import models.siena.StripQueue;
@@ -95,6 +97,98 @@ public class Users extends Controller {
 			Authentication.setAuthenticated(newUser, rememberMe);
 			Application.index();
 		}
+	}
+	
+	public static void forgotPassword(@Email String email) {
+		if (Authentication.connected() != null) {
+			flash.put("message", "If you're looking for a way to change your password, just click your email at the top of the page.");
+			Application.index();
+		}
+		
+		if (email == null) {
+			render();
+		} else if (validation.hasErrors()) {
+			render();
+		} else if (User.getByEmail(email) == null) {
+			validation.addError("email", "The email address you entered is not registered.");
+			render();
+		} else {
+			BasicPasswordReset reset = BasicPasswordReset.getByEmail(email);
+			if (reset == null)
+				reset = new BasicPasswordReset(email);
+			reset.save();
+			Mails.passwordResetLink(reset);
+			flash.put("message", "Check your email for a link to reset your password");
+		}
+		Application.index();
+	}
+	
+	public static void resetPassword(String code,
+			@Required @MinSize(User.PASSWORD_LENGTH_MIN) @MaxSize(User.PASSWORD_LENGTH_MAX) String new_password,
+			String retype_password) {
+		if (Authentication.connected() != null) {
+			flash.put("message", "You need to log out first in order to reset a password.");
+			Application.index();
+		}
+		
+		if (code != null) {
+			try {
+				String decodedCode = URLDecoder.decode(code, "UTF-8");
+				Logger.debug("%s decoded to %s", code, decodedCode);
+				BasicPasswordReset reset = BasicPasswordReset.getByCode(code);
+				if (reset != null) {
+					
+					if (new_password == null && retype_password == null) {
+						validation.clear();
+						render(reset);
+					}
+					
+					// Make sure the passwords match
+					if (!new_password.equals(retype_password))
+						validation.addError("retype_password", "The passwords you entered did not match");
+					
+					if (validation.hasErrors()) {
+						render(reset);
+					} else {
+						// Get the user that this reset key belongs to
+						User user = User.getByEmail(reset.email);
+						if (user != null) {
+							BasicAuthentication auth = BasicAuthentication.getByUid(user.id);
+							
+							// Delete the old authentication, assuming it exists
+							if (auth != null) {
+								auth.delete();
+								Logger.debug("Deleted old BasicAuthentication for %s", user.email);
+							}
+							
+							// Set the new password
+							BasicAuthentication newAuth = new BasicAuthentication(user.id, new_password);
+							newAuth.save();
+							
+							reset.delete();
+							
+							// Successful! Log them in and redirect to home page
+							flash.put("message", "Your password was successfully changed! Welcome back, "+user.email+"!");
+							Authentication.setAuthenticated(user, false);
+							Application.index();
+							
+						} else {
+							// This shouldn't happen, but it might be possible
+							Logger.warn("Password reset was attempted, but the user's email was not found.");
+							flash.put("message", "There was a problem resetting your password.");
+							Mails.notifyMe("Password reset failure", "Password reset was attempted, but the user's email was not found. Email="+reset.email);
+							Application.index();
+						}
+					}
+				}
+			} catch (UnsupportedEncodingException e) {
+				// This (hopefully) won't happen
+				Logger.error("URLDecoder failed; code="+code);
+				Mails.notifyMe("Password reset failure", "URL Decoding failed, this isn't good. Code was "+code);
+			}
+		}
+		flash.put("message", "The reset link you used is either invalid or has expired.");
+		Application.index();
 	}
 	
 	public static void accountInfo(

@@ -3,8 +3,7 @@
 #{set title:'Register' /}
 <h1>Registration</h1>
 <p>
-Warning!! This application is currently under heavy development.<br/>
-Go ahead and register, but I can not guarantee your account will exist next time you come back.<br/>
+This application is currently in development. Go ahead and register, but I can not guarantee your account will exist next time you come back.<br/>
 </p>
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
@@ -12,7 +11,7 @@ Go ahead and register, but I can not guarantee your account will exist next time
 <br/>
 <div class="formBlock">
 	<h1>Create an Account</h1>
-	<p>It's easy! Just fill out the information below.</p>
+	<p>Already have an account? Maybe you were trying to <a href="@{Users.register}">login</a>?</p>
 	#{form @Users.register(), method: 'POST'}
 	#{field 'email'}
 	<label>Email:<span class="subLabel">Your email</span></label><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/><br/>

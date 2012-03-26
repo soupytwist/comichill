@@ -35,7 +35,7 @@ public class User extends Model {
 	
 	public User(String email) {
 		this();
-		this.email = email;
+		this.email = email.toLowerCase();
 	}
 	
 	public List<Subscription> getSubscriptions() {
@@ -59,7 +59,7 @@ public class User extends Model {
 	}
 	
 	public static User getByEmail(String email) {
-		return Model.all(User.class).filter("email", email).get();
+		return Model.all(User.class).filter("email", email.toLowerCase()).get();
 	}
 	
 	public static User guest() {

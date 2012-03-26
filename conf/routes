@@ -27,6 +27,10 @@ GET     /register                               Users.register
 POST    /register                               Users.register
 GET     /account                                Users.accountInfo
 POST    /account                                Users.accountInfo
+GET     /forgotpassword                         Users.forgotPassword
+POST    /forgotpassword                         Users.forgotPassword
+GET     /resetpassword/{code}                   Users.resetPassword
+POST    /resetpassword/{code}                   Users.resetPassword
 GET     /comics/?                               Application.all
 GET     /comics/{label}/{<[0-9]+>sid}/?         Viewer.viewBySid
 GET     /queue/?                                Viewer.viewQueue

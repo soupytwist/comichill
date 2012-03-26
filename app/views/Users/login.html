@@ -2,25 +2,20 @@
 #{stylesheet "admin.css" /}
 #{set title:'Login' /}
 <h1>Login</h1>
-<p>
-Please remember that the site is under under heavy development.<br/>
-If you are unable to log in, it is possible that your account no longer exists or has changed.<br/>
-I am very sorry if this happens, but if it does, you can register again <a href="@{Users.register}" >here</a>.<br/>
-</p>
 #{ifErrors}
    <h3>Please correct the errors below!</h3>
 #{/ifErrors}
 <br/>
 <div class="formBlock">
 	<h1>Login with Comic Hill Account</h1>
-	<p>Login with your ComicHill account</p>
+	<p>Don't have an account? Why not <a href="@{Users.register}">register</a>?</p>
 	#{form @Users.login(), method: 'POST'}
 	#{field 'email'}
 	<label>Email:<span class="subLabel">Your email</span></label><input type='text' name='${field.name}' class='autofocus ${field.errorClass}' value='${flash.email}'/><br/>
 	#{errors 'email'}<span class="error">${error}</span>#{/errors}
 	#{/field}
 	#{field 'password'}
-	<label>Password:<span class="subLabel">Careful now</span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
+	<label>Password:<span class="subLabel"><a href="@{Users.forgotPassword}">Forgot?</a></span></label><input type='password' name='${field.name}' class='${field.errorClass}' value=''/><br/>
 	#{errors 'password'}<span class="error">${error}</span>#{/errors}
 	#{/field}
 	#{field 'rememberMe'}
@@ -33,7 +28,7 @@ I am very sorry if this happens, but if it does, you can register again <a href=
 </div>
 
 <br/>
-If for some other reason you are unable to log in, please <a href="@{Application.contact}">contact me</a>.
+If for some reason you are unable to log in, please <a href="@{Application.contact}">contact me</a>.
 
 <script type='text/javascript'>
 function rememberWarning() { 

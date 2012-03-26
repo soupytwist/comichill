@@ -15,6 +15,7 @@ import play.data.validation.Validation;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import util.SecurityUtil;
 
 public class BasicAuthentication extends Model {
 
@@ -48,10 +49,7 @@ public class BasicAuthentication extends Model {
 	}
 	
 	public static byte[] generateSalt() {
-		Random r = new SecureRandom();
-		byte[] salt = new byte[SALT_LENGTH];
-		r.nextBytes(salt);
-		return salt;
+		return SecurityUtil.getRandomBytes(SALT_LENGTH);
 	}
 	 
 	public void applySalt(String password, byte[] salt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
