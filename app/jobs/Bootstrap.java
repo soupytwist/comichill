@@ -20,6 +20,8 @@ import play.templates.TemplateLoader;
 @OnApplicationStart
 public class Bootstrap extends TrackedJob {
 	
+	public static final int JOB_ID = 0;
+	
     public void doJob() {
     	startTracking();
     	
@@ -48,7 +50,7 @@ public class Bootstrap extends TrackedJob {
 
 	@Override
 	public int getJobId() {
-		return 0;
+		return JOB_ID;
 	}
     
 }

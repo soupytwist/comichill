@@ -23,6 +23,8 @@ import pojo.StripNode;
 @Every("2h")
 public class RssUpdater  extends TrackedJob<String> {
 	
+	public static final int JOB_ID = 3;
+	
 	/**
 	 * Runs the job. Collects all updates from RSS feeds and adds them.
 	 */
@@ -89,7 +91,7 @@ public class RssUpdater  extends TrackedJob<String> {
 	
 	@Override
 	public int getJobId() {
-		return 3;
+		return JOB_ID;
 	}
 	
 }

@@ -23,6 +23,8 @@ import util.Serializers;
 
 public class TagBuilder extends TrackedJob {
 	
+	public static final int JOB_ID = 1;
+	
 	public void doJob() {
 		startTracking();
 		
@@ -69,7 +71,7 @@ public class TagBuilder extends TrackedJob {
 	
 	@Override
 	public int getJobId() {
-		return 1;
+		return JOB_ID;
 	}
 	
 }

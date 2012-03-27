@@ -13,6 +13,8 @@ import play.jobs.Job;
 
 @Every("6h")
 public class Judgement extends TrackedJob {
+
+	public static final int JOB_ID = 4;
 	
 	public void doJob() {
 		startTracking();
@@ -65,7 +67,7 @@ public class Judgement extends TrackedJob {
 	
 	@Override
 	public int getJobId() {
-		return 4;
+		return JOB_ID;
 	}
 	
 }

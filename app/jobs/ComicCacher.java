@@ -21,6 +21,8 @@ import util.My;
 import util.Serializers;
 
 public class ComicCacher extends TrackedJob {
+
+	public static final int JOB_ID = 2;
 	
 	public void doJob() {
 		startTracking();
@@ -51,7 +53,7 @@ public class ComicCacher extends TrackedJob {
 	
 	@Override
 	public int getJobId() {
-		return 2;
+		return JOB_ID;
 	}
 	
 }
