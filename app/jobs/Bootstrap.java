@@ -22,9 +22,7 @@ public class Bootstrap extends TrackedJob {
 	
 	public static final int JOB_ID = 0;
 	
-    public void doJob() {
-    	startTracking();
-    	
+    public void doTrackedJob() {
     	// Create the routes.js file with URLs for the REST API / AJAX
         try {
         	Logger.info("[BOOTSTRAP] Starting jsroutes file creation");
@@ -42,7 +40,6 @@ public class Bootstrap extends TrackedJob {
         	Logger.error("[BOOTSTRAP] Creating jsroutes file failed; %s", e.getMessage());
         	track("Failed; "+e.getMessage(), "health", -1);
         }
-        endTracking();
         
     	// Call the ComicCacher job
         new ComicCacher().now();

@@ -16,8 +16,7 @@ public class Judgement extends TrackedJob {
 
 	public static final int JOB_ID = 4;
 	
-	public void doJob() {
-		startTracking();
+	public void doTrackedJob() {
 		
 		Logger.info("[JUDGEMENT] Job has started!");
 		
@@ -62,7 +61,6 @@ public class Judgement extends TrackedJob {
 		
 		track("Total hits: " + totalHits, "hits", totalHits);
 		Logger.info("[JUDGEMENT] Job has completed!");
-		endTracking();
 	}
 	
 	@Override

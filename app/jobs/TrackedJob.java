@@ -10,9 +10,12 @@ public abstract class TrackedJob<V> extends Job<V> {
 
 	private JobResult myResult;
 	
-	protected void startTracking() {
+	public final void doJob() {
 		myResult = new JobResult(getJobId());
 		Logger.debug("JobResult has been initialized for tracking");
+		doTrackedJob();
+		myResult.insert();
+		Logger.debug("JobResult has been saved");
 	}
 	
 	protected void track(String message, String param, int value) {
@@ -26,12 +29,7 @@ public abstract class TrackedJob<V> extends Job<V> {
 		track(message, null, 0);
 	}
 	
-	protected void endTracking() {
-		if (myResult == null)
-			Logger.warn("Job tracking failed; JobResult was not initialized");
-		else
-			myResult.insert();
-	}
+	public abstract void doTrackedJob();
 	
 	public abstract int getJobId();
 	

@@ -24,9 +24,7 @@ public class ComicCacher extends TrackedJob {
 
 	public static final int JOB_ID = 2;
 	
-	public void doJob() {
-		startTracking();
-		
+	public void doTrackedJob() {
     	// Create the comics.js file
         try {
         	Logger.info("[COMICCACHER] Starting comics.js file creation");
@@ -48,7 +46,6 @@ public class ComicCacher extends TrackedJob {
         	Logger.error("[COMICCACHER] Creating comics.js file failed; %s", e.getMessage());
         	track("Failed; "+e.getMessage(), "health", -1);
         }
-        endTracking();
 	}
 	
 	@Override

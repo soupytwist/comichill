@@ -25,9 +25,7 @@ public class TagBuilder extends TrackedJob {
 	
 	public static final int JOB_ID = 1;
 	
-	public void doJob() {
-		startTracking();
-		
+	public void doTrackedJob() {
     	// Create the tags.js file
         try {
         	Logger.info("[TAGBUILDER] Starting tags.js file creation");
@@ -66,7 +64,6 @@ public class TagBuilder extends TrackedJob {
         	Logger.error("[TAGBUILDER] Creating tags.js file failed; %s", e.getMessage());
         	track("Failed; "+e.getMessage(), "health", -1);
         }
-        endTracking();
 	}
 	
 	@Override

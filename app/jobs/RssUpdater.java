@@ -28,8 +28,7 @@ public class RssUpdater  extends TrackedJob<String> {
 	/**
 	 * Runs the job. Collects all updates from RSS feeds and adds them.
 	 */
-	public void doJob() {
-		startTracking();
+	public void doTrackedJob() {
 		
 		Logger.info("[RSSUPDATER] Updater is starting!");
 		List<RssStripSource> sources = RssStripSource.getAllEnabled();
@@ -83,7 +82,6 @@ public class RssUpdater  extends TrackedJob<String> {
 		}
 		
 		Logger.info("[RSSUPDATER] Updater is finished!");
-		endTracking();
 		
 		// Refresh the comic cache
 		new ComicCacher().now();
