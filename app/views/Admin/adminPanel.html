@@ -1,5 +1,7 @@
 #{extends 'main-text.html' /}
 #{knockout /}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+#{script 'job-charts.js' /}
 #{stylesheet 'admin.css' /}
 #{set title:'Admin Panel' /}
 
@@ -28,63 +30,24 @@
 	<th width="202px">Execution Time</th>
 	<th width="371px">Last Message</th>
 </tr>
-<tr style="height: 100px">
-	<td>Bootstrap<br/><a href="@{Admin.doBootstrap}">run now</a></td>
-	<td><div class="job-results-chart" jobId=0 params='["health"]'></div></td>
-	<td><div class="job-results-chart" jobId=0 params='["runtime"]'></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(0).size() > 0) { print results.get(0).get(0).message.nl2br(); } }%</div></td>
+%{ for (row in [
+	[ 0, "[\"health\"]" ],
+	[ 1, "[\"health\"]" ],
+	[ 2, "[\"health\"]" ],
+	[ 3, "[\"updates\", \"problems\"]" ],
+	[ 4, "[\"health\"]" ]
+	]) { }%
+<tr class="job-results" jobId=${row[0]} style="height: 100px">
+	<td>%{ print controllers.Jobs.lookupJobId(row[0])?.getSimpleName(); }%<br/><button class="start-job-button">Start</button></td>
+	<td><div class="job-results-chart" params='${row[1].raw()}'></div></td>
+	<td><div class="job-results-chart" params='["runtime"]'></div></td>
+	<td><div class="message-wrapper"><div class="message-timestamp"></div></div></td>
 </tr>
-<tr style="height: 100px">
-	<td>Tag Builder<br/><a href="@{Admin.doTagBuilder}">run now</a></td>
-	<td><div class="job-results-chart" jobId=1 params='["health"]'></div></td>
-	<td><div class="job-results-chart" jobId=1 params='["runtime"]'></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(1).size() > 0) { print results.get(1).get(0).message.nl2br(); } }%</div></td>
-</tr>
-<tr style="height: 100px">
-	<td>Comic Cacher<br/><a href="@{Admin.doComicCacher}">run now</a></td>
-	<td><div class="job-results-chart" jobId=2 params='["health"]'></div></td>
-	<td><div class="job-results-chart" jobId=2 params='["runtime"]'></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(2).size() > 0) { print results.get(2).get(0).message.nl2br(); } }%</div></td>
-</tr>
-<tr style="height: 100px">
-	<td>RSS Updater<br/><a href="@{Admin.doUpdates}">run now</a></td>
-	<td><div class="job-results-chart" jobId=3 params='["updates", "problems"]'></div></td>
-	<td><div class="job-results-chart" jobId=3 params='["runtime"]'></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(3).size() > 0) { print results.get(3).get(0).message.nl2br(); } }%</div></td>
-</tr>
-<tr style="height: 100px">
-	<td>Judgement<br/><a href="@{Admin.doJudgement}">run now</a></td>
-	<td><div class="job-results-chart" jobId=4 params='["hits"]'></div></td>
-	<td><div class="job-results-chart" jobId=4 params='["runtime"]'></div></td>
-	<td><div class="message-wrapper">%{ if (results.get(4).size() > 0) { print results.get(4).get(0).message.nl2br(); } }%</div></td>
-</tr>
+%{ } }%
 
 </table>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(drawAll);
 
-getChartData = #{jsAction @Admin.getJobResultsChart(':jobId', ':params') /};
-
-function drawAll() {
-	$(".job-results-chart").each(function(index, element) {
-		drawChart($(element).attr("jobId"), element, JSON.parse($(element).attr("params")));
-	});
-}
-
-function drawChart(jobId, chartElm, params) {
-	$.ajax(getChartData({jobId: jobId, params: params}), {type: "GET", dataType: "json", error: function(jqXHR, textStatus, errorThrown) { console.log(textStatus + " : " + errorThrown); }, success: function(data) {
-		for (r in data)
-			data[r][0] = new Date(data[r][0]);
-		var dt = new google.visualization.DataTable();
-		dt.addColumn('datetime', 'Time');
-		for (var param in params)
-			dt.addColumn('number', params[param]);
-		dt.addRows(data);
-		var chart = new google.visualization.AreaChart(chartElm);
-		chart.draw(dt, {pointSize: 3, legend: {position: "bottom"}, chartArea: {width: "80%"}});
-	} });
-}
+<script type="text/javacsript">
+$(function() { initCharts(); });
 </script>

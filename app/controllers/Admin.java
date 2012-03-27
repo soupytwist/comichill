@@ -58,30 +58,7 @@ public class Admin extends Controller {
 		Authentication.requireAdmin();
 		List<Comic> comics = Comic.all().fetch();
 		Map<Object, Object> rssFeeds = My.mapByKey("cid", RssStripSource.all().fetch().toArray());
-		Map<Integer, Object> results = My.map(JobResult.getByJobId(0), JobResult.getByJobId(1), JobResult.getByJobId(2), JobResult.getByJobId(3), JobResult.getByJobId(4));
-		render(comics, rssFeeds, results);
-	}
-	
-	public static void getJobResultsChart(int jobId, @As(",") String[] params) {
-		try {
-			List<JobResult> results = JobResult.getByJobId(jobId);
-			String result = "[";
-			int r = 0;
-			for (JobResult jr : results) {
-				if (r++ != 0)
-					result += ",";
-				result += "["+jr.startTime;
-				for (String param : params) {
-					result += ","+jr.getParam(param);
-				}
-				result += "]";
-			}
-			result += "]";
-			
-			renderJSON(result);
-		} catch (Exception e) {
-			
-		}
+		render(comics, rssFeeds);
 	}
 	
 	public static void editComic(String label) {
@@ -207,39 +184,5 @@ public class Admin extends Controller {
 			Admin.editComic(label);
 		}
 	}
-	
-	public static void doUpdates() {
-		Authentication.requireAdmin();
-		new RssUpdater().now();
-		flash.put("message", "Updater has begun...");
-		Admin.adminPanel();
-	}
-	
-	public static void doJudgement() {
-		Authentication.requireAdmin();
-		new Judgement().now();
-		flash.put("message", "Judgement has begun...");
-		Admin.adminPanel();
-	}
-	
-	public static void doComicCacher() {
-		Authentication.requireAdmin();
-		new ComicCacher().now();
-		flash.put("message", "ComicCacher has begun...");
-		Admin.adminPanel();
-	}
-	
-	public static void doTagBuilder() {
-		Authentication.requireAdmin();
-		new TagBuilder().now();
-		flash.put("message", "TagBuilder has begun...");
-		Admin.adminPanel();
-	}
-	
-	public static void doBootstrap() {
-		Authentication.requireAdmin();
-		new Bootstrap().now();
-		flash.put("message", "Bootstrap has begun...");
-		Admin.adminPanel();
-	}
+
 }

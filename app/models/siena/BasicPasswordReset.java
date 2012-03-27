@@ -13,6 +13,7 @@ import com.ning.http.util.Base64;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import siena.Query;
 import siena.Unique;
 import util.SecurityUtil;
 
@@ -68,7 +69,7 @@ public class BasicPasswordReset extends Model {
 	}
 	
 	public static BasicPasswordReset getByCode(String code) {
-		BasicPasswordReset reset = Model.all(BasicPasswordReset.class).filter("resetCode", code).get();
+		BasicPasswordReset reset = all().filter("resetCode", code).get();
 		if (reset != null && reset.isExpired()) {
 			Logger.debug("Password reset key is expired and being purged");
 			reset.delete();
@@ -76,4 +77,9 @@ public class BasicPasswordReset extends Model {
 		}
 		return reset;
 	}
+	
+	public static Query<BasicPasswordReset> all() {
+		return Model.all(BasicPasswordReset.class);
+	}
+
 }

@@ -12,6 +12,7 @@ import pojo.NavigationFrame;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import siena.Query;
 import siena.embed.Embedded;
 import util.My;
 import util.Serializers;
@@ -123,7 +124,11 @@ public class StripQueue extends Model {
 	}
 	
 	public static StripQueue getById(Long id) {
-		return Model.all(StripQueue.class).getByKey(id);
+		return all().getByKey(id);
+	}
+	
+	public static Query<StripQueue> all() {
+		return Model.all(StripQueue.class);
 	}
 	
 	public String toString() {

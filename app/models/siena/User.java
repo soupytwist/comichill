@@ -8,6 +8,7 @@ import play.data.validation.Validation;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import siena.Query;
 
 public class User extends Model {
 
@@ -59,7 +60,11 @@ public class User extends Model {
 	}
 	
 	public static User getByEmail(String email) {
-		return Model.all(User.class).filter("email", email.toLowerCase()).get();
+		return all().filter("email", email.toLowerCase()).get();
+	}
+	
+	public static Query<User> all() {
+		return Model.all(User.class);
 	}
 	
 	public static User guest() {

@@ -13,7 +13,11 @@ var route_get = {
 	subscriptions: #{jsAction @Subscriptions.getAll() /},
 	comics: #{jsAction @Comics.getAll() /},
 	visit: #{jsAction @Subscriptions.visit(':id') /},
-	zoom: #{jsAction @Subscriptions.zoom(':cid', ':scale') /}
+	zoom: #{jsAction @Subscriptions.zoom(':cid', ':scale') /},
+	startJob: #{jsAction @Jobs.startJob(':jobId') /},
+	jobChartData: #{jsAction @Jobs.getJobResultsChart(':jobId', ':hours', ':params') /},
+	lastResult: #{jsAction @Jobs.getLastResult(':jobId') /},
+	jobStatus: #{jsAction @Jobs.checkJobStatus(':jobId') /}
 }
 
 var route_post = {

@@ -1,5 +1,6 @@
 package models.siena;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,7 +63,13 @@ public class JobResult extends Model {
 		return Model.all(JobResult.class);
 	}
 	
-	public static List<JobResult> getByJobId(int jobId) {
-		return all().filter("jobId", jobId).order("-startTime").fetch(HISTORY_LENGTH);
+	public static List<JobResult> getByJobId(int jobId, int hours) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, -hours);
+		return all().filter("jobId", jobId).order("-startTime").filter("startTime>", cal.getTimeInMillis()).fetch();
+	}
+	
+	public static JobResult getLastResult(int jobId) {
+		return all().filter("jobId", jobId).order("-startTime").get();
 	}
 }

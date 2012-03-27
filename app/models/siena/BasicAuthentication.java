@@ -15,6 +15,7 @@ import play.data.validation.Validation;
 import siena.Generator;
 import siena.Id;
 import siena.Model;
+import siena.Query;
 import util.SecurityUtil;
 
 public class BasicAuthentication extends Model {
@@ -80,6 +81,10 @@ public class BasicAuthentication extends Model {
 	
 	public String toString() {
 		return "[UserAuthentication hash="+hash+" salt="+salt+"]";
+	}
+	
+	public static Query<BasicAuthentication> all() {
+		return Model.all(BasicAuthentication.class);
 	}
 
 	public static BasicAuthentication getByUid(Long uid) {

@@ -1,4 +1,4 @@
-p, h1, form, button {
+p, h1, form {
 	border:0;
 	margin:0;
 	padding:0;
@@ -177,6 +177,7 @@ button.rightFloat {
 }
 
 td .message-wrapper {
+	position: relative;
 	width: 100%;
 	height: 100px;
 	style="height: 100px;
@@ -186,6 +187,14 @@ td .message-wrapper {
 	font-family: monospace;
 	border: 1px solid #CCC;
 	padding: 6px;
+}
+
+.message-wrapper .message-timestamp {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 1px solid #CCC;
+	background-color: #EEE;
 }
 
 .job-results-chart {
