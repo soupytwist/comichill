@@ -17,9 +17,6 @@ public class Judgement extends TrackedJob {
 	public static final int JOB_ID = 4;
 	
 	public void doTrackedJob() {
-		
-		Logger.info("[JUDGEMENT] Job has started!");
-		
 		List<Subscription> subs = Subscription.all().fetch();
 		List<Comic> comics = Comic.all().fetch();
 		Map<Long, Comic> cmap = new HashMap<Long, Comic>();
@@ -60,7 +57,6 @@ public class Judgement extends TrackedJob {
 		}
 		
 		track("Total hits: " + totalHits, "hits", totalHits);
-		Logger.info("[JUDGEMENT] Job has completed!");
 	}
 	
 	@Override

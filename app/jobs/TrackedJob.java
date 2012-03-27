@@ -11,11 +11,13 @@ public abstract class TrackedJob<V> extends Job<V> {
 	private JobResult myResult;
 	
 	public final void doJob() {
+		Logger.info("[%s] Job is starting...", this.getClass().getSimpleName().toUpperCase());
 		myResult = new JobResult(getJobId());
 		Logger.debug("JobResult has been initialized for tracking");
 		doTrackedJob();
 		myResult.insert();
 		Logger.debug("JobResult has been saved");
+		Logger.info("[%s] Job has ended", this.getClass().getSimpleName().toUpperCase());
 	}
 	
 	protected void track(String message, String param, int value) {
