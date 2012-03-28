@@ -35,7 +35,7 @@
 	[ 1, "[\"health\"]" ],
 	[ 2, "[\"health\"]" ],
 	[ 3, "[\"updates\", \"problems\"]" ],
-	[ 4, "[\"health\"]" ]
+	[ 4, "[\"hits\"]" ]
 	]) { }%
 <tr class="job-results" jobId=${row[0]} style="height: 100px">
 	<td>%{ print controllers.Jobs.lookupJobId(row[0])?.getSimpleName(); }%<br/><button class="start-job-button">Start</button></td>
