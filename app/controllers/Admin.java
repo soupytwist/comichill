@@ -61,6 +61,10 @@ public class Admin extends Controller {
 		render(comics, rssFeeds);
 	}
 	
+	public static void stats() {
+		render();
+	}
+	
 	public static void editComic(String label) {
 		Authentication.requireAdmin();
 		Comic comic = null;

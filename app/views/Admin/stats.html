@@ -1,0 +1,38 @@
+#{extends 'main-text.html' /}
+#{knockout /}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+#{script 'job-charts.js' /}
+#{stylesheet 'admin.css' /}
+#{set title:'Stats' /}
+
+<h1 style="margin-bottom: 0">Site Statistics</h1>
+<div class="job-results" jobId=5>
+<div class="job-results-chart" data-bind="attr: { params: JSON.stringify(params()) }" style="width: 100%; height: 480px"></div>
+<div class="message-timestamp"></div>
+<br/>
+
+<table>
+<tr>
+	<th width="200px">Parameters</th>
+	<th width="380px">Recent Stats</th>
+	<th width="100px">Update</th>
+</tr>
+<tr>
+	<td><select style="width: 200px" data-bind="options: allParams, selectedOptions: params" size="8" multiple="true"></select></td>
+	<td><div class="job-results" jobId=5 ></div><div style="height: 128px" class="message-wrapper"></div></div></td>
+	<td><button class="start-job-button">Start</button></td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var timeSpan = 168; // hours
+
+var viewModel = {
+	allParams: ko.observableArray(["users", "comics", "strips", "subscriptions", "queues", "basic_auths", "basic_password_resets"]),
+	params: ko.observableArray()
+};
+viewModel.params(viewModel.allParams());
+viewModel.params.subscribe(function() { window.setTimeout(drawAll, 100); } );
+ko.applyBindings(viewModel);
+</script>

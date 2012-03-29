@@ -41,13 +41,10 @@
 	<td>%{ print controllers.Jobs.lookupJobId(row[0])?.getSimpleName(); }%<br/><button class="start-job-button">Start</button></td>
 	<td><div class="job-results-chart" params='${row[1].raw()}'></div></td>
 	<td><div class="job-results-chart" params='["runtime"]'></div></td>
-	<td><div class="message-wrapper"><div class="message-timestamp"></div></div></td>
+	<td><div class="message-wrapper"></div></td>
 </tr>
 %{ } }%
 
 </table>
 
-
-<script type="text/javacsript">
-$(function() { initCharts(); });
-</script>
+ <a href="@{Admin.stats}">more stats...</a>

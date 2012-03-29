@@ -17,25 +17,25 @@ public class StatTracker extends TrackedJob {
 	
 	public void doTrackedJob() {
 		int users = User.all().count();
-		track("Total users: ", "users", users);
+		track("Total users: "+users, "users", users);
 		
 		int comics = Comic.all().count();
-		track("Total comics: ", "comics", comics);
+		track("Total comics: "+comics, "comics", comics);
 		
 		int strips = Strip.all().count();
-		track("Total strips: ", "strips", strips);
+		track("Total strips: "+strips, "strips", strips);
 		
 		int subscriptions = Subscription.all().count();
-		track("Total subscriptions: ", "subscriptions", subscriptions);
+		track("Total subscriptions: "+subscriptions, "subscriptions", subscriptions);
 		
 		int queues = StripQueue.all().count();
-		track("Total queues: ", "queues", queues);
+		track("Total queues: "+queues, "queues", queues);
 		
 		int basic_auths = BasicAuthentication.all().count();
-		track("Total basic_auths: ", "basic_auths", basic_auths);
+		track("Total basic_auths: "+basic_auths, "basic_auths", basic_auths);
 		
 		int basic_password_resets = BasicPasswordReset.all().count();
-		track("Total basic_password_resets: ", "basic_password_resets", basic_password_resets);
+		track("Total basic_password_resets: "+basic_password_resets, "basic_password_resets", basic_password_resets);
 	}
 	
 	@Override

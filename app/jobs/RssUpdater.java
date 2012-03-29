@@ -79,8 +79,11 @@ public class RssUpdater  extends TrackedJob<String> {
 			track("Total strips added: "+totalCreated, "updates", totalCreated);
 		}
 		
-		// Refresh the comic cache
-		new ComicCacher().now();
+		// Refresh the comic cache if there were updates
+		if (totalCreated > 0) {
+			new ComicCacher().now();
+			track("Started ComicCacher");
+		}
 	}
 	
 	@Override

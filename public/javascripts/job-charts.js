@@ -30,7 +30,7 @@ function drawChart(jobId, chartElm) {
 				dt.addColumn('number', params[param]);
 			dt.addRows(data);
 			var chart = new google.visualization.AreaChart(chartElm);
-			chart.draw(dt, {pointSize: 3, legend: {position: "bottom"}, chartArea: {width: "80%"}, hAxis: { viewWindowMode: 'explicit', viewWindow: {min: new Date( new Date().getTime() - timeSpan*3600000), max: new Date()}}});
+			chart.draw(dt, {pointSize: 3, legend: {position: "bottom"}, chartArea: {width: "80%", height: "90%"}, hAxis: { viewWindowMode: 'explicit', viewWindow: {min: new Date( new Date().getTime() - timeSpan*3600000), max: new Date()}}});
 		},
 		function(jqXHR, textStatus, errorThrown) { console.log(textStatus + " : " + errorThrown); }
 	);
@@ -54,7 +54,7 @@ function checkJobStatus(elm) {
 		function(data) {
 			if (data && data != "") { 
 				$(elm).text("Done");
-				$(".job-results-chart", $(elm).parent().parent()).each(function (index, chart) { drawChart(jobId, chart); });
+				$(".job-results-chart", $(elm).parents(".job-results")).each(function (index, chart) { drawChart(jobId, chart); });
 				window.clearInterval(jobStatusTimer);
 		}},
 		function() { window.clearInterval(jobStatusTimer); $(elm).text("Failed"); }
