@@ -1,0 +1,86 @@
+#{extends 'main-text.html' /}
+#{knockout /}
+#{script 'cache/comics.js' /}
+#{script 'cache/tags.js' /}
+#{script 'jquery-ui-1.8.17.min.js' /}
+#{stylesheet 'admin.css' /}
+#{set title:'Edit Categories' /}
+
+<h1>Edit Categories</h1>
+<br/>
+
+<!-- ko foreach: cats -->
+<div class="formBlock collapsed" data-bind="css: {ok: (id() != -1)}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
+<h1 data-bind="text: name"></h1>
+<p>Edit this Category</p>
+<label>Name:<span class="subLabel">Display name</span></label><input type='text' data-bind="value: name" /><br/>
+<label>Tags:<span class="subLabel">Separate with pipes</span></label><input type='text' data-bind="value: tags" /><br/>
+<label>Comics:</label><div class="category-preview" data-bind="categoryPreviewBinding: tags"></div><br/>
+<button data-bind="text: ((id() == -1)? 'Create' : 'Update'), click: $root.submitAction"></button>
+</div>
+<!-- /ko -->
+<button data-bind="click: addCategory">Add Category</button>
+
+<script type="text/javascript">
+
+var emptyCategory = {
+	id: -1,
+	name: "New Category",
+	tags: ""
+}
+
+function AppViewModel() {
+	var self = this;
+	self.cats = ko.mapping.fromJS(%{ print util.Serializers.gson.toJson(cats) }%);
+	self.submitAction = function(cat) {
+		server_post('tagcategory', cat, function(data) {myAlert("Successfully saved category"); ko.mapping.fromJS(data, cat);}, function() {myAlert("Error saving category!");});
+	}
+	self.addCategory = function() {
+		self.cats.push(ko.mapping.fromJS(emptyCategory));
+	}
+}
+
+var tmparr = {};
+
+ko.bindingHandlers.categoryPreviewBinding = {
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+    	var value = valueAccessor();
+    	var valueUnwrapped = ko.utils.unwrapObservable(value);
+        var comics = previewComics(valueUnwrapped);
+        var myhtml = "";
+       	$(comics).each(function(k,comic) {
+       		myhtml += "<img src='/img/thumb/"+comic+".png'/>"
+       	});
+        console.log(myhtml);
+       	$(element).html(myhtml);
+    }
+};
+
+function previewComics(tag_str, owner) {
+	var arr = Array();
+	var tags = tag_str.split("|");
+	for (tag in tags) {
+		console.log(tags[tag]);
+		if (sys_tags[tags[tag]]) {
+			$(sys_tags[tags[tag]]).each(function(k, cid) {
+				var comic = sys_comics[cid].label;
+				if (arr.indexOf(comic) == -1)
+					arr.push(comic);
+			});
+		}
+	}
+	return arr;
+}
+
+var viewModel = new AppViewModel();
+ko.applyBindings(viewModel);
+
+function toggleCollapsed(elm) {
+	if ($(elm).parent().hasClass("collapsed"))
+		$(elm).text("collapse");
+	else
+		$(elm).text("expand");
+	$(elm).parent().toggleClass("collapsed", 250);
+}
+
+</script>

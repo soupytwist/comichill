@@ -26,18 +26,21 @@ var route_post = {
 	rss: '@{RssController.create}',
 	archive: '@{ArchiveController.create}',
 	rss_fetch: '@{RssController.fetch}',
+	tagcategory: '@{TagCategories.create}'
 }
 
 var route_put = {
 	comic: #{jsAction @Comics.update(':id') /},
 	subscription: #{jsAction @Subscriptions.update(':id') /},
 	rss: #{jsAction @RssController.update(':id') /},
-	archive: #{jsAction @ArchiveController.update(':id') /}
+	archive: #{jsAction @ArchiveController.update(':id') /},
+	tagcategory: #{jsAction @TagCategories.update(':id') /}
 }
 
 var route_delete = {
 	comic: #{jsAction @Comics.delete(':id') /},
 	subscription: #{jsAction @Subscriptions.delete(':id') /},
 	rss: #{jsAction @StripSourceController.delete(':id') /},
-	archive: #{jsAction @StripSourceController.delete(':id') /}
+	archive: #{jsAction @StripSourceController.delete(':id') /},
+	tagcategory: #{jsAction @TagCategories.delete(':id') /}
 }

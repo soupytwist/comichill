@@ -50,6 +50,7 @@ POST    /contact                                Application.doContact
 
 # Administration Panel
 GET     /admin                                  Admin.adminPanel
+GET     /admin/categories                       Admin.categories
 GET     /admin/stats                            Admin.stats
 GET     /admin/loadArchive/{<[0-9]+>id}/?       Admin.loadArchive
 GET     /admin/edit/{label}/{<[0-9]+>id}/?      Admin.editComic

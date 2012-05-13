@@ -9,8 +9,8 @@
 <div class="spacer"></div>
 
 <div class="formBlock" data-bind="css: {ok: comic.persisted()}">
-	<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
 	<h1 data-bind="text: viewModel.pageTitle()"></h1>
+	<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
 	<p>Edit the comic properties below</p>
 	<label>Label:<span class="subLabel">Short name for comic</span></label><input id="labelField" type='text' data-bind="value: comic.data.label, disable: comic.persisted()"/><br/>
 	<label>Title:<span class="subLabel">Full name for comic</span></label><input type='text' data-bind="value: comic.data.title"/><br/>
@@ -23,8 +23,8 @@
 </div>
 
 <div class="formBlock collapsed" data-bind="css: {ok: bannerExists() && thumbExists()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
-#{form @Admin.uploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Upload a Banner</h1>
+#{form @Admin.uploadBanner(comic.label), method:'POST', enctype:'multipart/form-data'}
 <p>Pick a banner and/or thumbnail to upload for this comic</p>
 #{field 'banner_img' }
 <label>Banner:<span class="subLabel">PNG file</span></label><input type='file' name='${field.name}'/><br/>
@@ -37,8 +37,8 @@
 </div>
 
 <div class="formBlock ok collapsed"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
-#{form @Admin.importCSV(comic.label), method:'POST', enctype:'multipart/form-data'}
 <h1>Import Strips from CSV</h1>
+#{form @Admin.importCSV(comic.label), method:'POST', enctype:'multipart/form-data'}
 <p>Pick a CSV file to upload</p>
 #{field 'csv' }
 <label>File:<span class="subLabel">CSV file</span></label><input type='file' name='${field.name}' class='${field.errorClass}'/><br/>
@@ -49,8 +49,8 @@
 
 <!-- ko foreach: rssFeeds -->
 <div class="formBlock collapsed" data-bind="css: {ok: persisted() && data.enabled()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
-	<form class="formClass" data-bind="submit: function() { submitAction($data, 'rss'); }">
 	<h1><input type="checkbox" data-bind="checked: data.enabled"/> RSS Feed<span data-bind="text: ' ('+ (data.enabled()?'enabled':'disabled') +')'"></span></h1>
+	<form class="formClass" data-bind="submit: function() { submitAction($data, 'rss'); }">
 	<button class="rightFloat" data-bind="click: $root.removeRss">Delete</button>
 	<label>Source:<span class="subLabel">URI of RSS feed XML</span></label><input type="text" data-bind="value: data.src"/><br/>
 	<label>Link Tag:<span class="subLabel">Tag that contains the URL</span></label><input type="text" data-bind="value: data.linkTag"/><br/>
@@ -72,8 +72,8 @@
 
 <!-- ko foreach: archives -->
 <div class="formBlock collapsed" data-bind="css: {ok: persisted()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
-	<form class="formClass" data-bind="submit: function() { submitAction($data, 'archive'); }">
 	<h1>Archive</h1>
+	<form class="formClass" data-bind="submit: function() { submitAction($data, 'archive'); }">
 	<button class="rightFloat" data-bind="click: $root.removeArchive">Delete</button>
 	<label>Source:<span class="subLabel">URI of RSS feed XML</span></label><input type="text" data-bind="value: data.src"/><br/>
 	<label>Link Pattern:<span class="subLabel">Regex to match the URL</span></label><input type="text" data-bind="value: data.urlPattern"/><br/>

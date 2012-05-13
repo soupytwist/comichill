@@ -99,7 +99,7 @@ div.formBlock span.error {
 	margin: 0!important;
 }
 
-.collapsed * :not(h1) {
+.collapsed *:not(h1):not(.collapse-button) {
 	display: none!important;
 }
 
@@ -220,4 +220,19 @@ td .message-wrapper {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+.category-preview {
+	float:left;
+	font-size:12px;
+	padding:4px 2px;
+	width:320px;
+	margin:2px 0 20px 10px;
+}
+
+.category-preview img {
+	height: 32px;
+	float: left;
+	margin-right: 4px;
+	margin-bottom: 4px;
 }
