@@ -91,7 +91,7 @@ public class Admin extends Controller {
 				message += "No banner image received.";
 			}
 			message += "  |  ";
-			if (thumb_img == null) {
+			if (thumb_img != null) {
 				try { // Upload the thumbnail image
 					File thumb = Play.getFile("data/thumb/"+label+".png");
 					FileUtils.copyFile(thumb_img, thumb);
