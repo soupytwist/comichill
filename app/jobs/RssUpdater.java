@@ -50,10 +50,19 @@ public class RssUpdater  extends TrackedJob<String> {
 						// Check if the strip already exists; if it does, do nothing!
 						Strip existing = Strip.getWithUrl(comic.id, node.url);
 						if (existing == null) {
-							Strip s = comic.newStrip(node.url, node.title); // this increments comic's numStrips
-							s.save();
-							comic.save();
-							created++;
+							try {
+								Strip s = comic.newStrip(node.url, node.title); // this increments comic's numStrips
+								Logger.debug("Inserting strip: %s", s.toString());
+								s.save();
+								comic.save();
+								created++;
+							} catch (Exception e) {
+								// If inserting a strip fails
+								Logger.error("[RSSUPDATER] Could not create strip: %s - [%s : %s]", comic.label, node.title, node.url);
+								emailMessage += "Failed to create strip for "+comic.label+":\n"+node.title+" : "+node.url+"\n"+e.getMessage()+"\n";
+								track("Failed to insert strip for "+comic.label+":\n"+node.title+" : "+node.url, "problems", 1);
+								throw e;
+							}
 						}
 					}
 					Logger.info("[RSSUPDATER] Finished importing strips; comic=%s added=%d", comic.label, created);
