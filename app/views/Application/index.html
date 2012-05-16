@@ -3,6 +3,7 @@
 #{script 'jquery-ui-1.8.17.min.js' /}
 #{script 'templateFunctions.js' /}
 #{script 'cache/comics.js' /}
+#{script 'cache/rankings.js' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
@@ -37,37 +38,17 @@ function AppViewModel() {
 	self.newest = ko.observableArray();
 	self.popular = ko.observableArray();
 	self.hits = ko.observableArray();
-	self.comics = ko.observableArray();
+	self.comics = {};
 	self.buildLists = function() {
-		$.each(self.comics(), function(index, value) {
-			self.newest.push(value);
-			self.popular.push(value);
-			if (value.data.rankHits() > 0) self.hits.push(value);
-		});
-		self.newest.sort(sortNewest);
-		self.newest(self.newest.splice(0, 10));
-		self.popular.sort(sortPopular);
-		self.popular(self.popular.splice(0, 10));
-		self.hits.sort(sortHits);
-		self.hits(self.hits.splice(0, 10));
+		$.each(sys_rankings["sub"], function(index, value) { self.popular.push(self.comics[value]); });
+		$.each(sys_rankings["hits"], function(index, value) { self.hits.push(self.comics[value]); });
+		$.each(sys_rankings["new"], function(index, value) { self.newest.push(self.comics[value]); });
 		extraBindings();
 	};
 	
 	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
 	self.templateName = function(comic) { return (self.loggedIn() ? ((comic.sub.id() == -1) ? 'comic-template' : 'comic-template-subscribed') : 'comic-template-noauth'); };
 	self.unreadTotal = ko.observable(0);
-}
-
-function sortPopular(left, right) {
-	return left.data.rankPop() - right.data.rankPop();
-}
-
-function sortHits(left, right) {
-	return right.data.rankHits() - left.data.rankHits();
-}
-
-function sortNewest(left, right) {
-	return parseInt(right.data.created()) - parseInt(left.data.created());
 }
 
 var viewModel = new AppViewModel();
@@ -84,7 +65,7 @@ function addComics(comicData) {
 		function(index, value) {
 			var newComic = new Comic();
 			ko.mapping.fromJS(value, newComic.data);
-			viewModel.comics.push(newComic);
+			viewModel.comics[newComic.data.id()] = newComic;
 		});
 	viewModel.buildLists();
 }
@@ -93,14 +74,8 @@ function addSubscriptions(subData) {
 	var count = 0, unread = 0;
 	$.each(subData,
 		function(index, value) {
-			var comic = null;
-			for (var tmp in viewModel.comics()) {
-				if (viewModel.comics()[tmp].data.id() == index) {
-					comic = viewModel.comics()[tmp];
-					count++;
-					break;
-				}
-			}
+			comic = viewModel.comics[index];
+			count++;
 			ko.mapping.fromJS(value, comic.sub);
 			unread += comic.unreadCount();
 	});

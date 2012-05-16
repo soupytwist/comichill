@@ -1,8 +1,7 @@
 package util;
 
 import java.lang.reflect.Field;
-import java.util.Calendar;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +18,10 @@ public class My {
 			else
 				map.put(i, new Empty());
 		}
-		
+
 		return map;
 	}
-	
+
 	public static Map<Object, Object> mapListByKey(String key, List<? extends Object> objs) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
@@ -37,7 +36,7 @@ public class My {
 		}
 		return map;
 	}
-	
+
 	public static Map<Object, Object> mapByKey(String key, Object... args) {
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		try {
@@ -52,6 +51,21 @@ public class My {
 		}
 		return map;
 	}
-	
+
+	public static List<Object> listKeys(String key, List<? extends Object> objs) {
+		List<Object> list = new ArrayList<Object>();
+		try {
+			for (Object obj : objs) {
+				if (obj != null) {
+					Field fkey = obj.getClass().getField(key);
+					list.add(fkey.get(obj));
+				}
+			}
+		} catch (Exception e) {
+			Logger.error("Listing of keys failed!");
+		}
+		return list;
+	}
+
 	public static class Empty {}
 }
