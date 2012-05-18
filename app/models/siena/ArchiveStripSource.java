@@ -17,8 +17,6 @@ import util.WebUtil;
 
 public class ArchiveStripSource extends StripSource {
 
-	public boolean newestFirst;
-
 	// Default no-arguments constructor
 	public ArchiveStripSource() {
 		super();
@@ -28,7 +26,6 @@ public class ArchiveStripSource extends StripSource {
 		this.src = ass.src;
 		this.titlePattern = ass.titlePattern;
 		this.urlPattern = ass.urlPattern;
-		this.newestFirst = ass.newestFirst;
 	}
 
 	@Override
@@ -57,7 +54,7 @@ public class ArchiveStripSource extends StripSource {
 
 			if (url.length() > 0) {
 				StripNode item = new StripNode(prefix + url, title);
-				if (this.newestFirst) items.add(item); else items.add(0, item);
+				items.add(0, item);
 			}
 		}
 

@@ -14,8 +14,7 @@ var defaultArchive = {
     src: "http://www.",
     titlePattern: ".+",
     urlPattern: ".+",
-    cid: -1,
-    newestFirst: false
+    cid: -1
 };
 
 var defaultComic = {

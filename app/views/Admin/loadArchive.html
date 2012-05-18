@@ -16,7 +16,7 @@ Or... <a href="@{Admin.editComic(comic.label)}">edit ${comic.label}</a><br/>
 <br/>
 Current number of strips: ${comic.numStrips}<br/>
 <a href="${archive.src}">${archive.src}</a><br/>
-<button onclick="commit()">Commit</button>
+<button data-bind="click: reverseOrder">Reverse Order</button><button onclick="commit()">Commit</button>
 <br/>
 <div class='formBlock collapsed'><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 <h1>Title Transformation</h1>
@@ -45,7 +45,8 @@ Results: ${nodes.size()} strips found</br>
 <script type="text/javascript">
 
 viewModel = {
-	strips: ko.observableArray()
+	strips: ko.observableArray(),
+	reverseOrder: function() { this.strips.reverse(); }
 };
 
 var committed = 0;

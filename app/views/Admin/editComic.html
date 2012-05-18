@@ -86,7 +86,6 @@
 	<label>Source:<span class="subLabel">URI of RSS feed XML</span></label><input type="text" data-bind="value: data.src"/><br/>
 	<label>Link Pattern:<span class="subLabel">Regex to match the URL</span></label><input type="text" data-bind="value: data.urlPattern"/><br/>
 	<label>Title Pattern:<span class="subLabel">Regex to match the title</span></label><input type="text" data-bind="value: data.titlePattern"/><br/>
-	<label>Reverse order:<span class="subLabel">If newest listed first</span></label><input type="checkbox" data-bind="checked: data.newestFirst"/><br/>
 	<div class="spacer"></div>
 	<button type='button' data-bind="click: function() { window.open('/admin/loadArchive/'+$data.data.id()); }, disable: viewModel.status() == 2 || data.id() == -1">Load</button>
 	<div class="spacer"></div>
