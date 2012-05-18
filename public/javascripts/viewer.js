@@ -64,26 +64,26 @@ function AppViewModel() {
 	self.preloadStrip = function(qpos) {
 		if (qpos >= 0 && qpos < self.qlen()) {
 			var data = queue[qpos];
-			ko.mapping.fromJS(data, self.off.data.strip);
+			ko.mapping.fromJS(data, self.off.data.data);
 			ko.mapping.fromJS(comics[data.cid], self.off.data.comic);
 		} else {
 			qdir = -qdir;
 		}
 	};
 	self.changeStrip = function() {
-		if (queue[self.q()].id != self.off.data.strip.id())
+		if (queue[self.q()].id != self.off.data.data.id())
 			self.preloadStrip(self.q());
 		
 		self.switchFrames();
 		if (loggedIn) {
-			server_get("visit", {id: self.cur.data.strip.id()});
-			if (subs && subs[self.cur.data.strip.cid()]) {
-				var sub = subs[self.cur.data.strip.cid()];
+			server_get("visit", {id: self.cur.data.data.id()});
+			if (subs && subs[self.cur.data.data.cid()]) {
+				var sub = subs[self.cur.data.data.cid()];
 				setZoom(sub['zoom']);
 			}
 		}
-		var title = self.cur.data.comic.title()+' - '+self.cur.data.strip.title();
-		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip), q: self.q()}, title, '/'+(useQueue? "queue" : "comics")+'/'+self.cur.data.comic.label()+'/'+self.cur.data.strip.sid());
+		var title = self.cur.data.comic.title()+' - '+self.cur.data.data.title();
+		window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.data), q: self.q()}, title, '/'+(useQueue? "queue" : "comics")+'/'+self.cur.data.comic.label()+'/'+self.cur.data.data.sid());
 		document.title = title;
 	};
 	self.switchFrames = function() {
@@ -97,21 +97,21 @@ function AppViewModel() {
 		window.setTimeout("viewModel.preloadStrip(viewModel.q()+qdir);", 500);
 	}
 	self.init = function(stripData, comicData) {
-		ko.mapping.fromJS(stripData, self.cur.data.strip);
+		ko.mapping.fromJS(stripData, self.cur.data.data);
 		ko.mapping.fromJS(comicData, self.cur.data.comic);
 		loadSubscriptions(false, function(data) {
 			subs = data;
-			if (subs[self.cur.data.strip.cid()]) {
-				var sub = subs[self.cur.data.strip.cid()];
+			if (subs[self.cur.data.data.cid()]) {
+				var sub = subs[self.cur.data.data.cid()];
 				setZoom(sub['zoom']);
 			}
 		});
 		
 		// Apply HTML5 history API JS bindings
 		if (window.history.pushState) {
-			var title = self.cur.data.comic.label()+' - '+self.cur.data.strip.sid();
-			window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.strip)}, title);
-			server_get((useQueue? "queue" : "noqueue"), {'id': self.cur.data.strip.id()},
+			var title = self.cur.data.comic.label()+' - '+self.cur.data.data.sid();
+			window.history.replaceState({strip: ko.mapping.toJSON(self.cur.data.data)}, title);
+			server_get((useQueue? "queue" : "noqueue"), {'id': self.cur.data.data.id()},
 					function(data) {
 						queue = data[0];
 						comics = data[1];
@@ -216,8 +216,8 @@ function zoom(scale) {
 
 function zoomBy(change) {
 	var scale = 1.0;
-	if (subs[viewModel.cur.data.strip.cid()]) {
-		var sub = subs[viewModel.cur.data.strip.cid()];
+	if (subs[viewModel.cur.data.data.cid()]) {
+		var sub = subs[viewModel.cur.data.data.cid()];
 		scale = sub['zoom'];
 	}
 	scale += change;

@@ -13,8 +13,8 @@
 <meta property="og:image" content="@@{'/data/thumb/'+comic.label+'.png'}"/>
 #{/set}
 
-<iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.strip.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>
-<iframe class="cframe" id="cframe2" data-bind="fadeVisible: f2.visible(), cframeSrc: f2.data.strip.url()"></iframe>
+<iframe class="cframe" id="cframe1" data-bind="fadeVisible: f1.visible(), cframeSrc: f1.data.data.url()" src="${strip.url}">Your browser can't do iframes. What is this, like 1999?</iframe>
+<iframe class="cframe" id="cframe2" data-bind="fadeVisible: f2.visible(), cframeSrc: f2.data.data.url()"></iframe>
 
 <div id="viewer-ctl-activate" data-bind="visible: !showCtl(), event: { mouseover: function() { showCtl(true); } }"></div>
 <div id="viewer-ctl-deactivate" data-bind="visible: showCtl(), event: { mouseover: function() { showCtl(false); } }"></div>
