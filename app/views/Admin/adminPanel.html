@@ -6,12 +6,12 @@
 #{set title:'Admin Panel' /}
 
 <h1>Admin Panel</h1>
-<h3>Comics</h3>
+<h3>Comics <a href="@{Admin.editComic("new")}">[new]</a></h3>
 <div class="comic-hill">
 %{for (comic in comics) { }%
 <div class="comic">
 	<a href="@{Admin.editComic(comic.label)}">
-		<img class="banner" src="/img/banner/${comic.label}.png"">
+		<img class="banner" src="/img/banner/${comic.label}.png" alt="${comic.title}" title="${comic.title}">
 	</a>
 	<span class="title">${comic.title}</span>
 	<span class="author">${comic.author}</span>

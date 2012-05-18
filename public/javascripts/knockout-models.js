@@ -27,7 +27,8 @@ var defaultComic = {
 	numStrips: 0,
 	tags: "",
 	rankPop: 0,
-	rankHits: 0
+	rankHits: 0,
+	enabled: false
 };
 
 var defaultStrip = {
@@ -100,9 +101,10 @@ function Comic() {
 
 function Strip() {
 	var self = this;
-	self.strip = ko.mapping.fromJS(defaultStrip);
+	self.data = ko.mapping.fromJS(defaultStrip);
 	self.comic = ko.mapping.fromJS(defaultComic);
-	self.link = ko.computed(function() { return '/comics/'+self.comic.label()+'/'+self.strip.sid(); });
+	self.persisted = ko.computed(function() { return self.data.id() != -1; });
+	self.link = ko.computed(function() { return '/comics/'+self.comic.label()+'/'+self.data.sid(); });
 }
 
 function loadSubscriptions(refresh, callback, errorfct) {
@@ -122,7 +124,7 @@ function server_get(route, params, successFct, errorFct) {
 }
 
 function server_post(route, obj, successFct, errorFct) {
-	var model = ko.mapping.toJSON(obj);
+	var model = ko.mapping.toJSON(obj).replace("%", "%25");
 	var routeSelect = (obj.id() == -1)? route_post[route] : route_put[route]({'id':obj.id()});
 	var methodSelect = (obj.id() == -1)? "POST" : "PUT";
 	$.ajax({

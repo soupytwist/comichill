@@ -8,8 +8,8 @@
 <div class="always-show" data-bind="template: {name: 'comic-template-noauth', data: comic}"></div><img class="comic-thumbnail" data-bind="attr: {src: '/img/thumb/'+comic.data.label()+'.png' }"/>
 <div class="spacer"></div>
 
-<div class="formBlock" data-bind="css: {ok: comic.persisted()}">
-	<h1 data-bind="text: viewModel.pageTitle()"></h1>
+<div class="formBlock" data-bind="css: {ok: (comic.persisted() && comic.data.enabled()), attention: (comic.persisted() && !comic.data.enabled())}">
+	<h1><input type="checkbox" data-bind="checked: comic.data.enabled"/><span data-bind="text: viewModel.pageTitle()"></span></h1>
 	<form class="formClass" data-bind="submit: function() { submitAction($data.comic, 'comic'); }">
 	<p>Edit the comic properties below</p>
 	<label>Label:<span class="subLabel">Short name for comic</span></label><input id="labelField" type='text' data-bind="value: comic.data.label, disable: comic.persisted()"/><br/>
@@ -36,7 +36,7 @@
 #{/form}
 </div>
 
-<div class="formBlock ok collapsed"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
+<div class="formBlock collapsed" data-bind="css: {ok: comic.persisted()}"><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
 <h1>Import Strips from CSV</h1>
 #{form @Admin.importCSV(comic.label), method:'POST', enctype:'multipart/form-data'}
 <p>Pick a CSV file to upload</p>
@@ -45,6 +45,14 @@
 #{/field}
 <button type='submit' >Upload</button>
 #{/form}
+</div>
+
+<div class="formBlock ok">
+<h1>Add New StripSource</h1>
+<p>Add Archives and RSS feeds</p>
+<button onclick="addArchiveAction(new Archive())">Add Archive</button>
+<button type="button" onclick="addRssAction(new Rss())">Add RSS</button>
+<div class="spacer"></div>
 </div>
 
 <!-- ko foreach: rssFeeds -->
@@ -86,8 +94,6 @@
 	</form>
 </div>
 <!-- /ko -->
-<input type="button" onclick="addRssAction(new Rss())" value="Add Rss" />
-<input type="button" onclick="addArchiveAction(new Archive())" value="Add Archive" />
 
 <script type="text/javascript">
 function AppViewModel() {

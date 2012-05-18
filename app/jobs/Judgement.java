@@ -70,9 +70,9 @@ public class Judgement extends TrackedJob {
 		try {
 			Logger.info("[JUDGEMENT] Starting rankings.js file creation");
 			Template template = TemplateLoader.load("Data/jsvar.js");
-			List<Comic> newest = Comic.all().order("-created").fetch(8);
-			List<Comic> subbed = Comic.all().order("-rankPop").fetch(8);
-			List<Comic> hits = Comic.all().order("-rankHits").fetch(8);
+			List<Comic> newest = Comic.allEnabled().order("-created").fetch(8);
+			List<Comic> subbed = Comic.allEnabled().order("-rankPop").fetch(8);
+			List<Comic> hits = Comic.allEnabled().order("-rankHits").fetch(8);
 			Map<String, Object> map = new HashMap<String, Object>();
 			Map<String, Object> innermap = new HashMap<String, Object>();
 			innermap.put("new", My.listKeys("id", newest));

@@ -1,7 +1,14 @@
 #{extends 'main-text.html' /}
 #{knockout /}
+#{script 'jquery-ui-1.8.17.min.js' /}
 #{stylesheet 'admin.css' /}
 #{set title:'Import Strips from Archive' /}
+
+<style>
+.committedstrip {
+	background-color: #D4FFDE;
+}
+</style>
 
 <h1>Import Strips for ${comic.title} - (${comic.label})</h1>
 <br/>
@@ -9,33 +16,118 @@ Or... <a href="@{Admin.editComic(comic.label)}">edit ${comic.label}</a><br/>
 <br/>
 Current number of strips: ${comic.numStrips}<br/>
 <a href="${archive.src}">${archive.src}</a><br/>
-<div class="status" data-bind="text: viewModel.statusText(), css: {statusError: viewModel.status() < 0, statusOK: viewModel.status() == 1}"></div>
 <button onclick="commit()">Commit</button>
 <br/>
+<div class='formBlock collapsed'><div class="collapse-button" onclick="toggleCollapsed(this)">expand</div>
+<h1>Title Transformation</h1>
+<p>This javascript will be applied to each title</p>
+<textarea style="width: 98%; height: 120px; padding: 1%" id="myfct">myfct = function(title) {
+	return title;
+}</textarea> <button onclick="applyTitleFunction()">Apply</button>
+</div>
 <br/>
 Results: ${nodes.size()} strips found</br>
 
-<ul>
-%{ for (node in nodes) { }%
-	<li><span>${node.title}</span> - <a class="small" href="${node.url}">${node.url}</a></li>
-%{ } }%
-</ul>
+<table data-bind="foreach: strips">
+<tr data-bind="css: {committedstrip: persisted()}">
+	<td><input type="checkbox" data-bind="checked: edit" /></td>
+	<!--  ko ifnot: edit() -->
+	<td><span data-bind="text: data.title()"></span></td>
+	<td><a data-bind="text: data.url(), attr: {href: data.url()}"></a></td>
+	<!--  /ko -->
+	<!--  ko if: edit() -->
+	<td><input type="text" style="width: 100%" data-bind="value: data.title"></input></td>
+	<td><input type="text" style="width: 100%" data-bind="value: data.url"></input></td>
+	<!--  /ko -->
+</tr>
+</table>
 
 <script type="text/javascript">
 
-function AppViewModel() {
-	var self = this;
-	self.status = ko.observable(2);
-	self.statusText = ko.observable("Click 'Commit' to submit the data");
-}
+viewModel = {
+	strips: ko.observableArray()
+};
+
+var committed = 0;
 
 function commit() {
-	server_get('commit_strips', {'commitKey':"${commitKey}"},
-			function (data) { viewModel.status(1); viewModel.statusText(data); },
-			function (jqXHR) { viewModel.status(-1); viewModel.statusText(jqXHR.responseText); });
+	if (committed < viewModel.strips().length) {
+		var strip = viewModel.strips()[committed];
+		server_post("strip", strip.data,
+			function(data) {
+				ko.mapping.fromJS(data, strip.data);
+				commit(++committed);
+			}, function(jqXHR, textStatus, errorThrown) {
+				myAlert("Error!\n"+textStatus+"\n"+errorThrown);
+			}
+		);
+	} else {
+		myAlert("Done! "+committed+" strips added");
+	}
 }
 
-var viewModel = new AppViewModel();
+function applyTitleFunction() {
+	eval($("#myfct").val().replace(/\n/g,''));
+	$.each(viewModel.strips(), function(index, value) {
+		value.data.title(myfct(value.data.title()));
+	})
+}
+
+function fdate(d, pattern) {
+	var res = "";
+	var prev = null;
+	var part = "";
+	for (var i = 0; i < pattern.length; i++) {
+		var c = pattern.charAt(i);
+		if (c == prev) {
+			part += c;
+		} else {
+			if (prev != null)
+				res += fdatepart(d, part);
+			part = ""+c;
+			prev = c;
+		}
+	}
+	if (prev != null)
+		res += fdatepart(d, part);
+	return res;
+}
+
+function fdatepart(d, part) {
+	switch(part) {
+	case "yyyy":	return d.getFullYear();
+	case "yy":		return pad(d.getFullYear() % 100, 2);
+	case "mm":		return pad(d.getMonth()+1, 2);
+	case "m":		return d.getMonth()+1;
+	case "dd":		return pad(d.getDate(), 2);
+	case "d":		return d.getDate();
+	default: 		return part;
+	}
+}
+
+function pad(number, length) {
+	var str = '' + number;
+	while (str.length < length)
+		str = '0' + str;
+	return str;
+}
+
+function toggleCollapsed(elm) {
+	if ($(elm).parent().hasClass("collapsed"))
+		$(elm).text("collapse");
+	else
+		$(elm).text("expand");
+	$(elm).parent().toggleClass("collapsed", 250);
+}
+
 ko.applyBindings(viewModel);
+
+$.each(%{print nodes.serializeWith("stripNodeSerializer").raw()}%, function(index, value) {
+	var s = new Strip();
+	ko.mapping.fromJS(value, s.data);
+	s.data.cid(${comic.id});
+	s.edit = ko.observable(false);
+	viewModel.strips.push(s);
+});
 
 </script>

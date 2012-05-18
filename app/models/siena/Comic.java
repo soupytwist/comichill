@@ -30,6 +30,8 @@ public class Comic extends Model {
 	@GeneratedValue
 	public Long created, updated;
 
+	public boolean enabled;
+
 	// Default no-arguments constructor
 	public Comic() {
 		this.created = new Date().getTime();
@@ -38,23 +40,25 @@ public class Comic extends Model {
 		this.id = -1L;
 		this.rankPop = 0;
 		this.rankHits = 0;
+		this.enabled = false;
 	}
 
 	public Comic(String acronym, String title, String author, String homepage, String tags) {
 		super();
-		updateFields(label, title, author, homepage, tags);
+		updateFields(label, title, author, homepage, tags, false);
 	}
 
-	public void updateFields(String label, String title, String author, String homepage, String tags) {
+	public void updateFields(String label, String title, String author, String homepage, String tags, boolean enabled) {
 		this.title = title;
 		this.label = label;
 		this.author = author;
 		this.homepage = homepage;
 		this.tags = tags;
+		this.enabled = enabled;
 	}
 
 	public void updateWith(Comic comic) {
-		updateFields(comic.label, comic.title, comic.author, comic.homepage, comic.tags);
+		updateFields(comic.label, comic.title, comic.author, comic.homepage, comic.tags, comic.enabled);
 	}
 
 	public int useNextSid() {
@@ -83,6 +87,10 @@ public class Comic extends Model {
 
 	public static Query<Comic> all() {
 		return Model.all(Comic.class);
+	}
+
+	public static Query<Comic> allEnabled() {
+		return all().filter("enabled", true);
 	}
 
 	@Override

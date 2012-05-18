@@ -78,6 +78,7 @@ GET    /rest/strips/{<[0-9]+>id}                Strips.get
 GET    /rest/strips/{label}/{<[0-9]+>sid}       Strips.getBySid
 GET    /rest/strips/updates                     Subscriptions.getUpdates
 GET    /rest/strips/{label}                     Strips.getByComic
+POST   /rest/strips                             Strips.create
 
 POST   /admin/rss/fetch                         RssController.fetch
 GET    /rest/rss/{<[0-9]+>id}                   RssController.get

@@ -74,10 +74,12 @@ function addSubscriptions(subData) {
 	var count = 0, unread = 0;
 	$.each(subData,
 		function(index, value) {
-			comic = viewModel.comics[index];
-			count++;
-			ko.mapping.fromJS(value, comic.sub);
-			unread += comic.unreadCount();
+			if (viewModel.comics[index]) {
+				comic = viewModel.comics[index];
+				count++;
+				ko.mapping.fromJS(value, comic.sub);
+				unread += comic.unreadCount();
+			}
 	});
 	extraBindings();
 	viewModel.unreadTotal(unread);

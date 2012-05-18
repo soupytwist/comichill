@@ -118,12 +118,14 @@ public class Admin extends Controller {
 
 			try {
 				List<StripNode> nodes = archive.load();
-				String commitKey = "archive_"+comic.id+"_"+new Date().getTime();
 
+				// Update: This method is being deprecated in favor of one that
+				// will allow comics to be created in successive requests from the client
+				//String commitKey = "archive_"+comic.id+"_"+new Date().getTime();
 				// Cache the result so that it does not need to be resent or recalculated
-				Cache.set(commitKey, nodes, "5mn");
-
-				render(archive, comic, nodes, commitKey);
+				// Cache.set(commitKey, nodes, "5mn");
+				//Logger.debug("Node list:\n%s", Serializers.gson.toJson(nodes));
+				render(archive, comic, nodes);
 			} catch (Exception e) {
 				Logger.error("Failed to load  archive with id: %d;\n%s", archive.id, e);
 				response.status = 400;

@@ -22,6 +22,7 @@ var route_get = {
 
 var route_post = {
 	comic: '@{Comics.create}',
+	strip: '@{Strips.create}',
 	subscription: '@{Subscriptions.create}',
 	rss: '@{RssController.create}',
 	archive: '@{ArchiveController.create}',

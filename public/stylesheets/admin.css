@@ -24,7 +24,7 @@ div.formBlock {
 	border: 1px solid #CCC;
 	background-color: #EEE;
 	margin:0 auto;
-	width:480px;
+	width:640px;
 	padding:14px;
 	position: relative;
 }
@@ -49,6 +49,7 @@ div.formBlock label{
 	text-align:right;
 	width:140px;
 	float:left;
+	clear: left;
 }
 
 div.formBlock .subLabel{
@@ -65,7 +66,7 @@ div.formBlock input:not([type=checkbox]){
 	font-size:12px;
 	padding:4px 2px;
 	border:solid 1px #aacfe4;
-	width:320px;
+	width:400px;
 	margin:2px 0 20px 10px;
 }
 
@@ -146,7 +147,13 @@ div.resultsPreview ul {
 }
 
 .ok {
+	border: 1px solid #BDB!important;
 	background-color: #D4FFDE!important;
+}
+
+.attention {
+	border: 1px solid #FC0!important;
+	background-color: #FFFDDF!important;
 }
 
 button.rightFloat {
