@@ -71,7 +71,7 @@ div.formBlock input:not([type=checkbox]){
 }
 
 div.formBlock input[type=checkbox]{
-	clear: none;
+	clear: left;
 }
 
 div.formBlock button {
