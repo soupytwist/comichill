@@ -3,7 +3,7 @@
 #{script 'jquery-ui-1.8.17.min.js' /}
 #{script 'templateFunctions.js' /}
 #{script 'cache/comics.js' /}
-#{script 'cache/rankings.js' /}
+#{stylesheet 'index.css' /}
 #{include 'public/html/templates.html' /}
 #{set title:'Comic Hill' /}
 
@@ -11,52 +11,69 @@
 
 <div id="add-subscriptions-dialog">
 <h3>It looks like you haven't added any subscriptions!</h3>
-To start using Comic Hill, add some comics to your home page.<br/>
-Click <a href="@{Application.all}">here</a> to find your favorite comics and discover new ones!
+To start using Comic Hill, subscribe to the comics you want to follow!<br/>
 </div>
 
-<div class="comic-hill">
-<div class="column" id="first" ><h1 class="title">New</h1>
-<div data-bind="template: {name: templateName, foreach: newest}"></div>
+<div class="column left" >
+<div class="side-menu">
+<span class="head">My Comics</span>
+%{if (user != null) {}%
+<span onclick="sortList(bySubscribed)" data-bind="text: ((subCount() == 0)? 'No Subscriptions':'My Subscriptions ('+subCount()+')')"></span>
+<a data-bind="attr: {href: ((unreadTotal() > 0)? '@{Subscriptions.generateUpdateQueue}' : '')}"><span data-bind="text: ((unreadTotal() == 0)? '(No Unread)':'Unread ('+unreadTotal()+')')"></span></a>
+<span class="coming-soon" title="Coming soon!">Catch-up</span>
+%{} else {}%
+<a href="@{Users.login}"><span>Log In</span></a>
+<a href="@{Users.register}"><span>Register</span></a>
+%{}}%
+<span class="head">Browse</span>
+<span onclick="sortList(byDate)">Recently Added</span>
+<span onclick="sortList(bySubs)">Most Subscribed</span>
+<span onclick="sortList(byHits)">Popular Now</span>
+<span class="head">Pages</span>
+<span class="coming-soon" title="Coming soon!">Categories</span>
 </div>
-<div class="column" id="middle"><h1 class="title">Most Subscribed</h1>
-<div data-bind="template: {name: templateName, foreach: popular}"></div>
 </div>
-<div class="column" id="last"><h1 class="title">Most Hits</h1>
-<div data-bind="template: {name: templateName, foreach: hits}"></div>
+<div class="column right">
+<div data-bind="template: {name: templateName, foreach: list}"></div>
 </div>
-</div>
-
-<a href="@{Application.all}">
-<div id="home-all"></div></a>
-<a data-bind="visible: unreadTotal() > 0" href="@{Subscriptions.generateUpdateQueue}">
-<div id="home-updates"></div></a>
 
 <script type="text/javascript">
 function AppViewModel() {
 	var self = this;
-	self.newest = ko.observableArray();
-	self.popular = ko.observableArray();
-	self.hits = ko.observableArray();
+	self.list = ko.observableArray();
 	self.comics = {};
-	self.buildLists = function() {
-		$.each(sys_rankings["sub"], function(index, value) { self.popular.push(self.comics[value]); });
-		$.each(sys_rankings["hits"], function(index, value) { self.hits.push(self.comics[value]); });
-		$.each(sys_rankings["new"], function(index, value) { self.newest.push(self.comics[value]); });
-		extraBindings();
-	};
-	
+	self.buildList = function() { $.each(self.comics, function(index, value) { self.list.push(value); value.sub.id.subscribe(self.calcSubCount);});
+									self.list.sort(byDate); extraBindings(); }
 	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
 	self.templateName = function(comic) { return (self.loggedIn() ? ((comic.sub.id() == -1) ? 'comic-template' : 'comic-template-subscribed') : 'comic-template-noauth'); };
 	self.unreadTotal = ko.observable(0);
+	self.subCount = ko.observable(0);
+	self.calcSubCount = function() {
+		var count = 0;
+		$.each(self.comics, function(index, value) {
+			if (value.sub.id() != -1)
+				count++;
+		});
+		self.subCount(count);
+	}
 }
 
 var viewModel = new AppViewModel();
+
+function sortList(f) {
+	viewModel.list.sort(f);
+}
+
+function byDate(a, b) { return b.data.created() - a.data.created(); }
+function byHits(a, b) { return b.data.rankHits() - a.data.rankHits(); }
+function bySubs(a, b) { return b.data.rankPop() - a.data.rankPop(); }
+function bySubscribed(a, b) { return b.sub.id() - a.sub.id(); }
 
 addComics(sys_comics);
 if (viewModel.loggedIn()){
 	loadSubscriptions(true, function(subData) {
 		addSubscriptions(subData);
+		viewModel.calcSubCount();
 	});
 }
 
@@ -67,7 +84,7 @@ function addComics(comicData) {
 			ko.mapping.fromJS(value, newComic.data);
 			viewModel.comics[newComic.data.id()] = newComic;
 		});
-	viewModel.buildLists();
+	viewModel.buildList();
 }
 
 function addSubscriptions(subData) {
@@ -81,7 +98,6 @@ function addSubscriptions(subData) {
 				unread += comic.unreadCount();
 			}
 	});
-	extraBindings();
 	viewModel.unreadTotal(unread);
 	if (count == 0)
 		$("#add-subscriptions-dialog").fadeIn();

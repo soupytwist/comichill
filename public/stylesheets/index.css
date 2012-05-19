@@ -1,0 +1,99 @@
+.comic-hill {
+	clear: both;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	overflow: hidden;
+}
+
+.column {
+	float: left;
+	margin: 0px 4px;
+	padding: 0px;
+}
+
+.column.left {
+	width: 192px;
+}
+
+.column.right {
+	width: 592px;
+}
+
+
+div.side-menu {
+	margin: 0;
+	padding: 4px 0;
+	border-radius: 12px;
+	background-color: #EEE;
+	border: 3px solid black;
+	text-align: left;
+	list-style-type: circle;
+	list-style-position: inside;
+}
+
+.side-menu a {
+	color: black;
+	text-decoration: none;
+}
+
+.side-menu span:not(.head):hover {
+	background-color: yellow;
+	cursor: pointer;
+}
+
+.side-menu span.coming-soon:hover {
+	background-color: #EEE!important;
+	cursor: pointer;
+}
+
+.coming-soon {
+	color: #BBB;
+}
+
+.side-menu span {
+	margin: 4px 0;
+	padding: 6px 12px;
+	width: 162px;
+	background-color: white;
+	display: block;
+}
+
+.side-menu span.head {
+	margin: 4px 0;
+	font-size: 20px;
+	font-weight: bold;
+	list-style-type: none;
+}
+
+
+
+div#home-all {
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	width: 120px;
+	height: 60px;
+	background-image: url('/img/all.png');
+	z-index: 10;
+}
+
+div#home-mine {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	width: 120px;
+	height: 60px;
+	background-image: url('/img/mine.png');
+	z-index: 10;
+}
+
+div#home-updates {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 196px;
+	height: 60px;
+	background-image: url('/img/new.png');
+	z-index: 10;
+}

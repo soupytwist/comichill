@@ -7,7 +7,6 @@
 
 <h1>Admin Panel</h1>
 <h3>Comics <a href="@{Admin.editComic("new")}">[new]</a></h3>
-<div class="comic-hill">
 %{for (comic in comics) { }%
 <div class="comic">
 	<a href="@{Admin.editComic(comic.label)}">
@@ -20,7 +19,7 @@
 		if (rssFeeds.get(comic.id).enabled) { }%<div class="rss-icon has-rss"></div>%{ } else { }%<div class="rss-icon no-rss"></div>%{ } } }%
 </div>
 %{ } }%
-</div>
+<div class="spacer"></div>
 <br/>
 <a href='@Admin.categories'>Edit Categories</a>
 <br/>
