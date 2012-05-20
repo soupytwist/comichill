@@ -14,10 +14,6 @@ public class Application extends Controller {
 		render();
 	}
 
-	public static void index2() {
-		render();
-	}
-
 	public static void doContact(@Required @Email String email, @Required @MaxSize(2048) String messageBody) {
 		if (validation.hasErrors()) {
 			params.flash();
