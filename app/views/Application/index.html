@@ -43,7 +43,7 @@ function AppViewModel() {
 	self.list = ko.observableArray();
 	self.comics = {};
 	self.buildList = function() { $.each(self.comics, function(index, value) { self.list.push(value); value.sub.id.subscribe(self.calcSubCount);});
-									self.list.sort(byDate); extraBindings(); }
+									sortList(byDate); }
 	self.loggedIn=ko.observable(%{print (user != null && !user.isGuest())}%);
 	self.templateName = function(comic) { return (self.loggedIn() ? ((comic.sub.id() == -1) ? 'comic-template' : 'comic-template-subscribed') : 'comic-template-noauth'); };
 	self.unreadTotal = ko.observable(0);
@@ -62,6 +62,7 @@ var viewModel = new AppViewModel();
 
 function sortList(f) {
 	viewModel.list.sort(f);
+	extraBindings();
 }
 
 function byDate(a, b) { return b.data.created() - a.data.created(); }
